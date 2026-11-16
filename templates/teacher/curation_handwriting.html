@@ -1,0 +1,61 @@
+{% set hw = (curations|default({})).get('handwriting') %}
+{% if hw %}
+{% set samples = hw.samples %}
+{% set totals = hw.totals %}
+{% set latest = hw.latest %}
+{% set scope_label = selected.name if selected else '全部班级' %}
+<section class="curation-section" id="handwriting-library">
+  <div class="curation-heading">
+    <div>
+      <h4>课堂手写样本库</h4>
+      <p class="muted">当前查看「{{ scope_label }}」：已收集 {{ totals.scope_total }} 张 · 已选用 {{ totals.scope_included }} 张（显示 {{ samples|length }} 张）｜ 全库已收集 {{ totals.total }} 张 · 已选用 {{ totals.included }} 张（每生限 10 张）。</p>
+    </div>
+    <form method="get" action="{{ url_for('teacher.dashboard') }}#handwriting-library" class="sample-digit-filter">
+      <input type="hidden" name="tab" value="analysis">
+      <input type="hidden" name="class_id" value="{{ selected_class_id or '' }}">
+      <input type="hidden" name="lesson_id" value="{{ lesson_id or '' }}">
+      <input type="hidden" name="open" value="lesson-7-task-2">
+      <label>数字<select name="digit"><option value="">全部数字</option>{% for n in range(10) %}<option value="{{ n }}" {% if digit == n %}selected{% endif %}>{{ n }}</option>{% endfor %}</select></label>
+      <button class="secondary compact">筛选样本</button>
+    </form>
+  </div>
+  <section class="sample-publication">
+    <div>
+      <h3>学生端统一数据集</h3>
+      <p>学生端共用全局最新一版；班级与数字筛选仅用于分批整理。每次点击下方「保存并发布」将自动汇总<strong>全部班级中已选用的 {{ totals.included }} 张样本</strong>更新版本（相同笔迹自动合并，不影响已发布的旧版本）。</p>
+      {% if latest %}<p>最新：第{{ latest.version }}版 · {{ latest.count }}张 <a href="{{ url_for('handwriting.export', version=latest.version) }}">下载数据集</a></p><div class="sample-distribution">{% for count in latest.counts %}<span>数字{{ loop.index0 }}<strong>{{ count }}</strong></span>{% endfor %}</div>{% else %}<p>尚未发布，学生05显示“等待教师保存并发布”。</p>{% endif %}
+    </div>
+  </section>
+  <div class="sample-toolbar">
+    <div class="sample-bulk-actions">
+      <button type="button" class="secondary compact sample-select-all" data-included="1">当前筛选全选 ✓</button>
+      <button type="button" class="secondary compact sample-select-all" data-included="0">当前筛选取消 ✕</button>
+    </div>
+    <form class="sample-batch-save" id="sample-batch-form" method="post" action="{{ url_for('handwriting.batch_save') }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="class_id" value="{{ selected_class_id or '' }}">
+      <input type="hidden" name="lesson_id" value="{{ lesson_id or '' }}">
+      <input type="hidden" name="digit" value="{{ digit if digit is not none else '' }}">
+      <input type="hidden" name="changes" id="sample-batch-changes" value="[]">
+      <span class="sample-dirty-hint" id="sample-dirty-hint">点击卡片 ✓ / ✕ 或修正数字标签后保存并发布</span>
+      <button type="submit" class="compact" id="sample-batch-save-btn" disabled>保存并发布</button>
+    </form>
+  </div>
+  <div class="teacher-sample-grid">
+    {% for sample in samples %}
+    <article class="teacher-sample-card {% if sample.included %}is-included{% else %}is-excluded{% endif %}" data-sample-id="{{ sample.id }}" data-init-label="{{ sample.label }}" data-init-included="{{ '1' if sample.included else '0' }}" data-label="{{ sample.label }}" data-included="{{ '1' if sample.included else '0' }}">
+      <div class="sample-card-head">
+        <span class="sample-card-sub" title="#{{ sample.id }} · {{ sample.class_name }} · {{ sample.student_name }} · 原标{{ sample.original_label }}">{{ sample.student_name }}{% if not selected %}·{{ sample.class_name }}{% endif %}</span>
+        <button type="button" class="sample-toggle-btn {% if sample.included %}is-included{% else %}is-excluded{% endif %}" aria-pressed="{{ 'true' if sample.included else 'false' }}" aria-label="切换样本{{ sample.id }}启用状态，当前{% if sample.included %}启用{% else %}停用{% endif %}" title="点击切换启用/停用">{% if sample.included %}✓{% else %}✕{% endif %}</button>
+      </div>
+      <div class="teacher-sample-preview">
+        <canvas width="120" height="180" data-bits="{{ sample.pixels }}" role="img" aria-label="样本{{ sample.id }}，标注数字{{ sample.label }}"></canvas>
+        <select class="sample-label-select" aria-label="样本{{ sample.id }}的数字标签" title="点击修正数字标签">{% for n in range(10) %}<option value="{{ n }}" {% if n == sample.label %}selected{% endif %}>{{ n }}</option>{% endfor %}</select>
+      </div>
+    </article>
+    {% else %}
+    <p class="muted">当前范围还没有学生上传的样本。</p>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}

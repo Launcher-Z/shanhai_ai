@@ -1,0 +1,46 @@
+{
+  "activity_id": "lesson-4-task-2",
+  "version": 1,
+  "title": "全班结果对比与分析 · 学习札记",
+  "intro": "结合全班异兽测试的汇总结果，思考数据之外的算法与算力问题。",
+  "sections": [
+    {
+      "id": "analysis",
+      "step": 0,
+      "title": "结果对比与思考",
+      "optional": false,
+      "questions": [
+        {
+          "id": "beast-classification-limit",
+          "type": "single",
+          "prompt": "观察全班对四张异兽的预测比例，为什么机器从未学过异兽，却仍给出了较高的某类动物比例？",
+          "required": true,
+          "options": [
+            {
+              "value": "closed-set",
+              "label": "分类器只能在训练过的四类动物之间分配 100% 的比例，无法跳出已知类别"
+            },
+            {
+              "value": "clear-image",
+              "label": "异兽图片足够清晰，所以机器已经认识了这种新生物"
+            },
+            {
+              "value": "more-data",
+              "label": "只要再多放几张这四类现实动物的图片，机器就会自动输出“以上都不是”"
+            }
+          ],
+          "answer": "closed-set",
+          "explanation": "分类器只能在训练过的四个类别之间分配预测比例，高比例只说明某类局部特征更接近，不能证明机器认识异兽。"
+        },
+        {
+          "id": "algorithm-and-compute",
+          "type": "text",
+          "prompt": "除了继续调整训练“数据”，如果要让机器更准确、有条理地分辨动物，你认为在“算法”（特征提取与判断方法）或“算力”（计算能力）上还需要解决什么问题？结合本次全班结果说说你的想法。",
+          "required": true,
+          "review": true,
+          "max_length": 2000
+        }
+      ]
+    }
+  ]
+}

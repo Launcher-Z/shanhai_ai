@@ -1,0 +1,64 @@
+<nav class="feature-steps edge-steps" aria-label="实验步骤">
+  {% for label in ['看颜色与灰度', '尝试横向卷积核', '尝试纵向卷积核', '尝试合并', '设计我的卷积核'] %}<button type="button" data-edge-step="{{ loop.index0 }}"{% if loop.first %} aria-current="step"{% endif %}><span>0{{ loop.index }}</span>{{ label }}</button>{% endfor %}
+</nav>
+<div class="feature-intro"><h3 data-edge-ui="heading"></h3><p data-edge-ui="intro"></p></div>
+<div class="feature-toolbar" aria-label="选择实验图片">
+  <span>试验图</span>
+  {% for key, name in [('horizontal', '横边'), ('vertical', '竖边'), ('diagonal', '斜边'), ('house', '小屋'), ('fish', '何罗鱼'), ('bifang', '毕方')] %}<button type="button" data-edge-sample="{{ key }}" aria-pressed="false">{{ name }}</button>{% endfor %}
+  <span data-edge-ui="image-name"></span>
+</div>
+<div class="edge-workbench" data-edge-ui="workbench">
+  <figure class="edge-picture edge-source"><figcaption><strong data-edge-ui="source-title">彩色原图</strong><span data-edge-ui="source-size"></span></figcaption><canvas data-edge-canvas="source" width="480" height="480" tabindex="0" role="img" aria-label="原图，点击像素或用方向键移动"></canvas><p data-edge-ui="source-count"></p></figure>
+  <aside class="edge-console">
+    <section data-edge-panel="gray">
+      <p class="edge-coordinate" data-edge-ui="coordinate"></p>
+      <div class="edge-rgb" aria-label="当前像素的三个原始颜色数值"><span class="edge-r" data-edge-ui="r"></span><span class="edge-g" data-edge-ui="g"></span><span class="edge-b" data-edge-ui="b"></span></div>
+      <div class="edge-flow-arrow" aria-hidden="true">↓</div>
+      <div class="edge-gray-calculation">
+        <span>加权求和，再四舍五入</span>
+        <div class="edge-weight-formula" data-edge-ui="gray-formula" aria-label="R乘0.299，加G乘0.587，加B乘0.114">
+          <span class="edge-r"><i></i><b>R</b> × <strong>0.299</strong></span>
+          <span class="edge-g"><i>+</i><b>G</b> × <strong>0.587</strong></span>
+          <span class="edge-b"><i>+</i><b>B</b> × <strong>0.114</strong></span>
+        </div>
+        <p class="edge-weight-explanation">人眼对绿色的亮度变化更敏感，对蓝色较不敏感，所以绿色权重最大、蓝色最小。这组三项权重相加为 1。</p>
+        <p data-edge-ui="gray-products" style="visibility:hidden"></p>
+      </div>
+      <div class="edge-flow-arrow" aria-hidden="true">↓</div>
+      <div class="edge-gray-output"><span data-edge-ui="gray-swatch"></span><output data-edge-ui="gray-answer"></output><small>1 个灰度数值</small></div>
+      <p class="edge-three-to-one">3 个颜色数值 → 1 个灰度数值</p>
+      <div class="feature-actions edge-gray-actions"><button type="button" data-edge-action="apply">处理当前</button><button type="button" data-edge-action="auto">自动填充</button><button type="button" data-edge-action="replay">重播</button></div>
+      <progress data-edge-ui="progress" value="0" max="576" aria-label="灰度转换进度"></progress><p data-edge-ui="progress-label" role="status"></p>
+    </section>
+    <section data-edge-panel="kernel" hidden>
+      <h4 data-edge-ui="kernel-title"></h4><p data-edge-ui="kernel-position"></p>
+      <div class="edge-custom-controls" data-edge-ui="custom-controls" hidden>
+        <label>预制核<select data-edge-custom="preset"><option value="blur">均值模糊</option><option value="sharpen">锐化</option><option value="emboss">浮雕</option><option value="edge">边缘提取</option></select></label>
+        <div class="edge-custom-rules"><label>除以<input data-edge-custom="divisor" type="number" min="0.1" max="1000" step="0.1" value="9"></label><label>再加<input data-edge-custom="offset" type="number" min="-255" max="255" step="1" value="0"></label><label class="edge-custom-absolute"><input data-edge-custom="absolute" type="checkbox">取绝对值</label></div>
+      </div>
+      <p class="feature-small">灰度窗口 × 卷积核（对应相乘）</p>
+      <div class="feature-window-pair"><div class="feature-matrix" data-edge-ui="window"></div><span>×</span><div class="feature-matrix" data-edge-ui="kernel"></div><div class="edge-custom-matrix" data-edge-ui="custom-editor" hidden>{% for index in range(9) %}<input type="number" min="-9" max="9" step="1" data-edge-coefficient="{{ index }}" aria-label="卷积核第{{ index // 3 + 1 }}行第{{ index % 3 + 1 }}列">{% endfor %}</div></div>
+      <div class="edge-custom-apply" data-edge-ui="custom-apply" hidden><button type="button" data-edge-action="custom-apply">应用</button><button type="button" data-edge-action="custom-reset">恢复预设</button><span data-edge-ui="custom-draft" role="status"></span></div>
+      <div class="edge-kernel-flow" aria-hidden="true">↓ 对应相乘 ↓</div>
+      <div class="feature-matrix edge-products" data-edge-ui="kernel-products" aria-label="九个对应位置的乘积"></div>
+      <div class="edge-kernel-totals"><span>正数合计 <output data-edge-ui="positive-sum">—</output></span><span>负数合计 <output data-edge-ui="negative-sum">—</output></span></div>
+      <div class="edge-kernel-result"><span>汇总<output data-edge-ui="kernel-sum">—</output></span><b aria-hidden="true">→</b><span><span data-edge-ui="kernel-middle-label">变化大小</span><output data-edge-ui="kernel-magnitude">—</output></span><b aria-hidden="true">→</b><span><span data-edge-ui="kernel-output-label">填入右图</span><i data-edge-ui="kernel-swatch"></i></span></div>
+      <p class="edge-kernel-stage" data-edge-ui="kernel-calculation" role="status">点击“逐格演示”，观察九组数怎样配对。</p>
+      <div class="feature-actions edge-kernel-actions"><button type="button" data-edge-action="kernel-play">逐格演示</button><button type="button" data-edge-action="scan">自动继续</button><button type="button" data-edge-action="kernel-replay">重播</button><button type="button" data-edge-action="move">移动一格</button></div>
+      <p class="edge-kernel-progress" data-edge-ui="kernel-progress" role="status"></p>
+    </section>
+    <section data-edge-panel="combine" hidden>
+      <div class="edge-direction-pair">
+        <figure class="edge-direction-x"><figcaption>横向结果</figcaption><canvas data-edge-canvas="direction-x" width="240" height="240" tabindex="0" role="img" aria-label="横向卷积结果，点击或用方向键选像素"></canvas><output data-edge-ui="direction-x-value"></output></figure>
+        <figure class="edge-direction-y"><figcaption>纵向结果</figcaption><canvas data-edge-canvas="direction-y" width="240" height="240" tabindex="0" role="img" aria-label="纵向卷积结果，点击或用方向键选像素"></canvas><output data-edge-ui="direction-y-value"></output></figure>
+      </div>
+      <p class="edge-combine-coordinate" data-edge-ui="combine-coordinate"></p>
+      <div class="edge-combine-formula" data-edge-ui="combine-values" aria-label="两方向平方和的平方根"></div>
+      <div class="edge-combine-threshold"><label>强度门槛 <output data-edge-ui="threshold-value">100</output><input data-edge-control="threshold" type="range" min="10" max="1100" step="10" value="100"></label><p data-edge-ui="threshold-rule" role="status"></p></div>
+    </section>
+  </aside>
+  <figure class="edge-picture edge-result"><figcaption><strong data-edge-ui="result-title">灰度图 · 待填充</strong><span data-edge-ui="result-size"></span></figcaption><canvas data-edge-canvas="result" width="480" height="480" tabindex="0" role="img" aria-label="灰度或轮廓结果，点击像素或用方向键移动"></canvas><p data-edge-ui="result-count"></p></figure>
+</div>
+<p class="feature-caption" data-edge-ui="caption"></p><p class="feature-status" data-edge-ui="status" role="status"></p>
+<div class="feature-takeaway"><span>观察线索</span><p data-edge-ui="takeaway"></p></div>
+<div class="feature-navigation"><button type="button" data-edge-action="previous">上一步</button><span data-edge-ui="step-count">01 / 05</span><button type="button" class="feature-primary" data-edge-action="next">尝试横向卷积核 →</button></div>

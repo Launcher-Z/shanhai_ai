@@ -1,0 +1,15 @@
+{% macro score_value(value) %}{{ (value|string ~ '/5分') if value is number else {'met':'符合','partial':'部分符合','unmet':'不符合'}.get(value,'未选') }}{% endmacro %}
+{% macro creation_answer(value) %}
+{% set data=value|creation_data %}
+{% for row in data.get('observations',[]) %}<h4>编号 {{ row.image_id }}</h4><p class="review-student-answer">观察：{{ row.features }}
+AI回答：{{ row.ai_answer }}
+核对：{{ row.verification }}</p>{% endfor %}
+{% for work in data.get('works',[]) %}<section><h4>{{ work.title }}</h4>{% if work.media_id %}<a href="/api/creation/media/{{ work.media_id }}" target="_blank" rel="noopener"><img style="max-width:100%;max-height:300px;object-fit:contain;{{ 'image-rendering:pixelated' if data.get('kind') == 'pixel' else '' }}" loading="lazy" src="/api/creation/media/{{ work.media_id }}/thumbnail" alt="{{ work.title }}"></a>{% endif %}
+{% if data.get('kind') != 'pixel' %}<p class="review-student-answer">{{ work.prompt }}</p><p>生图：{{ work.tool.name }} · {{ '活动内' if work.tool.mode=='internal' else '外部应用' }}</p>
+{% if work.ai_optimization.used %}<details><summary>AI优化前后</summary><h5>原稿</h5><p class="review-student-answer">{{ work.ai_optimization.original_prompt }}</p><h5>AI建议</h5><p class="review-student-answer">{{ work.ai_optimization.suggested_prompt }}</p></details>{% endif %}{% endif %}</section>{% endfor %}
+{% set labels={'met':'符合','partial':'部分符合','unmet':'不符合'} %}
+{% if data.get('evaluation') %}{% set e=data.evaluation %}{% if data.get('media_id') %}<img style="max-width:100%;max-height:240px;object-fit:contain" loading="lazy" src="/api/creation/media/{{ data.media_id }}/thumbnail" alt="本次评分对应的作品">{% set beast=creation_beasts.get(data.get('beast_id')) %}{% if beast %}<p class="review-student-answer">{{ beast.name }}：{{ beast.text }}</p>{% endif %}{% if data.get('animal_name') %}<p>创作动物：{{ data.animal_name }}</p>{% endif %}{% endif %}{% if 'feature_keep' in e or 'magical_detail' in e or 'visual_harmony' in e %}<p>动物特征保留：{{ score_value(e.feature_keep) }} · 神异细节可见：{{ score_value(e.magical_detail) }} · 画面与风格协调：{{ score_value(e.visual_harmony) }}</p>{% else %}<p>原文特征：{{ score_value(e.accuracy) }} · 神韵氛围：{{ score_value(e.spirit) }} · 画面表达：{{ score_value(e.expression) }}</p>{% endif %}{% if 'errors' in e %}<p>遗漏／错误：{{ e.errors|join('、') or '未勾选' }}</p>{% endif %}<p class="review-student-answer">{{ e.detail }}</p>{% endif %}
+{% if data.get('ai_review') %}{% set r=data.ai_review %}<h4>AI优化复盘</h4>{% for key,label in [('change_and_choice','变化与取舍'),('expectation','预期'),('actual_result','实际表现'),('next_adjustment','下次调整')] %}{% if r.get(key) %}<p class="review-student-answer">{{ label }}：{{ r[key] }}</p>{% endif %}{% endfor %}<p>是否符合预期：{{ labels.get(r.match,'未选') }}</p>{% endif %}
+{% if 'favorites' in data %}{% for fav in data.favorites %}<section><h4>{{ fav.source }}{% if fav.author %} · {{ fav.author }}{% endif %}</h4><p class="review-student-answer">{{ fav.content }}</p></section>{% else %}<p class="hint">当前收藏本为空</p>{% endfor %}{% endif %}
+{% if not data %}<p>未填写</p>{% endif %}
+{% endmacro %}

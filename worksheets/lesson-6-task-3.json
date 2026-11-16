@@ -1,0 +1,264 @@
+{
+  "activity_id": "lesson-6-task-3",
+  "version": 7,
+  "title": "HOG 方向统计与特征 · 学习札记",
+  "intro": "先体验，再作答。",
+  "sections": [
+    {
+      "id": "gradient",
+      "step": 0,
+      "title": "为什么需要HOG",
+      "optional": false,
+      "questions": [
+        {
+          "id": "hog-similarity-observation",
+          "type": "single",
+          "prompt": "判断：小幅移动小屋时，HOG特征的相似程度通常比轮廓像素更高。",
+          "required": true,
+          "options": [
+            {
+              "value": "yes",
+              "label": "符合观察"
+            },
+            {
+              "value": "no",
+              "label": "不符合观察"
+            }
+          ],
+          "answer": "yes",
+          "explanation": "HOG的局部方向统计对小幅移动往往更稳定，但并非每次都更相似。"
+        }
+      ]
+    },
+    {
+      "id": "pixel-direction",
+      "step": 1,
+      "title": "找像素的方向",
+      "optional": false,
+      "questions": [
+        {
+          "id": "gradient-meaning",
+          "type": "single",
+          "prompt": "橙色梯度箭头表示什么？",
+          "required": true,
+          "options": [
+            {
+              "value": "change",
+              "label": "由暗到亮的变化方向"
+            },
+            {
+              "value": "edge",
+              "label": "沿着边缘延伸的方向"
+            },
+            {
+              "value": "move",
+              "label": "物体移动的方向"
+            }
+          ],
+          "answer": "change",
+          "explanation": "梯度由邻居的灰度差得到，指向变亮的方向，与局部边缘走向垂直。平坦处强度为0，不设方向。"
+        }
+      ]
+    },
+    {
+      "id": "histogram",
+      "step": 2,
+      "title": "一块变成一组数",
+      "optional": false,
+      "questions": [
+        {
+          "id": "weighted-vote",
+          "type": "number",
+          "prompt": "两个像素都投给0°方向，变化强度分别是100和50。这根柱子总共增加多少？",
+          "required": true,
+          "answer": 150,
+          "explanation": "HOG按变化强度累加，不是每像素只加1。100＋50＝150；平坦像素贡献0。"
+        },
+        {
+          "id": "region-as-numbers",
+          "type": "single",
+          "prompt": "观察工作台下方：这一块8×8区域，统计后可以怎样表示？",
+          "required": true,
+          "options": [
+            {
+              "value": "numbers",
+              "label": "用9个数，记录各方向累计的梯度强度"
+            },
+            {
+              "value": "pixel",
+              "label": "只能保留64个像素的位置，无法用统计数描述"
+            },
+            {
+              "value": "name",
+              "label": "直接得到“小屋”或“何罗鱼”的名字"
+            }
+          ],
+          "answer": "numbers",
+          "explanation": "一个区域的方向与强度分布可以用一组数字概括；它描述特点，不直接给出物体类别。"
+        },
+        {
+          "id": "local-position",
+          "type": "single",
+          "prompt": "分别统计小屋的屋顶、墙边等区域，主要保留了什么？",
+          "required": true,
+          "options": [
+            {
+              "value": "position",
+              "label": "保留哪些方向出现在图像的哪些大致位置"
+            },
+            {
+              "value": "color",
+              "label": "找回灰度图丢失的颜色"
+            },
+            {
+              "value": "pixels",
+              "label": "保证图像的像素数量变少"
+            }
+          ],
+          "answer": "position",
+          "explanation": "分区统计保留方向出现的大致位置，也减少对每个像素精确位置的依赖。8×8是本课参数，不是HOG的唯一规定。"
+        }
+      ]
+    },
+    {
+      "id": "cell-size",
+      "step": 3,
+      "title": "区域大小有讲究",
+      "optional": false,
+      "questions": [
+        {
+          "id": "size-movement-record",
+          "type": "text",
+          "required": true,
+          "review": true,
+          "experiment_record": true,
+          "max_length": 900,
+          "prompt": "选定一次移动，保持位移，记录四种划分的相似程度。右为正、下为正。",
+          "record_table": {
+            "fields": [
+              {
+                "key": "dx",
+                "label": "水平位移",
+                "min": -48,
+                "max": 48,
+                "integer": true
+              },
+              {
+                "key": "dy",
+                "label": "垂直位移",
+                "min": -48,
+                "max": 48,
+                "integer": true
+              },
+              {
+                "key": "4",
+                "label": "4×4",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "8",
+                "label": "8×8",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "16",
+                "label": "16×16",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "24",
+                "label": "24×24",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              }
+            ]
+          }
+        },
+        {
+          "id": "cell-size-tradeoff",
+          "type": "multiple",
+          "prompt": "比较同一次移动下的四种划分，哪些说法合理？（多选）",
+          "required": true,
+          "options": [
+            {
+              "value": "detail",
+              "label": "小区域保留更多位置细节，也更容易受小幅移动影响"
+            },
+            {
+              "value": "layout",
+              "label": "更大的区域会混合更多位置细节"
+            },
+            {
+              "value": "only",
+              "label": "相似程度越高，就一定越能正确识别物体"
+            }
+          ],
+          "answer": [
+            "detail",
+            "layout"
+          ],
+          "explanation": "区域大小需要取舍：细节与变化容忍往往不能同时最大化，8×8不是唯一最优。"
+        }
+      ]
+    },
+    {
+      "id": "vector",
+      "step": 4,
+      "title": "组成最终特征",
+      "optional": false,
+      "questions": [
+        {
+          "id": "coordinate-meaning",
+          "type": "single",
+          "prompt": "坐标图上的何罗鱼落点，是怎样得到的？",
+          "required": true,
+          "options": [
+            {
+              "value": "two",
+              "label": "取完整特征中的两个数，作为横、纵坐标"
+            },
+            {
+              "value": "position",
+              "label": "用何罗鱼在原图中的位置作坐标"
+            },
+            {
+              "value": "category",
+              "label": "HOG已经识别出它的类别，自动分好类"
+            }
+          ],
+          "answer": "two",
+          "explanation": "平面坐标只显示两个特征数。完整特征仍被保留；得到一个点不等于已经识别出类别。"
+        },
+        {
+          "id": "feature-output",
+          "type": "single",
+          "prompt": "HOG最终交给分类器使用的，主要是什么？",
+          "required": true,
+          "options": [
+            {
+              "value": "vector",
+              "label": "按固定顺序组成的一组数值特征"
+            },
+            {
+              "value": "picture",
+              "label": "给人看的短线图本身"
+            },
+            {
+              "value": "category",
+              "label": "已经判断好的物体类别"
+            }
+          ],
+          "answer": "vector",
+          "explanation": "短线图方便人观察；按顺序组成的完整特征数字才是分类器的输入。坐标图只展示其中两个数。"
+        }
+      ]
+    }
+  ]
+}

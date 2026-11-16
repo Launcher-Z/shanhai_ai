@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600" preserveAspectRatio="none">
+  <!-- 云团集中于画面中部，四周留足透明空间，避免 SVG 边界裁出矩形。 -->
+  <defs>
+    <radialGradient id="deep-mist" cx=".5" cy=".52" r=".58">
+      <stop offset="0" stop-color="#303532" stop-opacity=".97"/>
+      <stop offset=".48" stop-color="#4c534e" stop-opacity=".95"/>
+      <stop offset=".76" stop-color="#7b8279" stop-opacity=".83"/>
+      <stop offset="1" stop-color="#a9ada2" stop-opacity=".08"/>
+    </radialGradient>
+    <radialGradient id="pale-mist">
+      <stop offset="0" stop-color="#f7f6ee" stop-opacity=".9"/>
+      <stop offset=".55" stop-color="#e6e8de" stop-opacity=".66"/>
+      <stop offset="1" stop-color="#e6e8de" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="cloud-edge" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".012 .019" numOctaves="3" seed="17" result="cloud"/>
+      <feDisplacementMap in="SourceGraphic" in2="cloud" scale="76" xChannelSelector="R" yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+  </defs>
+  <g filter="url(#cloud-edge)">
+    <!-- 深灰雾作底，浅白雾丝穿插在上下和局部中段，形成黑白交织。 -->
+    <path d="M120 300 C94 263 154 228 211 228 C208 180 288 166 338 192 C375 137 466 159 501 188 C558 152 627 187 650 221 C725 201 786 248 767 285 C815 323 756 367 704 365 C680 414 598 414 552 391 C498 442 413 419 382 399 C308 432 247 399 232 371 C175 385 101 350 120 300Z" fill="url(#deep-mist)"/>
+    <path d="M187 308 C223 258 277 273 318 242 C375 211 441 241 489 220 C558 202 613 247 659 253 C714 278 713 329 675 350 C624 378 577 350 527 378 C455 404 400 364 347 380 C277 399 230 357 203 350 C181 339 173 324 187 308Z" fill="url(#deep-mist)"/>
+    <ellipse cx="350" cy="231" rx="210" ry="46" fill="url(#pale-mist)" transform="rotate(-10 350 231)"/>
+    <ellipse cx="593" cy="353" rx="193" ry="44" fill="url(#pale-mist)" transform="rotate(-15 593 353)"/>
+    <ellipse cx="182" cy="331" rx="83" ry="29" fill="url(#pale-mist)" transform="rotate(9 182 331)"/>
+    <path d="M178 288 C254 231 294 283 358 265 C413 245 444 250 478 265 C429 272 400 285 358 294 C282 304 249 270 178 312Z" fill="url(#pale-mist)" opacity=".88"/>
+    <path d="M478 320 C535 290 565 328 616 309 C652 293 695 302 731 319 C684 313 661 344 615 347 C559 350 535 322 478 340Z" fill="url(#pale-mist)" opacity=".8"/>
+  </g>
+</svg>

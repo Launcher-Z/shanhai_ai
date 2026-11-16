@@ -1,0 +1,43 @@
+.has-animal-review .activity-overview,.has-animal-review .activity-workspace { display:none; }
+.animal-review[hidden] { display:none; }
+.animal-review { padding:8px 0 16px; color:#344738; }
+.animal-review-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; }
+.animal-review-heading h3 { margin:0 0 9px; font:25px/1.5 KaiTi,'楷体',serif; font-weight:400; color:#244c40; }
+.animal-review-heading p,.animal-review-intro,.animal-review-note,.animal-review-feedback { font:14px/1.8 KaiTi,'楷体',serif; color:#77765f; }
+.animal-review-heading p { margin:0; }
+.animal-review button[data-review-refresh] { padding:8px 13px; border:1px solid #84735466; background:#f6f3e955; color:#365f50; font:15px KaiTi,'楷体',serif; cursor:pointer; }
+.animal-review button:focus-visible { outline:2px solid #a47c3c; outline-offset:4px; }
+.animal-review-intro { margin:18px 0 0; color:#566b50; }
+.animal-review .animal-chart-legend { margin-top:20px; }
+.animal-review .animal-chart-group { font-family:KaiTi,'楷体',serif; }
+.animal-review .animal-chart-group:hover { background:#365f500d; }
+.animal-review-note { margin-top:19px; font-size:13px; }
+.animal-review-feedback { min-height:24px; color:#8e3b34; }
+.animal-review-image { width:min(800px,calc(100% - 28px)); max-height:90dvh; padding:23px; border:1px solid #a29479; border-radius:1px; background:#f6f3e9 url('../antique-paper.png') center/cover; color:#344738; box-shadow:0 14px 50px #1f29243d; }
+.animal-review-image::backdrop { background:#25322988; }
+.animal-review-image header { display:flex; align-items:center; justify-content:space-between; gap:14px; padding-bottom:12px; border-bottom:1px solid #84735455; }
+.animal-review-image h3 { margin:0; font:24px KaiTi,'楷体',serif; font-weight:400; color:#244c40; }
+.animal-review-image button { padding:0 5px; border:0; background:transparent; color:#46604c; font:32px/1 KaiTi,serif; cursor:pointer; }
+.animal-review-image img { display:block; width:100%; max-height:58dvh; object-fit:contain; margin:18px auto; background:#f6f3e955; }
+.animal-review-image-frame { position:relative; }
+.animal-review-image .animal-review-image-frame button { position:absolute; top:50%; transform:translateY(-50%); display:grid; place-items:center; width:38px; height:52px; padding:0 0 4px; border:1px solid #84735466; background:#f6f3e9e6; color:#244c40; font:40px/1 KaiTi,serif; }
+.animal-review-image-frame button:hover { background:#f6f3e9; border-color:#244c40; }
+.animal-review-previous { left:7px; }
+.animal-review-next { right:7px; }
+.animal-review-image-position { margin:0; text-align:center; color:#8a826e; font:12px/1.5 Consolas,monospace; }
+.animal-review-image [hidden] { display:none; }
+.animal-review-comparison { width:min(540px,100%); margin:22px auto 15px; }
+.animal-review-ratio-labels { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px 15px; margin-bottom:10px; }
+.animal-review-ratio-key { display:flex; align-items:baseline; flex-wrap:wrap; gap:7px; color:#365f50; font:17px KaiTi,'楷体',serif; }
+.animal-review-ratio-key:nth-child(2) { justify-content:flex-end; color:#975348; }
+.animal-review-ratio-key:nth-child(3) { color:#b07a3b; }
+.animal-review-ratio-key:nth-child(4) { color:#3c6e82; }
+.animal-review-ratio-track { display:flex; height:13px; overflow:hidden; background:#84735420; border-bottom:1px solid #84735422; }
+.animal-review-ratio-fill { display:block; height:100%; background:#365f50; }
+.animal-review-ratio-fill:nth-child(2) { background:#975348; }
+.animal-review-ratio-fill:nth-child(3) { background:#b07a3b; }
+.animal-review-ratio-fill:nth-child(4) { background:#3c6e82; }
+.animal-review-ratio-number { font:18px/1.5 Consolas,monospace; font-variant-numeric:tabular-nums; }
+.animal-review-image [data-review-count],.animal-review-camera { text-align:center; color:#77765f; font:14px/1.8 KaiTi,'楷体',serif; }
+.animal-review-camera { padding:40px 12px; }
+@media(max-width:600px) { .animal-review-heading{gap:10px}.animal-review-heading h3{font-size:22px}.animal-review-image{padding:16px}.animal-review-image h3{font-size:20px} }

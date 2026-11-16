@@ -1,0 +1,19 @@
+<section class="animal-analysis" aria-label="动物分类预测比例统计" data-activity-id="{{ activity.id }}"
+         data-api="{{ url_for('teacher.animal_analysis') }}" data-class-id="{{ selected_class_id or '' }}"
+         data-student-url="{{ url_for('teacher.dashboard') }}"
+         data-image-base="{{ url_for('static', filename='learning/animal-classifier/beasts/images/' if activity.id == 'lesson-4-task-1' else 'learning/animal-classifier/images/') }}">
+  <header class="animal-analysis-heading"><div><h4>{{ '四张异兽 · 预测比例' if activity.id == 'lesson-4-task-1' else '九图与摄像头 · 预测比例' }}</h4><p>当前范围：{{ selected.name if selected else '全部班级' }} · <span data-animal-total></span></p></div><button type="button" class="secondary compact" data-animal-refresh>刷新数据</button></header>
+  <div class="animal-chart-legend">{% for name in activity.animal_chart.names %}<span><i></i>{{ name }}</span>{% endfor %}<small>{{ activity.animal_chart.names|length }}类平均预测比例（%）</small></div>
+  <div class="animal-chart-scroll"><div class="animal-chart" role="group" aria-label="点击每组柱子查看数据源"><div class="animal-chart-axis" aria-hidden="true"><span>100</span><span>75</span><span>50</span><span>25</span><span>0</span></div><div class="animal-chart-groups" data-animal-groups></div></div></div>
+  <p class="animal-analysis-note">点击柱组查看来源。每名学生每个来源计一次；缺项与格式异常不参与均值，0%和100%仍是有效数值。{% if activity.id != 'lesson-4-task-1' %}摄像头画面各不相同，其均值仅作描述。{% endif %}</p>
+  <p class="animal-analysis-feedback" data-animal-feedback role="status" aria-live="polite"></p>
+  <dialog class="animal-source-dialog" aria-labelledby="animal-source-title-{{ activity.id }}">
+    <header><div><h3 id="animal-source-title-{{ activity.id }}" data-animal-source-title></h3><p data-animal-source-summary></p></div><button type="button" data-animal-close aria-label="关闭数据源">×</button></header>
+    <div class="animal-source-tools"><label>查看<select data-animal-filter><option value="all">全部来源</option><option value="valid">已纳入</option><option value="excluded">已排除</option><option value="invalid">格式异常</option><option value="missing">未填写</option></select></label><label class="animal-reason-label">本次排除原因（选填）<input data-animal-reason maxlength="200" placeholder="例如：抄录有误"></label></div>
+    <div class="animal-source-table-scroll"><table><thead><tr><th>班级 / 学生</th><th>学生填写的原值</th><th>状态</th><th>操作</th></tr></thead><tbody data-animal-sources></tbody></table></div>
+    <p class="animal-source-feedback" data-animal-source-feedback role="status" aria-live="polite"></p>
+    <p class="animal-analysis-note">排除只影响这名学生的这一行统计，原始札记、成绩和完成状态保留；可随时恢复。不同班级范围共用同一排除标记。</p>
+  </dialog>
+  <script type="application/json" data-animal-data>{{ activity.animal_chart|tojson }}</script>
+</section>
+<script src="{{ url_for('static', filename='animal-analysis.js') }}" type="module"></script>

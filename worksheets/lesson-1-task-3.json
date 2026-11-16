@@ -1,0 +1,11 @@
+{
+  "activity_id":"lesson-1-task-3", "version":1,
+  "title":"观察展示后再绘制 · 学习札记",
+  "intro":"完成重画后，提交你的第二稿。",
+  "sections":[{
+    "id":"second-design", "step":0, "title":"我的第二稿", "optional":false,
+    "questions":[
+      {"id":"pixel-work", "type":"text", "prompt":"我的第二稿", "required":true, "review":true, "record_form":"pixel", "max_length":2000}
+    ]
+  }]
+}

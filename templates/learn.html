@@ -1,0 +1,136 @@
+{% macro status_circle(done, excellent=false, resource=false) -%}
+<span class="status-ring{% if done %} done{% endif %}{% if excellent %} gold{% endif %}{% if resource %} resource-ring{% endif %}" aria-hidden="true"><img src="{{ url_for('static', filename='learning/ink-circle-' ~ ('green' if done else 'red') ~ '.png') }}" alt=""></span>
+{%- endmacro %}
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf }}">
+  <script src="{{ url_for('static', filename='learning/handwriting-api.js') }}" defer></script>
+  <meta name="progress-locks-enabled" content="{{ 'true' if config.get('PROGRESS_LOCKS_ENABLED', true) else 'false' }}">
+  <title>学习首页 · 再绘山海经</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='learning/ink-notebook.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/learning.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/atlas-entry.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/ink-scroll.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/activity-entry.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/worksheet.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/image-code/activity.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/pixel-paint/activity.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/image-math/activity.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/image-features/activity.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/image-features/hog.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/neural/activity.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/creation/activity.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/animal-classifier/host.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='animal-chart.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/animal-review/activity.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/animal-improvement/activity.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='learning/classification/activity.css') }}">
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="#volume-1" data-jump="0"><span class="seal">山<br>海</span><span>再绘山海经<small>图像与人工智能</small></span></a>
+    <div class="volume-navigation">
+      <nav aria-label="大卷导航">
+        {% for volume in volumes %}
+        {% set tasks = volume.lessons | map(attribute='activities') | sum(start=[]) | rejectattr('optional') | list %}
+        {% set done = tasks | length > 0 and tasks | selectattr('completed') | list | length == tasks | length %}
+        <a href="#{{ volume.id }}" data-jump="{{ loop.index0 }}" aria-label="卷{{ volume.number }} {{ volume.title }}，{{ '优秀' if volume.excellent else ('已完成' if done else '未完成') }}"{% if loop.first %} class="active" aria-current="step"{% endif %}><span class="volume-label">{{ status_circle(done, volume.excellent) }}<span class="volume-number">卷{{ volume.number }}</span></span><strong>{{ volume.title }}</strong></a>
+        {% endfor %}
+      </nav>
+      <div class="ink-track" role="progressbar" aria-label="全卷滚动进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="ink-fill"></span></div>
+    </div>
+    <button type="button" class="atlas-entry" id="open-atlas" aria-haspopup="dialog" aria-controls="learning-atlas" data-atlas-src="{{ url_for('static', filename='atlas/index.html') }}" hidden><svg viewBox="0 0 44 32" fill="none" aria-hidden="true"><path d="M2 27 13 7l8 14 6-11 15 18M5 28c10-4 24-2 34 0" stroke="currentColor" stroke-width="2"/><circle cx="33" cy="6" r="2.4" fill="currentColor"/></svg><span>山海图</span></button>
+    <div class="student-menu"><span>{{ student.name }}<small>{{ student.class_name }}</small></span><form method="post" action="{{ url_for('student.logout') }}"><input type="hidden" name="csrf" value="{{ csrf }}"><button type="submit">退出</button></form></div>
+  </header>
+  <main class="book-scroll">
+    <div class="book-stage">
+      {% for volume in volumes %}{% set vi = loop.index0 %}{% set first_lesson = volume.lessons[0] %}
+      <section class="sheet{% if not volume.available %} is-locked{% endif %}" id="{{ volume.id }}" data-volume="{{ vi }}" aria-label="卷{{ volume.number }} · {{ volume.title }}{% if not volume.available %}，本卷尚未解锁{% endif %}" style="--sheet-paper:{{ volume.paper }};--sheet-accent:{{ volume.accent }}">
+        <div class="page-frame" aria-hidden="true"></div><div class="spine" aria-hidden="true"></div>
+        <img class="landscape" src="{{ url_for('static', filename='learning/' ~ volume.image) }}" alt="" width="1752" height="897" decoding="async">
+        <span class="ghost-word" aria-hidden="true">{{ volume.word }}</span>
+        <div class="book-layout"{% if not volume.available %} inert{% endif %}>
+          <aside class="lesson-rail">
+            <div class="rail-heading"><span class="tiny">山海册 · 卷{{ volume.number }}</span><h2>{{ volume.title }}</h2><span class="rail-rule" aria-hidden="true"></span></div>
+            <div class="lesson-tabs" role="tablist" aria-label="卷{{ volume.number }}课时" aria-orientation="vertical">
+              {% for lesson in volume.lessons %}
+              {% set required = lesson.activities | rejectattr('optional') | list %}
+              {% set done = required | length > 0 and required | selectattr('completed') | list | length == required | length %}
+              <button type="button" class="lesson-tab{% if loop.first %} selected{% endif %}{% if not lesson.available %} is-locked{% endif %}" role="tab" id="tab-{{ vi }}-{{ loop.index0 }}" aria-label="第 {{ lesson.number }} 课 {{ lesson.title }}，{{ '未解锁' if not lesson.available else ('优秀' if lesson.excellent else ('已完成' if done else '未完成')) }}" aria-controls="panel-{{ vi }}" aria-selected="{{ 'true' if loop.first else 'false' }}" tabindex="{{ 0 if loop.first else -1 }}" data-lesson="{{ loop.index0 }}">
+                {{ status_circle(done, lesson.excellent) }}
+                <span><small>第 {{ lesson.number }} 课</small><strong>{{ lesson.title }}</strong><em>{{ '未解锁' if not lesson.available else ('优秀' if lesson.excellent else ('已完成' if done else '未完成')) }}</em></span><b aria-hidden="true">›</b>
+              </button>
+              {% endfor %}
+            </div>
+            <p class="legend">{{ status_circle(false) }}未完成 {{ status_circle(true) }}完成 {{ status_circle(true, true) }}优秀</p>
+          </aside>
+          <div class="lesson-panel{% if not first_lesson.available %} is-locked{% endif %}" id="panel-{{ vi }}" role="tabpanel" aria-labelledby="tab-{{ vi }}-0" tabindex="0">
+            <p class="eyebrow">卷{{ volume.number }} · 第 {{ first_lesson.number }} 课</p><h1 class="lesson-title">{{ first_lesson.title }}</h1><p class="lesson-intro">{{ first_lesson.intro }}</p>
+            <div class="activity-list">
+              {% for activity in first_lesson.activities %}
+              <button type="button" class="activity{% if not activity.available %} is-locked{% endif %}" data-activity-id="{{ activity.id }}"{% if activity.available %} aria-haspopup="dialog" aria-controls="learning-activity"{% else %} disabled aria-label="{{ activity.title }}，活动尚未解锁"{% endif %}>{{ status_circle(activity.completed, activity.excellent, activity.get('progress_mode') == 'none') }}<span class="activity-copy"><strong>{{ activity.title }}</strong><small>活动 {{ loop.index }} · {{ '自由观展／采集' if activity.get('progress_mode') == 'none' else ('未解锁' if not activity.available else (activity.label if activity.label is defined else ('已完成' if activity.completed else ('可体验' if activity.content_type else '准备中')))) }}</small></span><span class="activity-label">{% if activity.available %}查看活动 <span aria-hidden="true">↗</span>{% else %}未解锁{% endif %}</span></button>
+              {% endfor %}
+            </div>
+            <div class="page-foot"><ul class="knowledge-tags" aria-label="本课知识点">{% for tag in first_lesson.knowledge %}<li>{{ tag }}</li>{% endfor %}</ul><span class="folio">{{ volume.number }}</span></div>
+          </div>
+        </div>
+        <div class="fold-shadow" aria-hidden="true"></div>
+      </section>
+      {% endfor %}
+      <div class="paper-curl" aria-hidden="true"></div>
+    </div>
+  </main>
+  <canvas class="ink-field" aria-hidden="true"></canvas>
+  <footer><span>再绘山海经 · 图像与人工智能</span><span class="current-volume">卷一 · 图像与数据</span></footer>
+  <dialog id="learning-atlas" class="learning-atlas paper-dialog" aria-label="山海图">
+    <p class="atlas-entry-status" role="status">墨色渐开，山海将现……</p>
+    <div class="atlas-frame-host"></div>
+    <button type="button" class="atlas-entry-close paper-dialog-close" aria-label="关闭山海图" autofocus><img src="{{ url_for('static', filename='learning/ink-close.png') }}" alt="" width="44" height="44" loading="lazy" decoding="async" aria-hidden="true"></button>
+  </dialog>
+  <dialog id="learning-activity" class="learning-activity paper-dialog" aria-labelledby="activity-title">
+    <div class="activity-body">
+      <div id="activity-scroll" class="activity-reader reading" tabindex="0" role="region" aria-label="活动内容，可上下滚动">
+        <div class="activity-content reading-content">
+          <header class="activity-heading">
+            <p class="activity-context"></p>
+            <p class="activity-number"></p>
+            <h2 id="activity-title"></h2>
+          </header>
+          <section class="activity-overview" aria-labelledby="activity-overview-title">
+            <h3 id="activity-overview-title">本课导读</h3>
+            <p class="activity-intro"></p>
+            <ul class="activity-knowledge" aria-label="本课知识点"></ul>
+          </section>
+          <div class="activity-workspace"><p>活动内容准备中</p></div>
+          {% include 'activities/image_code.html' %}
+          {% include 'activities/pixel_paint.html' %}
+          {% include 'activities/pixel_redraw.html' %}
+          {% include 'activities/animal_identification.html' %}
+          {% include 'activities/animal_classifier.html' %}
+          {% include 'activities/animal_review.html' %}
+          {% include 'activities/animal_improvement.html' %}
+          {% include 'activities/classification.html' %}
+          {% include 'activities/image_math.html' %}
+          {% include 'activities/image_features.html' %}
+          {% include 'activities/neural.html' %}
+        </div>
+      </div>
+      <div class="ink-scrollbar" hidden><div class="ink-track"><button type="button" class="ink-thumb" role="scrollbar" aria-label="活动内容滚动位置" aria-controls="activity-scroll" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div></div>
+    </div>
+    <div class="activity-foot"><span>再绘山海经 · 学生活动</span><span class="activity-folio"></span></div>
+    <button type="button" id="reset-learning-activity" class="activity-reset" aria-label="重置当前活动的体验进度" title="完成活动后可重置体验，保留札记与完成情况" disabled hidden><img src="{{ url_for('static', filename='learning/ink-reset.png') }}" alt="" width="44" height="44" decoding="async" aria-hidden="true"><span>重置</span></button>
+    <button type="button" id="open-learning-note" class="note-entry" aria-label="打开学习札记" aria-haspopup="dialog" aria-controls="learning-note" aria-expanded="false" hidden><span class="status-ring" aria-hidden="true"><img class="note-entry-ring" src="{{ url_for('static', filename='learning/ink-circle-red.png') }}" alt=""><img class="note-entry-book" src="{{ url_for('static', filename='learning/ink-notebook.svg') }}" alt=""></span><span>学习札记</span></button>
+    {% include 'activities/worksheet.html' %}
+    <button type="button" class="activity-entry-close paper-dialog-close" aria-label="关闭活动" autofocus><img src="{{ url_for('static', filename='learning/ink-close.png') }}" alt="" width="44" height="44" loading="lazy" decoding="async" aria-hidden="true"></button>
+  </dialog>
+  <script id="course-data" type="application/json">{{ volumes | tojson }}</script>
+  <script src="{{ url_for('static', filename='learning/gsap.min.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='learning/ScrollTrigger.min.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='learning/learning.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='learning/atlas-entry.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='learning/activity-entry.js') }}" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,673 @@
+{
+  "activity_id": "lesson-7-task-2",
+  "version": 8,
+  "title": "体验 0—9 识别与局限 · 学习札记",
+  "intro": "先体验，再用实验记录说明自己的发现。",
+  "sections": [
+    {
+      "id": "ten-input",
+      "title": "十个输出与初测",
+      "questions": [
+        {
+          "id": "output-count",
+          "type": "number",
+          "prompt": "识别0—9，本实验设置了多少个输出？",
+          "required": true,
+          "answer": 10,
+          "explanation": "0—9有10个类别，对应10个输出。"
+        },
+        {
+          "id": "weight-groups",
+          "type": "number",
+          "prompt": "216个输入连接这些输出，共对应多少组权重？",
+          "required": true,
+          "answer": 10,
+          "explanation": "每个输出有自己的一组216个权重。"
+        },
+        {
+          "id": "ten-baseline",
+          "type": "text",
+          "prompt": "选定5张不同测试图，记录训练0次的预测与比例。",
+          "review": false,
+          "required": true,
+          "max_length": 18000,
+          "experiment_record": true
+        }
+      ],
+      "optional": false,
+      "step": 0
+    },
+    {
+      "id": "ten-compare",
+      "title": "训练与固定图比较",
+      "questions": [
+        {
+          "id": "ten-comparison",
+          "type": "text",
+          "prompt": "表头填写同五个数字，记录初测、累计101次、401次及自选次数后的对错和预测比例。",
+          "review": false,
+          "required": true,
+          "max_length": 18000,
+          "experiment_record": false,
+          "record_table": {
+            "kind": "digit_comparison",
+            "fields": [
+              {
+                "key": "image-1",
+                "label": "第1列数字",
+                "min": 0,
+                "integer": true,
+                "max": 9
+              },
+              {
+                "key": "image-2",
+                "label": "第2列数字",
+                "min": 0,
+                "integer": true,
+                "max": 9
+              },
+              {
+                "key": "image-3",
+                "label": "第3列数字",
+                "min": 0,
+                "integer": true,
+                "max": 9
+              },
+              {
+                "key": "image-4",
+                "label": "第4列数字",
+                "min": 0,
+                "integer": true,
+                "max": 9
+              },
+              {
+                "key": "image-5",
+                "label": "第5列数字",
+                "min": 0,
+                "integer": true,
+                "max": 9
+              },
+              {
+                "key": "custom-steps",
+                "label": "自选累计次数",
+                "min": 0,
+                "max": 10000000,
+                "integer": true
+              },
+              {
+                "key": "101-1-correct",
+                "label": "101次·图片1对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "101-1-probability",
+                "label": "101次·图片1比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "101-2-correct",
+                "label": "101次·图片2对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "101-2-probability",
+                "label": "101次·图片2比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "101-3-correct",
+                "label": "101次·图片3对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "101-3-probability",
+                "label": "101次·图片3比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "101-4-correct",
+                "label": "101次·图片4对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "101-4-probability",
+                "label": "101次·图片4比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "101-5-correct",
+                "label": "101次·图片5对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "101-5-probability",
+                "label": "101次·图片5比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "401-1-correct",
+                "label": "401次·图片1对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "401-1-probability",
+                "label": "401次·图片1比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "401-2-correct",
+                "label": "401次·图片2对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "401-2-probability",
+                "label": "401次·图片2比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "401-3-correct",
+                "label": "401次·图片3对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "401-3-probability",
+                "label": "401次·图片3比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "401-4-correct",
+                "label": "401次·图片4对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "401-4-probability",
+                "label": "401次·图片4比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "401-5-correct",
+                "label": "401次·图片5对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "401-5-probability",
+                "label": "401次·图片5比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "custom-1-correct",
+                "label": "自选次·图片1对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "custom-1-probability",
+                "label": "自选次·图片1比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "custom-2-correct",
+                "label": "自选次·图片2对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "custom-2-probability",
+                "label": "自选次·图片2比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "custom-3-correct",
+                "label": "自选次·图片3对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "custom-3-probability",
+                "label": "自选次·图片3比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "custom-4-correct",
+                "label": "自选次·图片4对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "custom-4-probability",
+                "label": "自选次·图片4比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "custom-5-correct",
+                "label": "自选次·图片5对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "custom-5-probability",
+                "label": "自选次·图片5比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "0-1-correct",
+                "label": "0次·图片1对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "0-1-probability",
+                "label": "0次·图片1比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "0-2-correct",
+                "label": "0次·图片2对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "0-2-probability",
+                "label": "0次·图片2比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "0-3-correct",
+                "label": "0次·图片3对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "0-3-probability",
+                "label": "0次·图片3比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "0-4-correct",
+                "label": "0次·图片4对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "0-4-probability",
+                "label": "0次·图片4比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "0-5-correct",
+                "label": "0次·图片5对错",
+                "options": [
+                  "正确",
+                  "错误"
+                ]
+              },
+              {
+                "key": "0-5-probability",
+                "label": "0次·图片5比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              }
+            ],
+            "layout": "matrix",
+            "header_digits": true
+          }
+        },
+        {
+          "id": "training-count",
+          "type": "single",
+          "prompt": "这里“自动训练100次”的意思是什么？",
+          "required": true,
+          "options": [
+            {
+              "value": "0",
+              "label": "完整遍历训练集100轮"
+            },
+            {
+              "value": "1",
+              "label": "追加100次图片计算与参数更新"
+            },
+            {
+              "value": "2",
+              "label": "把累计次数设置为100"
+            }
+          ],
+          "answer": "1",
+          "explanation": "每次完整更新参数算一次；按钮表示追加次数，不是轮数或累计目标。"
+        },
+        {
+          "id": "ten-evidence",
+          "type": "text",
+          "prompt": "对照相同的测试图，说明表现怎样变化。若有反例或变化不明显，也请如实记录。",
+          "review": true,
+          "required": true,
+          "max_length": 1800,
+          "experiment_record": false
+        }
+      ],
+      "optional": false,
+      "step": 1
+    },
+    {
+      "id": "handwriting",
+      "title": "手写与权重探究",
+      "questions": [
+        {
+          "id": "handwriting-record",
+          "type": "text",
+          "prompt": "选择3条手写尝试，核对预测结果，并填写自己实际写的数字。",
+          "review": false,
+          "required": true,
+          "max_length": 18000,
+          "experiment_record": false,
+          "record_table": {
+            "kind": "handwriting_results",
+            "fields": [
+              {
+                "key": "row1-id",
+                "label": "记录1·手写编号",
+                "min": 1,
+                "max": 1000000,
+                "integer": true
+              },
+              {
+                "key": "row1-actual",
+                "label": "记录1·实际数字",
+                "min": 0,
+                "max": 9,
+                "integer": true
+              },
+              {
+                "key": "row1-steps",
+                "label": "记录1·累计训练次数",
+                "min": 0,
+                "max": 10000000,
+                "integer": true
+              },
+              {
+                "key": "row1-first-digit",
+                "label": "记录1·第一预测数字",
+                "min": 0,
+                "max": 9,
+                "integer": true
+              },
+              {
+                "key": "row1-first-probability",
+                "label": "记录1·第一预测比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "row1-second-digit",
+                "label": "记录1·第二预测数字",
+                "min": 0,
+                "max": 9,
+                "integer": true
+              },
+              {
+                "key": "row1-second-probability",
+                "label": "记录1·第二预测比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "row2-id",
+                "label": "记录2·手写编号",
+                "min": 1,
+                "max": 1000000,
+                "integer": true
+              },
+              {
+                "key": "row2-actual",
+                "label": "记录2·实际数字",
+                "min": 0,
+                "max": 9,
+                "integer": true
+              },
+              {
+                "key": "row2-steps",
+                "label": "记录2·累计训练次数",
+                "min": 0,
+                "max": 10000000,
+                "integer": true
+              },
+              {
+                "key": "row2-first-digit",
+                "label": "记录2·第一预测数字",
+                "min": 0,
+                "max": 9,
+                "integer": true
+              },
+              {
+                "key": "row2-first-probability",
+                "label": "记录2·第一预测比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "row2-second-digit",
+                "label": "记录2·第二预测数字",
+                "min": 0,
+                "max": 9,
+                "integer": true
+              },
+              {
+                "key": "row2-second-probability",
+                "label": "记录2·第二预测比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "row3-id",
+                "label": "记录3·手写编号",
+                "min": 1,
+                "max": 1000000,
+                "integer": true
+              },
+              {
+                "key": "row3-actual",
+                "label": "记录3·实际数字",
+                "min": 0,
+                "max": 9,
+                "integer": true
+              },
+              {
+                "key": "row3-steps",
+                "label": "记录3·累计训练次数",
+                "min": 0,
+                "max": 10000000,
+                "integer": true
+              },
+              {
+                "key": "row3-first-digit",
+                "label": "记录3·第一预测数字",
+                "min": 0,
+                "max": 9,
+                "integer": true
+              },
+              {
+                "key": "row3-first-probability",
+                "label": "记录3·第一预测比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              },
+              {
+                "key": "row3-second-digit",
+                "label": "记录3·第二预测数字",
+                "min": 0,
+                "max": 9,
+                "integer": true
+              },
+              {
+                "key": "row3-second-probability",
+                "label": "记录3·第二预测比例（%）",
+                "min": 0,
+                "max": 100,
+                "integer": false
+              }
+            ]
+          }
+        },
+        {
+          "id": "weight-meaning",
+          "type": "single",
+          "prompt": "权重映射图中的红色与蓝色应怎样理解？",
+          "required": true,
+          "options": [
+            {
+              "value": "0",
+              "label": "标准字帖的笔画与背景"
+            },
+            {
+              "value": "1",
+              "label": "该位置输入为1时，对这一类别加权和的正向与负向贡献"
+            },
+            {
+              "value": "2",
+              "label": "该位置写对与写错的概率"
+            }
+          ],
+          "answer": "1",
+          "explanation": "权重表示计算中的贡献，不是标准模板，也不是该位置的识别概率。"
+        },
+        {
+          "id": "generalization",
+          "type": "text",
+          "prompt": "选一张识别不理想或第一、第二预测接近的笔迹，结合训练图库和权重映射，从样本覆盖、位置、大小或模型结构解释可能原因。",
+          "review": true,
+          "required": true,
+          "max_length": 1800,
+          "experiment_record": false
+        }
+      ],
+      "optional": false,
+      "step": 2
+    },
+    {
+      "id": "own-training",
+      "title": "拓展 · 加入自己的样本",
+      "questions": [
+        {
+          "id": "own-conclusion",
+          "type": "text",
+          "prompt": "加入自己的样本并继续训练后，模型识别你新写数字的表现有什么变化？变好、不明显或变差都可以，请举一个实际例子。",
+          "review": false,
+          "required": true,
+          "max_length": 1800,
+          "experiment_record": false
+        }
+      ],
+      "optional": true,
+      "step": 3,
+      "sample_upload": true
+    },
+    {
+      "id": "class-training",
+      "title": "拓展 · 用班级数据再训练",
+      "optional": true,
+      "step": 4,
+      "questions": [
+        {
+          "id": "class-conclusion",
+          "type": "text",
+          "prompt": "使用班级数据继续训练后，比较一张旧笔迹和一张新笔迹的结果。变化是否一致？结合实际记录说明。",
+          "review": false,
+          "required": true,
+          "max_length": 1800,
+          "experiment_record": false
+        }
+      ]
+    }
+  ]
+}

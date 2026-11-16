@@ -1,0 +1,9 @@
+{% for mode in ['zero-one', 'digits'] %}
+<section id="neural-{{ mode }}" class="neural-lab" data-neural-mode="{{ mode }}" data-student-id="{{ student.id }}" hidden>
+  <nav class="neural-steps" aria-label="实验步骤"></nav>
+  <div class="neural-heading"><h3></h3><p></p></div>
+  <p class="neural-load" role="status">正在展开实验…</p>
+  <div class="neural-frame-host"></div>
+  <div class="neural-note-actions"><button type="button" data-neural-note>打开本段札记</button><span role="status" data-neural-status></span></div>
+</section>
+{% endfor %}

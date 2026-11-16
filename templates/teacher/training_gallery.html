@@ -1,0 +1,23 @@
+<section class="training-gallery animal-analysis" aria-label="新增训练图片完整列表">
+  <header class="animal-analysis-heading"><div><h4>新增训练图像 · 首次提交</h4><p>{{ selected.name if selected else '全部班级' }} · 共{{ activity.training_gallery|map(attribute='samples')|map('length')|sum }}张，点击缩略图放大</p></div></header>
+  {% for group in activity.training_gallery %}
+  <section class="training-gallery-category" aria-label="{{ group.name }}新增训练图片">
+    <h5>{{ group.name }} <span>{{ group.samples|length }}张</span></h5>
+    <div class="training-gallery-grid">
+      {% for sample in group.samples %}
+      <figure>
+        <button type="button" class="training-gallery-thumbnail" data-training-image="/api/creation/media/{{ sample.media_id }}" data-training-caption="{{ group.name }} · {{ sample.class_name }} · {{ sample.student_name }} · 第{{ sample.round }}轮 · {{ sample.name }}" data-training-note="{{ sample.note }}" aria-label="放大{{ sample.student_name }}的{{ group.name }}训练图片：{{ sample.name }}">
+          <img src="/api/creation/media/{{ sample.media_id }}/thumbnail" alt="{{ sample.name }}" loading="lazy" decoding="async">
+        </button>
+        <figcaption><strong>{{ sample.student_name }}</strong><span>{{ sample.class_name }} · 第{{ sample.round }}轮</span><span title="{{ sample.name }}">{{ sample.name }}</span></figcaption>
+      </figure>
+      {% else %}<p class="animal-analysis-note">当前范围暂无该类别已提交的新增训练图片。</p>{% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+  <dialog class="training-gallery-dialog" aria-label="查看新增训练大图">
+    <header><h3>新增训练图片</h3><button type="button" data-training-close aria-label="关闭训练大图">×</button></header>
+    <img data-training-large alt=""><p data-training-caption></p><p data-training-note></p>
+  </dialog>
+</section>
+<script type="module" src="{{ url_for('static', filename='training-gallery.js') }}"></script>

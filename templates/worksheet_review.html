@@ -1,0 +1,40 @@
+{% extends 'teacher/base.html' %}
+{% from 'teacher/creation_answer.html' import creation_answer %}
+{% from 'teacher/decision_answer.html' import decision_answer %}
+{% from 'teacher/knn_captures_answer.html' import knn_captures_answer %}
+{% block title %}评阅 {{ record.student_name }}的札记 · 再绘山海经{% endblock %}
+{% block console_content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='worksheet-teacher.css') }}">
+<div class="teacher-head"><div><p class="eyebrow">{{ record.class_name }} · {{ record.student_name }}</p><h1>{{ record.definition.title }}</h1><p class="muted">{{ record.progress.label }}{% if record.has_objectives %} · 首次答对 {{ record.first_correct }}/{{ record.results|length }}{% endif %}</p></div><a class="review-link" href="{{ url_for('worksheet.queue', class_id=record.class_id) }}">返回评阅列表 →</a></div>
+<form method="post" action="{{ url_for('worksheet.review', record_id=record.id) }}" class="review-layout">
+  <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="revision" value="{{ record.revision }}">
+  <section class="panel review-answers">
+    {% for section in record.definition.sections %}<h2>{{ '选做' if section.get('optional') else ('子活动 ' ~ (section.step + 1)) }} · {{ section.title }}</h2>
+      {% for q in section.questions %}<article class="review-answer">
+        <h3>{{ q.prompt }}</h3>
+        {% if q.get('pixel_context') %}<p class="hint">本题约定：白色＝{{ q.pixel_context.white }}，黑色＝{{ 1 - q.pixel_context.white }}</p><pre aria-label="本题原图，1为黑格，0为白格">原图（1黑、0白）：{% for row in q.pixel_context.pixels|batch(5) %}
+{{ row|join('') }}{% endfor %}</pre>{% endif %}
+        {% set answer = record.answers.get(q.id, '') %}
+        {% set exp_table = answer|structured_answer(q) %}
+        {% if q.type in ['single', 'multiple'] %}<p class="review-student-answer">{% for option in q.options %}{% if (q.type == 'single' and option.value == answer) or (q.type == 'multiple' and option.value in answer) %}{{ option.label }}{% if q.type == 'multiple' %}；{% endif %}{% endif %}{% endfor %}</p>
+        {% elif q.get('decision_tree') %}{{ decision_answer(answer) }}
+        {% elif q.get('knn_captures') %}{{ knn_captures_answer(answer) }}
+        {% elif q.get('record_form') %}{{ creation_answer(answer) }}
+        {% elif exp_table %}<div class="review-exp-wrap"><table class="teacher-exp-table"><thead><tr>{% for h in exp_table.headers %}<th>{{ h }}</th>{% endfor %}</tr></thead><tbody>{% for row in exp_table.rows %}<tr>{% for cell in row %}<td class="{{ 'tone-' + cell.tone if cell.tone else '' }}{{ ' has-digit-svg' if cell.bits else '' }}">{% if cell.bits %}<svg class="teacher-digit-svg" viewBox="0 0 12 18" width="36" height="54" role="img" aria-label="{{ cell.alt|default('手写数字笔迹') }}"><rect width="12" height="18" fill="#fff"/>{% for b in cell.bits %}{% if b == '1' %}<rect x="{{ loop.index0 % 12 }}" y="{{ loop.index0 // 12 }}" width="1" height="1" fill="#2c4a3e"/>{% endif %}{% endfor %}</svg>{% else %}{{ cell.text }}{% endif %}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+        {% else %}<p class="review-student-answer">{{ answer or '未填写' }}</p>{% endif %}
+        {% if q.type != 'text' %}{% set result = record.results.get(q.id) %}<p class="hint">{{ '当前回答正确' if result and result.correct else '当前回答有误' }}{% if result and result.attempts == 2 %} · 已订正一次{% endif %}</p><p class="muted">{{ q.explanation }}</p>
+        {% elif record.activity_id != 'lesson-9-task-2' and q.get('review', true) and record.status == 'pending' and record.stage_states[section.id].status == 'pending' %}<label class="review-return"><input type="checkbox" name="returned_questions" value="{{ q.id }}">驳回这道题，允许学生修改</label>{% endif %}
+      </article>{% endfor %}
+    {% endfor %}
+  </section>
+  <aside class="panel review-decision">
+    <h2>教师反馈</h2>
+    {% if record.status == 'pending' %}
+      <p class="hint">{{ '看后直接评定通过或优秀即可，学生可随时继续增改收藏本且保持圈色不变。' if record.activity_id == 'lesson-9-task-2' else '通过后札记锁定。驳回时，请勾选左侧需要修改的主观题，并写明建议。' }}</p>
+      {% if record.has_objectives %}<p class="hint">金圈由首次正确率 ≥85% 且审核通过决定，订正不覆盖首次成绩。</p>{% endif %}
+      <label for="review-feedback">评语 / 修改建议</label><textarea id="review-feedback" name="feedback" rows="6" maxlength="2000">{{ record.feedback }}</textarea>
+      <div class="review-actions"><button name="decision" value="approve">通过</button>{% if not record.has_objectives %}<button name="decision" value="excellent">优秀通过 · 金圈</button>{% endif %}{% if record.activity_id != 'lesson-9-task-2' %}<button class="secondary" name="decision" value="return">驳回选中的题</button>{% endif %}</div>
+    {% else %}<p class="review-student-answer">{{ record.feedback or '暂无教师评语。' }}</p><p class="hint">当前状态为“{{ record.progress.label }}”，无需重复审核。</p>{% endif %}
+  </aside>
+</form>
+{% endblock %}

@@ -1,0 +1,260 @@
+{% from 'teacher/metrics.html' import metrics %}
+{% from 'teacher/decision_answer.html' import branch %}
+{{ metrics(report.summary, true) }}
+<div class="analysis-caption"><span>有效首答 <strong>{{ report.summary.first_total }}</strong> 次 · 答对 <strong>{{ report.summary.first_correct }}</strong> 次</span><details><summary>统计口径</summary><p>仅计正式提交，未答不计为错误；订正不覆盖首次成绩。不同题目版本分别统计。</p></details></div>
+{% if not report.volumes %}<div class="console-empty"><h3>暂时没有已接入的札记</h3></div>{% endif %}
+<div class="analysis-layout">
+{% if report.volumes %}
+<aside class="analysis-index" aria-label="分析目录">
+  <p class="index-label">卷课目录</p>
+  <nav>
+    {% for vol in report.volumes %}
+    <div class="index-volume-group">
+      <a class="index-volume" href="#analysis-{{ vol.id }}"><span>卷{{ vol.number }}</span><strong>{{ vol.title }}</strong></a>
+      {% for l in vol.lessons %}
+      <a class="index-lesson" href="#analysis-{{ l.id }}"><span>第 {{ l.number }} 课</span><strong>{{ l.title }}</strong></a>
+      {% for a in l.activities %}
+      <a class="index-activity" href="#analysis-{{ a.id }}">{{ a.title }}</a>
+      {% endfor %}
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </nav>
+</aside>
+{% endif %}
+<div class="analysis-content">
+{% set ns = namespace(tools_shown=false) %}
+{% set creation_tools = (curations|default({})).get('creation', {}).get('tools') %}
+{% set active_open = open_activity|default('') %}
+{% for vol in report.volumes %}
+<details class="volume-analysis" id="analysis-{{ vol.id }}" open>
+  <summary class="volume-heading">
+    <div class="volume-title"><span class="eyebrow">卷{{ vol.number }}</span><h3>{{ vol.title }}</h3></div>
+    <div class="lesson-summary"><span>{{ vol.lessons|length }} 课</span><span>已提交 <strong>{{ vol.summary.submitted }}/{{ vol.summary.expected }}</strong> 份</span><span>已完成 <strong>{{ vol.summary.completed }}</strong> 份</span><span>首答正确率 <strong>{{ (vol.summary.first_rate|string ~ '%') if vol.summary.first_rate is not none else '—' }}</strong></span></div>
+  </summary>
+  <div class="volume-body">
+  {% for lesson in vol.lessons %}
+  {% set lesson_activity_ids = lesson.activities|map(attribute='id')|list %}
+  <details class="lesson-analysis" id="analysis-{{ lesson.id }}" {% if lesson_id == lesson.id or active_open in lesson_activity_ids %}open{% endif %}>
+    <summary class="lesson-heading">
+      <div><h4>第 {{ lesson.number }} 课 · {{ lesson.title }}</h4></div>
+      <div class="lesson-summary"><span>已提交 <strong>{{ lesson.summary.submitted }}/{{ lesson.summary.expected }}</strong> 份</span><span>已完成 <strong>{{ lesson.summary.completed }}</strong> 份</span><span>首答正确率 <strong>{{ (lesson.summary.first_rate|string ~ '%') if lesson.summary.first_rate is not none else '—' }}</strong></span></div>
+    </summary>
+    <div class="lesson-body">
+    {% if creation_tools and not ns.tools_shown and lesson.number in [8, 9] %}
+    {% set ns.tools_shown = true %}
+    <details class="creation-tools-panel" id="creation-tools"><summary>卷三 AI 外部应用入口设置</summary>
+      <form method="post" action="{{ url_for('creation.configure') }}" class="creation-tools-form">
+        <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="class_id" value="{{ selected_class_id or '' }}"><input type="hidden" name="lesson_id" value="{{ lesson_id or '' }}">
+        {% for key, label in [('recognize','识图'),('optimize','文字优化'),('generate','图片生成')] %}<label>{{ label }} · {{ '内部API已启用' if creation_tools[key].mode == 'internal' else '使用外部应用' }}<input type="url" name="{{ key }}" required value="{{ creation_tools[key].external_url }}"></label>{% endfor %}
+        <button class="compact">保存入口</button>
+      </form>
+    </details>
+    {% endif %}
+    {% for activity in lesson.activities %}
+    <details class="activity-analysis" id="analysis-{{ activity.id }}" {% if active_open == activity.id %}open{% endif %}><summary><span>{{ activity.title }}</span><small>{{ activity.versions|sum(attribute='eligible') }} 名学生{% if activity.versions|length > 1 %} · {{ activity.versions|length }} 个题目版本{% endif %}</small></summary>
+      {% if activity.animal_chart is defined %}{% include 'teacher/animal_chart.html' %}{% endif %}
+      {% if activity.training_gallery is defined %}{% include 'teacher/training_gallery.html' %}{% endif %}
+      {% if activity.has_objectives %}
+      <div class="activity-mode-bar" role="group" aria-label="{{ activity.title }}作答阶段切换">
+        <span class="mode-bar-label">固定题状态</span>
+        <div class="mode-switch">
+          <button type="button" class="mode-btn is-active" data-activity-mode="first" aria-pressed="true">首答情况</button>
+          <button type="button" class="mode-btn" data-activity-mode="correction" aria-pressed="false">自主订正情况</button>
+        </div>
+      </div>
+      {% endif %}
+      {% for version in activity.versions %}<div class="analysis-version">{% if activity.versions|length > 1 %}<p class="version-label">题目版本 {{ version.version }} · {{ version.eligible }} 名适用学生</p>{% endif %}
+        {% for section in version.sections %}
+        {% set section_index = loop.index %}
+        <section class="analysis-section{% if section.optional %} is-optional{% endif %}" id="sec-{{ activity.id }}-v{{ version.version }}-{{ section.id or section_index }}">
+          <header class="section-header">
+            <span class="section-step">{{ section_index }}</span>
+            <h4>{{ section.title }}</h4>
+            <small class="section-meta">{{ section.questions|length }} 题{% if section.optional %} · 选做{% endif %}</small>
+          </header>
+          <div class="section-questions">
+          {% for q in section.questions %}<article class="question-analysis" id="q-{{ activity.id }}-v{{ version.version }}-{{ q.id }}" data-question-id="{{ q.id }}">
+            <div class="question-top-row">
+              <div class="question-title-col">
+                <span class="question-num">{{ section_index }}.{{ loop.index }}</span>
+                <div class="question-title-main">
+                  <h5>{{ q.prompt }}</h5>
+                  <span class="question-type">{{ {'single':'单选','multiple':'多选','number':'数值','text':('教师审核' if q.question_kind == 'review' else '自主记录')}[q.type] }}{% if q.optional %} · 选做{% endif %}</span>
+                </div>
+              </div>
+              <div class="question-progress-col">
+                {% if q.question_kind == 'objective' %}
+                  {% set total_eligible = q.count + q.unanswered %}
+                  <div class="question-progress-bar" role="img" tabindex="0"
+                       aria-label="整体作答情况：正确 {{ q.correct_count }} 人，错误 {{ q.wrong_count }} 人，未回答 {{ q.unanswered }} 人"
+                       data-kind="objective" data-active-mode="first"
+                       data-first-correct="{{ q.correct_count }}" data-first-wrong="{{ q.wrong_count }}" data-first-rate="{{ q.rate if q.rate is not none else '' }}"
+                       data-corr-correct="{{ q.correction_stats.correct_count }}" data-corr-wrong="{{ q.correction_stats.wrong_count }}" data-corr-rate="{{ q.correction_stats.rate if q.correction_stats.rate is not none else '' }}"
+                       data-unanswered="{{ q.unanswered }}"
+                       data-corrected="{{ q.corrected }}" data-correction-correct="{{ q.correction_correct }}">
+                    {% if total_eligible %}
+                      <span class="bar-seg is-correct{% if not q.correct_count %} is-hidden{% endif %}" data-flex="{{ q.correct_count }}"></span>
+                      <span class="bar-seg is-wrong{% if not q.wrong_count %} is-hidden{% endif %}" data-flex="{{ q.wrong_count }}"></span>
+                      <span class="bar-seg is-unanswered{% if not q.unanswered %} is-hidden{% endif %}" data-flex="{{ q.unanswered }}"></span>
+                    {% else %}
+                      <span class="bar-seg is-unanswered" data-flex="1"></span>
+                    {% endif %}
+                  </div>
+                {% else %}
+                  {% set total_eligible = q.correct_count + q.pending_count + q.wrong_count + q.unanswered %}
+                  <div class="question-progress-bar" role="img" tabindex="0"
+                       aria-label="{% if q.question_kind == 'review' %}审核进度：通过 {{ q.correct_count }} 人，待审核 {{ q.pending_count }} 人，已驳回 {{ q.wrong_count }} 人，没做 {{ q.unanswered }} 人{% else %}记录情况：已记录 {{ q.correct_count }} 人，未填写 {{ q.unanswered }} 人{% endif %}"
+                       data-kind="{{ q.question_kind }}"
+                       data-correct="{{ q.correct_count }}" data-pending="{{ q.pending_count }}" data-wrong="{{ q.wrong_count }}" data-unanswered="{{ q.unanswered }}">
+                    {% if total_eligible %}
+                      {% if q.correct_count %}<span class="bar-seg is-correct" data-flex="{{ q.correct_count }}"></span>{% endif %}
+                      {% if q.pending_count %}<span class="bar-seg is-pending" data-flex="{{ q.pending_count }}"></span>{% endif %}
+                      {% if q.wrong_count %}<span class="bar-seg is-wrong" data-flex="{{ q.wrong_count }}"></span>{% endif %}
+                      {% if q.unanswered %}<span class="bar-seg is-unanswered" data-flex="{{ q.unanswered }}"></span>{% endif %}
+                    {% else %}
+                      <span class="bar-seg is-unanswered" data-flex="1"></span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+            {% if q.question_kind == 'objective' %}
+              <div class="question-answer-zone">
+                <div class="question-standard">
+                  <span class="standard-label">标准答案</span>
+                  <strong class="standard-value">{{ q.standard }}</strong>
+                  {% if q.type == 'multiple' %}<small class="muted">（须全部选对且不多选）</small>{% endif %}
+                </div>
+                {% if q.options %}<p class="question-options-line">全部选项：{{ q.options|join(' / ') }}</p>{% endif %}
+              </div>
+              <div class="question-status-zone cell-matrix-wrap">
+                <div class="cell-legend" aria-hidden="true"><span><i class="answer-cell is-correct"></i><em class="legend-text" data-first="正确" data-correction="正确（含订正）">正确</em></span><span><i class="answer-cell is-wrong"></i><em class="legend-text" data-first="错误" data-correction="仍错或待订正">错误</em></span><span><i class="answer-cell is-unanswered"></i>未回答</span></div>
+                <div class="answer-cell-grid" role="list" aria-label="学生作答状态方块图">
+                  {% for cell in q.cells %}
+                  <a class="answer-cell is-{{ cell.state }}"
+                     role="listitem"
+                     href="{{ url_for('teacher.dashboard', student_id=cell.student_id, class_id=selected_class_id or '', activity_id=activity.id) }}"
+                     data-student-name="{{ cell.student_name }}"
+                     data-class-name="{{ cell.class_name }}"
+                     data-state-label="{{ cell.state_label }}"
+                     data-first-state="{{ cell.state }}"
+                     data-first-label="{{ cell.state_label }}"
+                     data-correction-state="{{ cell.correction_state }}"
+                     data-correction-label="{{ cell.correction_state_label }}"
+                     data-first="{{ cell.first or '' }}"
+                     data-corrected="{{ '1' if cell.corrected else '' }}"
+                     data-correction="{{ cell.correction or '' }}"
+                     data-correction-correct="{{ '1' if cell.correction_correct else ('0' if cell.corrected else '') }}"
+                     aria-label="{{ cell.student_name }}（{{ cell.class_name }}）· {{ cell.state_label }}{% if cell.first %} · 首次：{{ cell.first }}{% endif %}"></a>
+                  {% else %}
+                  <span class="muted">当前范围内暂无学生。</span>
+                  {% endfor %}
+                </div>
+              </div>
+            {% else %}
+              {% if q.summary_tables %}
+              <div class="analysis-summary-wrap">
+                {% for tbl in q.summary_tables %}
+                <div class="analysis-summary-block">
+                  <p class="analysis-summary-title">{{ tbl.title }}</p>
+                  <table class="teacher-exp-table is-compact">
+                    <thead><tr>{% for h in tbl.headers %}<th>{{ h }}</th>{% endfor %}</tr></thead>
+                    <tbody>{% for row in tbl.rows %}<tr>{% for cell in row %}<td class="{{ 'tone-' + cell.tone if cell.tone else '' }}">{{ cell.text }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+                  </table>
+                </div>
+                {% endfor %}
+              </div>
+              {% endif %}
+              {% if q.tree_variants %}
+              <div class="teacher-tree-variants" aria-label="学生构造方案图谱">
+                <p class="analysis-summary-title">全班决策树构造方案图谱（共 {{ q.tree_variants|length }} 种）</p>
+                <div class="tree-variant-tabs" role="tablist" aria-label="切换决策树构造方案">
+                  {% for v in q.tree_variants %}
+                  <button type="button" class="tree-variant-tab{% if loop.first %} is-active{% endif %}" role="tab" aria-selected="{{ 'true' if loop.first else 'false' }}" data-variant-index="{{ v.index }}">
+                    <strong>方案 {{ v.index }}</strong><span>{{ v.count }}人 · {{ v.percent }}%</span>
+                  </button>
+                  {% endfor %}
+                </div>
+                <div class="tree-variants-grid">
+                  {% for v in q.tree_variants %}
+                  <section class="tree-variant-card" role="tabpanel" data-variant-index="{{ v.index }}"{% if not loop.first %} hidden{% endif %}>
+                    <header class="tree-variant-head">
+                      <div class="tree-variant-meta">
+                        <span class="tree-variant-badge">方案 {{ v.index }}</span>
+                        <strong>根条件：{{ v.root_label }}</strong>
+                        <small>{{ v.depth }} 层 / {{ v.conds }} 个条件</small>
+                      </div>
+                      <span class="tree-variant-count">{{ v.count }} 人（{{ v.percent }}%）</span>
+                    </header>
+                    <div class="tree-variant-bar" aria-hidden="true"><span data-percent="{{ v.percent }}"></span></div>
+                    <div class="teacher-decision-tree is-compact" aria-label="方案 {{ v.index }} 决策树结构">
+                      <div class="t-tree-scroll">{{ branch(v.tree) }}</div>
+                    </div>
+                    <p class="tree-variant-who">采用学生：{{ v.who }}</p>
+                  </section>
+                  {% endfor %}
+                </div>
+              </div>
+              {% endif %}
+              <div class="question-status-zone cell-matrix-wrap">
+                <div class="cell-legend-row">
+                  {% if q.question_kind == 'review' %}
+                  <div class="cell-legend" aria-hidden="true"><span><i class="answer-cell is-correct"></i>通过审核</span><span><i class="answer-cell is-pending"></i>待审核</span><span><i class="answer-cell is-wrong"></i>已驳回</span><span><i class="answer-cell is-unanswered"></i>没做</span></div>
+                  {% else %}
+                  <div class="cell-legend" aria-hidden="true"><span><i class="answer-cell is-correct"></i>已记录</span><span><i class="answer-cell is-unanswered"></i>未填写</span></div>
+                  {% endif %}
+                  {% if q.word_cloud is not none %}
+                  <button type="button" class="wordcloud-toggle" aria-expanded="false">词云</button>
+                  {% endif %}
+                </div>
+                {% if q.word_cloud is not none %}
+                <div class="wordcloud-panel" hidden>
+                  {% if q.word_cloud %}
+                  <div class="wordcloud-cloud" role="group" aria-label="学生作答高频词云">
+                    {% for item in q.word_cloud %}
+                    <button type="button" class="wc-word is-w{{ item.weight }}" data-word="{{ item.word }}" data-students="{{ item.students|tojson|forceescape }}" title="「{{ item.word }}」出现 {{ item.count }} 次（{{ item.students|length }} 位学生提到）"><span>{{ item.word }}</span><small>{{ item.count }}</small></button>
+                    {% endfor %}
+                  </div>
+                  <p class="wordcloud-filter-status muted" hidden></p>
+                  {% else %}
+                  <p class="muted wordcloud-empty">暂无足够的有效文本作答，暂未生成词云。</p>
+                  {% endif %}
+                </div>
+                {% endif %}
+                <div class="answer-cell-grid" role="list" aria-label="学生任务状态方块图">
+                  {% for cell in q.cells %}
+                  <a class="answer-cell is-{{ cell.state }}"
+                     role="listitem"
+                     href="{{ url_for('teacher.dashboard', student_id=cell.student_id, class_id=selected_class_id or '', activity_id=activity.id) }}"
+                     data-student-id="{{ cell.student_id }}"
+                     data-student-name="{{ cell.student_name }}"
+                     data-class-name="{{ cell.class_name }}"
+                     data-state-label="{{ cell.state_label }}"
+                     data-preview-text="{{ cell.preview_text }}"
+                     data-preview-images="{{ cell.preview_images|tojson|forceescape }}"
+                     data-feedback="{{ cell.feedback }}"
+                     aria-label="{{ cell.student_name }}（{{ cell.class_name }}）· {{ cell.state_label }}"></a>
+                  {% else %}
+                  <span class="muted">当前范围内暂无学生。</span>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          </article>{% endfor %}
+          </div>
+        </section>{% endfor %}
+      </div>{% endfor %}
+      {% if activity.id in ['lesson-1-task-2', 'lesson-1-task-3'] %}{% include 'teacher/curation_pixel.html' %}
+      {% elif activity.id == 'lesson-7-task-2' %}{% include 'teacher/curation_handwriting.html' %}
+      {% elif activity.id in ['lesson-8-task-2', 'lesson-9-task-1', 'lesson-9-task-3'] %}{% include 'teacher/curation_creation.html' %}
+      {% endif %}
+    </details>{% endfor %}
+    </div>
+  </details>
+  {% endfor %}
+  </div>
+</details>
+{% endfor %}
+</div></div>
+<div class="answer-cell-tooltip" id="answer-cell-tooltip" role="tooltip" hidden></div>

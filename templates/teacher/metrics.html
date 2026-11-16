@@ -1,0 +1,8 @@
+{% macro metrics(s, analysis=false) %}
+<dl class="console-metrics">
+  <div><dt>学生</dt><dd>{{ s.students }}<small>人</small></dd></div>
+  {% if analysis %}<div><dt>已首次提交</dt><dd>{{ s.submitted }}<small>/ {{ s.expected }} 份</small></dd></div><div><dt>必做段均已提交</dt><dd>{{ s.fully_submitted }}<small>份</small></dd></div><div class="metric-focus"><dt>客观题首答正确率</dt><dd>{{ (s.first_rate|string ~ '%') if s.first_rate is not none else '—' }}</dd></div>
+  {% else %}<div><dt>设备占用</dt><dd>{{ s.bound }}<small>人</small></dd></div><div class="metric-focus"><dt>活动已完成</dt><dd>{{ s.completed }}<small>/ {{ s.expected }} 份</small></dd></div><div><dt>优秀札记</dt><dd>{{ s.excellent }}<small>份</small></dd></div>{% endif %}
+  <div class="metric-attention"><dt>待审核</dt><dd>{{ s.pending }}<small>份</small></dd></div><div><dt>有待订正题</dt><dd>{{ s.correction }}<small>份</small></dd></div>
+</dl>
+{% endmacro %}

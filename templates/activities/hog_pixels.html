@@ -1,0 +1,20 @@
+<section data-hog-panel="pixels" hidden>
+  <div class="hog-gradient-workbench">
+    <figure class="hog-figure hog-gradient-source"><figcaption><strong>灰度图 · 选一个像素</strong><span data-hog-pixel-ui="position"></span></figcaption><canvas width="480" height="480" data-hog-pixel-canvas="source" tabindex="0" role="img" aria-label="灰度原图，点击或用方向键选择像素"></canvas></figure>
+    <div class="hog-gradient-process">
+      <div class="hog-neighbor-cross" data-hog-pixel-ui="neighbors" aria-label="四个邻居的真实灰度值"></div>
+      <p class="hog-pixel-instruction">分别点击左右、上下各最亮的一个</p>
+      <div class="hog-pixel-ties"><button type="button" data-hog-pixel-compare="horizontal:equal">左右一样亮</button><button type="button" data-hog-pixel-compare="vertical:equal">上下一样亮</button></div>
+      <div class="hog-pixel-playback"><button type="button" data-hog-pixel-action="mark">手动运算</button><button type="button" data-hog-pixel-action="auto">自动演示</button></div>
+      <div class="hog-pixel-calculation" data-hog-pixel-ui="calculation" hidden>
+        <p class="hog-axis-equation" data-hog-pixel-ui="horizontal"></p>
+        <p class="hog-axis-equation" data-hog-pixel-ui="vertical"></p>
+        <div class="hog-pixel-vector"><div data-hog-pixel-ui="vector"></div><div><p data-hog-pixel-ui="angle"></p><p data-hog-pixel-ui="strength"></p></div></div>
+      </div>
+      <p data-hog-pixel-ui="feedback" class="hog-feedback" role="status"></p>
+      <p class="hog-caption hog-pixel-playback-status" data-hog-pixel-ui="playback" role="status"></p>
+    </div>
+    <figure class="hog-figure hog-gradient-result"><figcaption><strong>像素梯度方向图</strong><span data-hog-pixel-ui="count">0 / 576</span></figcaption><canvas width="480" height="480" data-hog-pixel-canvas="directions" tabindex="0" role="img" aria-label="与左图逐像素对应的梯度方向图，空格尚未计算，小圆点表示变化强度为0"></canvas><p>箭头：从暗到亮　·：变化强度为0</p></figure>
+  </div>
+
+</section>

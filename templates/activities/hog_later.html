@@ -1,0 +1,27 @@
+<section data-hog-panel="size" hidden>
+  <div class="feature-actions hog-size-controls">{% for size in [4,8,16,24] %}<button type="button" data-hog-size="{{ size }}">{{ size }}×{{ size }}</button>{% endfor %}<button type="button" data-hog-size-ui="home">回到原位</button></div>
+  <div class="hog-size-workbench">
+    <figure class="hog-figure"><figcaption><strong>原小屋与区域特征</strong><button type="button" data-hog-size-ui="features" aria-pressed="false">查看区域特征</button></figcaption><canvas width="384" height="384" data-hog-size-ui="original" role="img" aria-label="原小屋，可切换为每个区域的方向统计示意"></canvas><p class="hog-size-legend">每格只汇总方向，不保留格内的具体位置。短线沿边缘走向。</p></figure>
+    <div class="hog-size-readout"><span>移动情况</span><strong data-hog-size-ui="offset"></strong><span data-hog-size-ui="current-size"></span><strong data-hog-size-ui="similarity"></strong><small>区域统计相似程度<br>不是识别成功率</small></div>
+    <figure class="hog-figure"><figcaption><strong>自由拖动这间小屋</strong></figcaption><canvas width="384" height="384" data-hog-size-ui="changed" tabindex="0" role="img" aria-label="自由拖动小屋，方向键每次移动1像素，Home回到原位"></canvas></figure>
+  </div>
+  <div class="hog-observation"><strong data-hog-size-ui="summary"></strong><p data-hog-size-ui="finding"></p><p>位移正数表示向右、向下；负数表示向左、向上。</p></div>
+</section>
+<section data-hog-panel="finish" hidden>
+  <div class="hog-finish-toolbar">
+  <div class="hog-finish-playback feature-actions"><button type="button" data-hog-finish-ui="auto" disabled>自动演示</button><strong class="hog-phase-status" data-hog-finish-ui="phase" aria-live="polite"></strong></div>
+  <ol class="hog-finish-flow" aria-label="从图片到特征的过程">
+    <li data-hog-finish-phase="0">何罗鱼原图</li><li data-hog-finish-phase="1">灰度与方向</li><li data-hog-finish-phase="2">分区统计</li><li data-hog-finish-phase="3">组成数字</li><li data-hog-finish-phase="4">坐标中的点</li>
+  </ol>
+  </div>
+  <div class="hog-fish-workbench">
+    <figure class="hog-figure"><figcaption><strong>何罗鱼图像</strong></figcaption><div class="hog-fish-stage"><canvas width="384" height="384" data-hog-finish-ui="source" role="img" aria-label="何罗鱼原图及特征提取过程"></canvas></div><div class="hog-fish-caption"><strong data-hog-finish-ui="source-label">何罗鱼 · 原图</strong></div></figure>
+    <figure class="hog-figure"><figcaption><strong>区域方向统计</strong></figcaption><div class="hog-fish-stage"><canvas width="384" height="384" data-hog-finish-ui="statistics" role="img" aria-label="何罗鱼36个区域的方向统计"></canvas></div><div class="hog-fish-caption"><strong>36个区域 · 每区9个数</strong><small>短线沿边缘走向。</small></div></figure>
+    <figure class="hog-figure hog-coordinate-figure"><figcaption><strong>特征坐标</strong></figcaption><div class="hog-fish-stage"><canvas width="384" height="384" data-hog-finish-ui="plot" role="img" aria-label="取两个特征数字作为横纵坐标，显示何罗鱼的落点"></canvas></div><div class="hog-fish-caption"><strong data-hog-finish-ui="coordinate-values"></strong><small data-hog-finish-ui="x-label"></small><small data-hog-finish-ui="y-label"></small></div></figure>
+  </div>
+  <p class="hog-feedback" data-hog-finish-ui="feedback"></p>
+  <div class="hog-vector-heading"><strong>按顺序组成的图像特征</strong><span data-hog-finish-ui="count"></span></div>
+  <p class="hog-number-legend">每行一块：4个8×8区域 × 每区9个数。<span class="hog-axis-x">橙框：横坐标</span> · <span class="hog-axis-y">蓝框：纵坐标</span></p>
+  <div class="hog-complete-numbers" data-hog-finish-ui="numbers" aria-label="完整900维HOG特征"></div>
+  <p class="hog-observation">平面图只展示两个特征数；实际识别仍使用完整特征。</p>
+</section>

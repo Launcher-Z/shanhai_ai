@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>动物分类实验</title><link rel="stylesheet" href="activity.css"></head>
+<body>
+  <main class="classifier-workbench">
+    <section class="sample-column" aria-label="训练类别与图片"><div id="classes"></div></section>
+    <section class="train-column" aria-label="训练模型"><div class="training-card"><button id="train" class="primary">开始训练</button><progress id="progress" max="100" value="0" aria-label="训练进度" hidden></progress><p id="training-status">先为两个类别命名并添加图片</p></div></section>
+    <section class="preview-card" aria-label="测试模型">
+      <h1>测试模型</h1>
+      <div class="test-tabs" role="tablist" aria-label="测试方式">
+        <button id="image-test-tab" role="tab" aria-selected="true" aria-controls="image-test-panel" data-test-mode="image">图片测试</button>
+        <button id="camera-test-tab" role="tab" aria-selected="false" aria-controls="camera-test-panel" tabindex="-1" data-test-mode="camera">摄像头实时测试</button>
+      </div>
+      <div id="preview-empty"><span class="empty-symbol" aria-hidden="true">待训</span><p>训练一个模型后，<br>就可以用新图片测试</p></div>
+      <div id="preview" hidden>
+        <div id="image-test-panel" role="tabpanel" aria-labelledby="image-test-tab"><img id="test-image" alt="所选测试图片"><p id="test-caption"></p></div>
+        <div id="camera-test-panel" role="tabpanel" aria-labelledby="camera-test-tab" hidden><video id="live-video" autoplay muted playsinline aria-label="实时测试画面"></video><p id="live-status" role="status">打开摄像头后实时查看预测</p><button id="start-live">开启摄像头</button></div>
+        <div id="probabilities"></div>
+        <div id="image-test-picker"><div id="tests" class="test-picker" aria-label="选择内置测试图片"></div></div>
+      </div>
+    </section>
+  </main>
+  <p id="status" role="status" aria-live="polite"></p>
+  <dialog id="image-library" aria-labelledby="library-title"><header><h2 id="library-title">添加训练图片</h2><button id="close-library" aria-label="关闭图库">×</button></header><div id="library-tabs" role="group" aria-label="内置图片分类"></div><div id="library-images" class="library-gallery"></div><footer><span id="library-count"></span><button id="select-group">全选本组</button><button id="add-selected" class="primary">加入当前类别</button></footer></dialog>
+  <script src="../neural/storage.js"></script><script type="module" src="activity.js"></script>
+</body></html>

@@ -1,0 +1,3 @@
+.has-animal-classifier .activity-overview,.has-animal-classifier .activity-workspace{display:none}
+.animal-classifier iframe{width:100%;min-height:0;border:0;display:block;background:transparent}
+.animal-classifier[hidden]{display:none}

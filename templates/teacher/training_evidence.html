@@ -1,0 +1,9 @@
+{% macro training_evidence(value) %}
+{% set data=value|creation_data %}
+{% if data %}
+<p>正规实验第{{ data.get('round') }}轮 · 额外训练图{{ data.get('extra_count',0) }}张</p>
+<div style="display:flex;flex-wrap:wrap;gap:14px">
+{% for sample in data.get('samples',[]) %}<figure style="margin:0;width:140px"><a href="/api/creation/media/{{ sample.media_id }}" target="_blank" rel="noopener"><img style="width:140px;height:110px;object-fit:contain" src="/api/creation/media/{{ sample.media_id }}/thumbnail" alt="{{ sample.name }}" loading="lazy"></a><figcaption style="overflow-wrap:anywhere">{{ sample.category }} · {{ sample.name }}</figcaption></figure>{% endfor %}
+</div><p class="review-student-answer">图片处理说明：{{ data.get('note') or '未填写' }}</p>
+{% else %}<p>尚未确认训练图片</p>{% endif %}
+{% endmacro %}

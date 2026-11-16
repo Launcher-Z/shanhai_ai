@@ -1,0 +1,14 @@
+{
+  "activity_id": "lesson-3-task-1",
+  "version": 1,
+  "title": "观察与猜测 · 学习札记",
+  "intro": "结合图片和全班测试结果，提出自己的猜测。",
+  "sections": [
+    {
+      "id": "factors", "step": 0, "title": "可能影响识别的因素", "optional": false,
+      "questions": [
+        {"id": "recognition-factors", "type": "text", "prompt": "结合你观察到的图片和测试结果，猜测哪些因素可能影响图像识别？请举例说明。", "required": true, "review": true, "max_length": 2000}
+      ]
+    }
+  ]
+}

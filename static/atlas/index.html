@@ -1,0 +1,34 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>五藏山经 · 山海图</title><link rel="stylesheet" href="world.css"><link rel="stylesheet" href="../learning/ink-scroll.css"></head><body>
+<header class="mast"><a class="brand" href="../.."><span class="seal">山<br>海</span><span>再绘山海经<small>图像与人工智能</small></span></a><button id="open" class="map-entry" aria-haspopup="dialog"><svg viewBox="0 0 44 32" fill="none" aria-hidden="true"><path d="M2 27 13 7l8 14 6-11 15 18M5 28c10-4 24-2 34 0" stroke="currentColor" stroke-width="2"/><circle cx="33" cy="6" r="2.4" fill="#a1573d"/></svg>山海图</button><span class="header-note">五藏山经 · 独立模型预览</span></header>
+<main class="lesson"><span>卷一 · 图像与数据</span><h1>图像的数字密码</h1><p>放大一幅图像，观察像素与数值的关系。<br>计算机眼中的山海，藏在每一个像素里。</p><div class="lesson-line">像素与数值探索 <span>准备中</span></div><div class="lesson-line">第一次像素绘制 <span>准备中</span></div></main>
+<section id="atlas" class="atlas" role="dialog" aria-modal="true" aria-labelledby="atlas-title" hidden>
+<header class="atlas-heading"><div><div class="eyebrow">五藏山经 · 写意游图</div><h2 id="atlas-title">山海无界</h2></div><div class="heading-hint">循山而行，境随步换</div><button id="close" class="close" aria-label="关闭山海图">×</button></header>
+<div class="atlas-body">
+  <section class="map-column" aria-label="连续三维山海地图">
+    <div id="location" class="location" aria-live="polite"><span class="region-seal" id="region-seal">南</span><div><p class="location-trail" id="location-trail">南山经 · 南山经之首</p><h3 id="mountain">招摇之山</h3><p id="direction" class="direction"></p></div></div>
+    <div class="viewport" id="viewport"><div class="loading" id="loading" role="status">墨色渐开，山海将现……</div><div class="labels" id="labels" aria-hidden="true"></div><span class="north" aria-hidden="true">北<br>↑</span></div>
+    <div class="map-bottom">
+      <div class="world-overview"><canvas id="route" width="360" height="155" role="img" aria-label="九域全图与当前位置"></canvas><div class="overview-caption">九域一图 <span>当前位置</span></div></div>
+      <div class="map-navigation"><div class="control-row"><div class="mode-controls"><button id="pan" aria-pressed="true">探索</button><button id="orbit" aria-pressed="false">转动</button></div><button id="zoom-out" aria-label="缩小">−</button><button id="zoom-in" aria-label="放大">＋</button><button id="home">归位</button></div><p class="gesture">拖动山水 · 滚轮缩放 · 方向键探索</p></div>
+    </div>
+    <p id="boundary" class="boundary" role="status"></p>
+  </section>
+  <aside class="reading-shell" id="reading-shell">
+    <div class="reading" id="reading-scroll" tabindex="0" role="region" aria-label="山域资料，可上下滚动"><div class="reading-content">
+    <div class="reading-top"><span class="tiny">山域记</span><span id="index"></span></div>
+    <h3 class="reading-name" id="reading-place">招摇之山</h3>
+    <section class="catalog-section" id="biology-section" hidden><h4>生物 <span id="creature-count"></span></h4><div id="creatures"></div></section>
+    <section class="catalog-section" id="resources-section" hidden>
+      <h4>植物／矿物资源</h4>
+      <div class="resource-group" id="plants-section" hidden><p class="resource-kind">植物</p><div id="plant-resources"></div></div>
+      <div class="resource-group" id="minerals-section" hidden><p class="resource-kind">矿物</p><div id="mineral-resources"></div></div>
+    </section>
+    <details class="original" id="original-section" hidden><summary>展开原文</summary><p id="original"></p></details>
+    <a id="source" class="source" target="_blank" rel="noopener noreferrer">《山海经》原文 ↗</a>
+    <p class="interpretation">九宫格与山间位置为体验设计，不是实际地理位置；原文方位和记载可展开查看。</p>
+    </div></div>
+    <div class="ink-scrollbar" hidden><div class="ink-track"><button type="button" class="ink-thumb" role="scrollbar" aria-label="山域资料滚动位置" aria-controls="reading-scroll" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div></div>
+  </aside>
+</div>
+<footer class="atlas-foot"><div class="progress-caption"><i></i><span id="catalog-status">正在读取山经</span></div><label>解锁演示 <select id="progress"><option value="9">九域全部开放 · 预览</option><option value="1">开放至第 1 课</option><option value="2">开放至第 2 课</option><option value="3">开放至第 3 课</option><option value="4">开放至第 4 课</option><option value="5">开放至第 5 课</option><option value="6">开放至第 6 课</option><option value="7">开放至第 7 课</option><option value="8">开放至第 8 课</option></select></label><span class="demo-note">演示状态 · 未连接真实学习记录</span></footer>
+</section><script type="module" src="world.js"></script></body></html>

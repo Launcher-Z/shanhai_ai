@@ -1,0 +1,66 @@
+{% if selected %}
+<details class="class-tools"><summary><span class="class-tools-title">当前班级设置 · {{ selected.name }}</span><span class="class-tools-badges"><span class="tool-badge {{ 'is-open' if selected.registration_open else 'is-closed' }}">{{ '允许新增账号' if selected.registration_open else '已关闭新增' }}</span><span class="tool-badge">开放至：{{ selected_cap_label }}</span></span></summary>
+  <div class="class-tools-grid">
+    <form class="tool-card" method="post" action="{{ url_for('teacher.rename_class', class_id=selected.id) }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label for="rename-class-name">班级改名</label>
+      <div class="inline-fields"><input id="rename-class-name" name="name" value="{{ selected.name }}" maxlength="40" required><button class="secondary compact">保存</button></div>
+      <p class="muted tool-hint">修改当前班级名称，学生数据保留。</p>
+    </form>
+    <div class="tool-card tool-card-inline">
+      <div>
+        <p class="tool-label">是否允许新增账号</p>
+        <p class="muted tool-hint">{{ '允许学生首次登录自动建档' if selected.registration_open else '仅限名单内学生登录' }}</p>
+      </div>
+      <form method="post" action="{{ url_for('teacher.toggle_registration', class_id=selected.id) }}">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <button class="secondary compact">{{ '关闭新增账号' if selected.registration_open else '允许新增账号' }}</button>
+      </form>
+    </div>
+    <form class="tool-card" method="post" action="{{ url_for('teacher.update_progress_cap', class_id=selected.id) }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label for="progress-cap">当前班级进度卡点（精确到活动与子活动）</label>
+      <div class="inline-fields">
+        <select id="progress-cap" name="progress_cap">
+          <option value="" {% if not selected.progress_cap %}selected{% endif %}>全部开放（不设卡点）</option>
+          {% for group in progress_cap_groups %}
+          <optgroup label="第 {{ group.lesson_number }} 课 · {{ group.lesson_title }}">
+            {% for opt in group.options %}
+            <option value="{{ opt.key }}" {% if selected.progress_cap == opt.key %}selected{% endif %}>{{ opt.label }}</option>
+            {% endfor %}
+          </optgroup>
+          {% endfor %}
+        </select>
+        <button class="compact">应用卡点</button>
+      </div>
+      <p class="muted tool-hint">选定节点及之前的课程、活动与子活动对本班开放，其后内容暂锁。</p>
+    </form>
+    <form class="tool-card" method="post" action="{{ url_for('teacher.add_students', class_id=selected.id) }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label for="names">批量添加学生 · 每行一个姓名</label>
+      <div class="roster-add-row">
+        <textarea id="names" name="names" rows="2" placeholder="每行输入一位学生姓名" required></textarea>
+        <button class="secondary compact">添加学生</button>
+      </div>
+    </form>
+  </div>
+</details>
+{% else %}
+<p class="class-tools-tip muted">当前为全部班级视图。可在右上角选择具体班级进行改名、账号权限、进度卡点与名单设置，或直接新增班级。</p>
+{% endif %}
+<div class="member-workbench">
+  <aside class="student-rail" aria-label="学生列表">
+    <div class="rail-heading"><h3>学生名册</h3><span>{{ scope.students|length }} 人</span></div>
+    <div class="rail-controls"><label class="sr-only" for="student-search">搜索学生</label><input id="student-search" type="search" placeholder="搜索学生姓名" autocomplete="off"><label class="sr-only" for="student-state">筛选状态</label><select id="student-state"><option value="all">全部学生</option><option value="pending">有待审札记</option><option value="bound">设备占用中</option><option value="free">未绑定或已到期</option></select></div>
+    <div class="student-list" id="student-list">
+      {% for s in scope.students %}<a class="student-item" href="{{ url_for('teacher.dashboard', class_id=selected_class_id or '', student_id=s.id) }}" data-workspace-url="{{ url_for('teacher.student_workspace', student_id=s.id, class_id=selected_class_id or '') }}" data-student-id="{{ s.id }}" data-name="{{ s.name }}" data-pending="{{ s.pending }}" data-bound="{{ s.bound }}" {% if s.id == selected_student_id %}aria-current="true"{% endif %}>
+        <span class="student-initial" aria-hidden="true">{{ s.name[0] }}</span><span class="student-label"><strong>{{ s.name }}</strong><small>{{ s.class_name }} · {{ '设备占用中' if s.bound else '未绑定' }}</small></span><span class="student-pending" {% if not s.pending %}hidden{% endif %}><i class="status-triangle pending" aria-hidden="true"></i><em class="pending-num">{{ s.pending }}</em> 待审</span>
+      </a>{% else %}<p class="rail-empty">暂无学生，请先创建班级、添加名单或让学生登录。</p>{% endfor %}
+      <p class="rail-empty" id="rail-no-match" hidden>没有符合条件的学生</p>
+    </div>
+  </aside>
+  <section class="student-workspace" id="student-workspace" aria-label="学生学习档案" tabindex="-1">
+    {% if work %}{% include 'teacher/workspace.html' %}{% else %}<div class="console-empty"><h3>从一个班级开始</h3><p>创建班级后，就可以查看学生的学习札记。</p></div>{% endif %}
+  </section>
+</div>
+<p id="workspace-message" class="workspace-message" role="status" aria-live="polite"></p>

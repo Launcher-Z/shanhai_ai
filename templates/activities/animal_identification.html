@@ -1,0 +1,14 @@
+<section id="animal-identification" class="animal-identification" aria-label="五种动物人工识别" hidden>
+  <div class="animal-identification-tools">
+    <p>观察这5张图片，把你的回答记入右上角的学习札记。不认识的动物，可以下载图片后用百度识图查找。</p>
+    <a href="https://graph.baidu.com/pcpage/index?tpl_from=pc" target="_blank" rel="noopener noreferrer">百度识图 ↗</a>
+  </div>
+  <div class="animal-identification-grid">
+    {% for filename in ['1.jpg', '2.jpg', '3.jpg', '4.jpeg', '5.png'] %}
+    <figure>
+      <img src="{{ url_for('static', filename='learning/animal-identification/' ~ filename) }}" alt="待识别的动物，图{{ loop.index }}" loading="lazy">
+      <figcaption><span>图 {{ loop.index }}</span><a href="{{ url_for('static', filename='learning/animal-identification/' ~ filename) }}" download="动物图{{ loop.index }}.{{ filename.split('.')[-1] }}">下载图片</a></figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+</section>

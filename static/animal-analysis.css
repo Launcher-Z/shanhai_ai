@@ -1,0 +1,31 @@
+/* 教师端统计沿用墨绿、朱砂与暖纸色，柱子高度固定对应0—100%。 */
+.training-gallery-category{margin-top:24px}.training-gallery-category h5{margin:0 0 12px;color:#244c40;font:20px KaiTi,'楷体',serif}.training-gallery-category h5 span{margin-left:8px;color:#77765f;font:12px sans-serif}
+.training-gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:18px 14px}.training-gallery-grid figure{margin:0;min-width:0}.teacher-page .training-gallery-thumbnail{display:block;width:100%;padding:4px;border:1px solid #84735440;background:#fffdf7;cursor:zoom-in}.training-gallery-thumbnail img{display:block;width:100%;height:110px;object-fit:contain}.training-gallery-thumbnail:focus-visible{outline:2px solid #a47c3c;outline-offset:3px}.training-gallery-grid figcaption{display:grid;gap:4px;margin-top:8px;font-size:12px;color:#77765f}.training-gallery-grid figcaption strong{color:#344738}.training-gallery-grid figcaption span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.training-gallery-dialog{width:min(900px,calc(100% - 32px));max-height:90dvh;box-sizing:border-box;overflow:auto;padding:20px;border:1px solid #a29479;border-radius:5px;background:#fbfaf4;color:#344738}.training-gallery-dialog::backdrop{background:#25322988}.training-gallery-dialog header{display:flex;justify-content:space-between;align-items:center;gap:16px}.training-gallery-dialog h3{margin:0;font:24px KaiTi,'楷体',serif}.teacher-page .training-gallery-dialog [data-training-close]{padding:0 8px;border:0;background:transparent;color:#46604c;font-size:30px}.training-gallery-dialog>img{display:block;width:100%;height:min(60dvh,650px);object-fit:contain;margin:16px 0}.training-gallery-dialog p{font-size:13px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}.training-gallery-grid>.animal-analysis-note{grid-column:1/-1}
+.animal-analysis { margin:18px; padding:20px; border:1px solid #84735440; border-radius:5px; background:#faf9f2; }
+.animal-analysis-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+.animal-analysis-heading h4 { margin:0 0 7px; color:#244c40; font:22px/1.4 KaiTi,'楷体',serif; }
+.animal-analysis-heading p,.animal-analysis-note { margin:0; color:#77765f; font-size:12px; line-height:1.8; }
+.animal-analysis-note { margin-top:14px; }
+.animal-analysis-feedback,.animal-source-feedback { min-height:18px; color:#48664d; font-size:12px; }
+.animal-source-dialog { width:min(1000px,calc(100% - 32px)); max-height:85dvh; padding:22px; border:1px solid #a29479; border-radius:5px; color:#344738; background:#fbfaf4; box-shadow:0 15px 60px #1f29243d; }
+.animal-source-dialog::backdrop { background:#25322966; }
+.animal-source-dialog>header { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; padding-bottom:15px; border-bottom:1px solid #84735444; }
+.animal-source-dialog h3 { margin:0; font:25px KaiTi,'楷体',serif; }
+.animal-source-dialog header p { margin:8px 0 0; font-size:12px; color:#77765f; }
+.teacher-page .animal-source-dialog [data-animal-close] { padding:0 8px; border:0; background:transparent; color:#46604c; font:30px/1 KaiTi,serif; }
+.animal-source-tools { display:flex; align-items:flex-end; gap:20px; margin:20px 0; }
+.animal-source-tools label { display:grid; gap:7px; font-size:12px; }
+.animal-reason-label { flex:1; }
+.animal-source-tools input,.animal-source-tools select { width:100%; padding:8px 10px; }
+.animal-source-table-scroll { overflow:auto; max-height:48dvh; }
+.animal-source-table-scroll table { width:100%; border-collapse:collapse; font-size:12px; }
+.animal-source-table-scroll th { position:sticky; top:0; background:#eef1e7; color:#48604c; text-align:left; padding:11px 12px; font-weight:500; }
+.animal-source-table-scroll td { padding:12px; border-bottom:1px solid #8473542b; vertical-align:top; }
+.animal-source-table-scroll small { display:block; margin-top:5px; color:#8a826e; font-size:11px; line-height:1.6; }
+.animal-raw-value { white-space:pre-line; font:12px/1.9 Consolas,'Microsoft YaHei',sans-serif; }
+.animal-source-table-scroll td:last-child { min-width:105px; }
+.animal-source-table-scroll td:last-child a { display:block; margin-bottom:8px; text-decoration:underline; text-underline-offset:3px; }
+.animal-source-table-scroll .is-excluded { background:#a47c3c0a; color:#8c7d65; }
+.animal-source-table-scroll .is-muted { color:#8a826e; }
+@media(max-width:650px){.animal-analysis{margin:10px;padding:14px}.animal-analysis-heading{flex-wrap:wrap}.animal-source-tools{flex-direction:column;align-items:stretch}.animal-source-table-scroll table{min-width:600px}.animal-source-dialog{padding:15px}}

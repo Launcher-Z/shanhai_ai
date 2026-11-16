@@ -1,0 +1,24 @@
+{
+  "activity_id":"lesson-5-task-2","version":1,
+  "title":"模拟 KNN 与比较 K 值 · 学习札记",
+  "intro":"对照相同点位比较 K 值，再记录自由探索的发现。",
+  "sections":[
+    {"id":"nearest","step":0,"title":"找最近的邻居","optional":false,"questions":[
+      {"id":"distance-meaning","type":"single","prompt":"在本实验的特征位置图中，两个点越近，表示什么？","required":true,"options":[{"value":"features","label":"所选特征更相似"},{"value":"habitat","label":"真实栖息地一定更近"},{"value":"same","label":"一定是同一种动物"}],"answer":"features","explanation":"这里的距离用于表示所选特征的相似程度，不代表真实地理距离，也不能保证动物类别相同。"},
+      {"id":"nearest-id","type":"single","prompt":"初始图中，离待分类点★最近的是哪个样本？","required":true,"options":[{"value":"L1","label":"L1：雪豹"},{"value":"M1","label":"M1：金丝猴"},{"value":"M2","label":"M2：金丝猴"}],"answer":"L1","explanation":"★在(50,50)，L1在(56,50)，距离为6；M1距离为10，M2距离为12。"}
+    ]},
+    {"id":"compare","step":1,"title":"固定点位，比较 K 值","optional":false,"questions":[
+      {"id":"k1-result","type":"single","prompt":"K=1 时，多数投票的判断是？","required":true,"options":[{"value":"monkey","label":"金丝猴"},{"value":"leopard","label":"雪豹"}],"answer":"leopard","explanation":"最近的一个样本是L1，属于雪豹。"},
+      {"id":"k3-result","type":"single","prompt":"K=3 时，多数投票的判断是？","required":true,"options":[{"value":"monkey","label":"金丝猴"},{"value":"leopard","label":"雪豹"}],"answer":"monkey","explanation":"最近的三个样本是L1、M1、M2，金丝猴2票，雪豹1票。"},
+      {"id":"k5-result","type":"single","prompt":"K=5 时，多数投票的判断是？","required":true,"options":[{"value":"monkey","label":"金丝猴"},{"value":"leopard","label":"雪豹"}],"answer":"leopard","explanation":"再加入L2、L3，雪豹3票，金丝猴2票。"},
+      {"id":"k7-result","type":"single","prompt":"K=7 时，多数投票的判断是？","required":true,"options":[{"value":"monkey","label":"金丝猴"},{"value":"leopard","label":"雪豹"}],"answer":"monkey","explanation":"再加入M3、M4，金丝猴4票，雪豹3票。"},
+      {"id":"k9-result","type":"single","prompt":"K=9 时，多数投票的判断是？","required":true,"options":[{"value":"monkey","label":"金丝猴"},{"value":"leopard","label":"雪豹"}],"answer":"leopard","explanation":"再加入L4、L5，雪豹5票，金丝猴4票。"}
+    ]},
+    {"id":"explore","step":2,"title":"异兽位置模拟与解释","optional":false,"questions":[
+      {"id":"knn-beast-captures","type":"text","prompt":"做一个测试模拟：你觉得天狗、长右、类、朱厌这 4 只异兽分别可能落在坐标上的什么位置？在实验台摆好位置并一键截取 4 张图（可随时重截替换）。","required":true,"review":true,"knn_captures":true,"max_length":16000},
+      {"id":"k-larger","type":"single","prompt":"K 越大，分类就一定越准确吗？","required":true,"options":[{"value":"no","label":"不一定，还取决于样本和待分类点"},{"value":"yes","label":"是，参考越多邻居就一定越准确"}],"answer":"no","explanation":"K改变参考邻居的范围，也可能引入其他类别的样本。判断是否更准确还需要真实标签和测试结果，不能只看K的大小。"},
+      {"id":"method-difference","type":"single","prompt":"决策树和 KNN 在本课中分别怎样作判断？","required":true,"options":[{"value":"rules-neighbors","label":"决策树沿判断条件逐层分支；KNN参考最近邻居的类别投票"},{"value":"same","label":"两者都只看最近的一个邻居"},{"value":"original","label":"两者就是前面动物图像分类器内部使用的同一个算法"}],"answer":"rules-neighbors","explanation":"这是两种分类方法的教学模拟；不能据此推断前面的动物图像分类器内部就使用这两种算法。"},
+      {"id":"knn-observation","type":"text","prompt":"从上面 4 只异兽中任选 1 只，说明为什么你觉得它会放在这个位置（可结合两个示意特征的高低与周围邻居的判断来解释）。","required":true,"review":true,"max_length":1500}
+    ]}
+  ]
+}

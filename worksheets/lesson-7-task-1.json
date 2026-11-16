@@ -1,0 +1,249 @@
+{
+  "activity_id": "lesson-7-task-1",
+  "version": 2,
+  "title": "体验 0—1 单层网络 · 学习札记",
+  "intro": "先体验，再用实验记录说明自己的发现。",
+  "sections": [
+    {
+      "id": "input",
+      "title": "认识输入",
+      "questions": [
+        {
+          "id": "pixel-count",
+          "type": "number",
+          "prompt": "6列×10行的这张图，共有多少个像素输入？",
+          "required": true,
+          "answer": 60,
+          "explanation": "6×10＝60，每个位置提供一个输入数值。"
+        },
+        {
+          "id": "pixel-meaning",
+          "type": "single",
+          "prompt": "点阵中的0和1表示什么？",
+          "required": true,
+          "options": [
+            {
+              "value": "0",
+              "label": "数字类别0和1"
+            },
+            {
+              "value": "1",
+              "label": "没有笔迹与有笔迹"
+            },
+            {
+              "value": "2",
+              "label": "预测错误与正确"
+            }
+          ],
+          "answer": "1",
+          "explanation": "这里0表示没有笔迹，1表示有笔迹。图片的正确类别是另一个标签。"
+        },
+        {
+          "id": "weighted-input",
+          "type": "single",
+          "prompt": "输入通过两组权重分别计算时，正确的是哪一种？",
+          "required": true,
+          "options": [
+            {
+              "value": "0",
+              "label": "每个像素只送给其中一个输出"
+            },
+            {
+              "value": "1",
+              "label": "同一组60个像素分别参与两个加权和，各自再加偏置"
+            },
+            {
+              "value": "2",
+              "label": "正确标签先变成一个额外像素"
+            }
+          ],
+          "answer": "1",
+          "explanation": "两个输出共享输入，但各有60个权重和一个偏置。"
+        }
+      ],
+      "optional": false,
+      "step": 0
+    },
+    {
+      "id": "baseline",
+      "title": "训练前测试",
+      "questions": [
+        {
+          "id": "baseline-record",
+          "type": "text",
+          "prompt": "记录5张固定图片的训练前预测与比例。",
+          "review": false,
+          "required": true,
+          "max_length": 18000,
+          "experiment_record": true
+        },
+        {
+          "id": "testing-parameters",
+          "type": "single",
+          "prompt": "测试这5张图片时，模型的权重和偏置会怎样？",
+          "required": true,
+          "options": [
+            {
+              "value": "0",
+              "label": "每测一张就更新"
+            },
+            {
+              "value": "1",
+              "label": "保持不变"
+            },
+            {
+              "value": "2",
+              "label": "预测错误才更新"
+            }
+          ],
+          "answer": "1",
+          "explanation": "测试使用已有参数计算预测，不根据测试图更新参数。"
+        }
+      ],
+      "optional": false,
+      "step": 1
+    },
+    {
+      "id": "manual",
+      "title": "逐次训练",
+      "questions": [
+        {
+          "id": "manual-record",
+          "type": "text",
+          "prompt": "逐次填写前3次手动训练的标签、预测与对错。",
+          "review": false,
+          "required": true,
+          "max_length": 1800,
+          "experiment_record": false,
+          "record_table": {
+            "kind": "manual_training",
+            "fields": [
+              { "key": "r1-label", "label": "第1次·正确标签", "options": ["0", "1"] },
+              { "key": "r1-pred", "label": "第1次·模型预测", "options": ["0", "1"] },
+              { "key": "r1-prob", "label": "第1次·预测比例（%）", "min": 0, "max": 100 },
+              { "key": "r1-correct", "label": "第1次·对错", "options": ["正确", "错误"] },
+              { "key": "r2-label", "label": "第2次·正确标签", "options": ["0", "1"] },
+              { "key": "r2-pred", "label": "第2次·模型预测", "options": ["0", "1"] },
+              { "key": "r2-prob", "label": "第2次·预测比例（%）", "min": 0, "max": 100 },
+              { "key": "r2-correct", "label": "第2次·对错", "options": ["正确", "错误"] },
+              { "key": "r3-label", "label": "第3次·正确标签", "options": ["0", "1"] },
+              { "key": "r3-pred", "label": "第3次·模型预测", "options": ["0", "1"] },
+              { "key": "r3-prob", "label": "第3次·预测比例（%）", "min": 0, "max": 100 },
+              { "key": "r3-correct", "label": "第3次·对错", "options": ["正确", "错误"] }
+            ]
+          }
+        },
+        {
+          "id": "correct-still-learns",
+          "type": "single",
+          "prompt": "一次预测已经选对类别，模型还可能更新参数吗？",
+          "required": true,
+          "options": [
+            {
+              "value": "0",
+              "label": "可能，正确类别的预测比例仍可能小于1"
+            },
+            {
+              "value": "1",
+              "label": "不可能，猜对就没有误差了"
+            },
+            {
+              "value": "2",
+              "label": "只有输入像素全为1时才可能"
+            }
+          ],
+          "answer": "0",
+          "explanation": "预测类别正确并不代表损失为0，模型仍可根据误差更新参数。"
+        },
+        {
+          "id": "zero-weight",
+          "type": "single",
+          "prompt": "某位置输入是0，本次该位置权重没有变化，可以得出什么结论？",
+          "required": true,
+          "options": [
+            {
+              "value": "0",
+              "label": "模型没有学习"
+            },
+            {
+              "value": "1",
+              "label": "这次权重改变量与输入相乘为0；其他权重和偏置仍可能更新"
+            },
+            {
+              "value": "2",
+              "label": "模型以后不会再使用这个位置"
+            }
+          ],
+          "answer": "1",
+          "explanation": "单个权重不变不能代表整个模型没有学习。"
+        }
+      ],
+      "optional": false,
+      "step": 2
+    },
+    {
+      "id": "continue",
+      "title": "继续训练",
+      "questions": [
+        {
+          "id": "total-updates",
+          "type": "number",
+          "prompt": "先逐次训练3次，再追加100次，累计更新参数多少次？",
+          "required": true,
+          "answer": 103,
+          "explanation": "训练次数按完整的参数更新计数，3＋100＝103。"
+        },
+        {
+          "id": "training-flow",
+          "type": "single",
+          "prompt": "哪一个流程描述了本实验的一次训练？",
+          "required": true,
+          "options": [
+            {
+              "value": "0",
+              "label": "输入→加权计算和预测→根据标签衡量误差→更新参数"
+            },
+            {
+              "value": "1",
+              "label": "输入→猜一个数字→保存图片"
+            },
+            {
+              "value": "2",
+              "label": "测试全部图片→自动知道答案"
+            }
+          ],
+          "answer": "0",
+          "explanation": "标签用于训练反馈，不作为预测的输入特征。"
+        }
+      ],
+      "optional": false,
+      "step": 3
+    },
+    {
+      "id": "compare",
+      "title": "训练后比较",
+      "questions": [
+        {
+          "id": "binary-comparison",
+          "type": "text",
+          "prompt": "用同一组5张图片，记录训练前后的预测与比例。",
+          "review": false,
+          "required": true,
+          "max_length": 18000,
+          "experiment_record": true
+        },
+        {
+          "id": "binary-evidence",
+          "type": "text",
+          "prompt": "依据两轮记录，说明哪些图片的判断或比例发生变化。你能据此证明模型会识别所有人的0和1吗？",
+          "review": true,
+          "required": true,
+          "max_length": 1800,
+          "experiment_record": false
+        }
+      ],
+      "optional": false,
+      "step": 4
+    }
+  ]
+}

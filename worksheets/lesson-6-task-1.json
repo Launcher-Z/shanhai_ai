@@ -1,0 +1,142 @@
+{
+  "activity_id": "lesson-6-task-1",
+  "version": 2,
+  "title": "图像数字运算 · 学习札记",
+  "intro": "实验做到哪一步，就填写对应的一段札记。首次提交本段后，下一步实验和札记一起开放；错题可以稍后订正。",
+  "sections": [
+    {
+      "id": "pixels",
+      "step": 0,
+      "title": "读懂像素",
+      "optional": false,
+      "questions": [
+        {
+          "id": "rgb-channels",
+          "type": "single",
+          "prompt": "实验中的一个彩色像素，用几个通道数值记录颜色？",
+          "required": true,
+          "options": [
+            {
+              "value": "1",
+              "label": "1 个"
+            },
+            {
+              "value": "3",
+              "label": "3 个"
+            },
+            {
+              "value": "8",
+              "label": "8 个"
+            }
+          ],
+          "answer": "3",
+          "explanation": "实验用 R、G、B 三个通道分别记录红、绿、蓝，每个彩色像素对应三个数值。"
+        },
+        {
+          "id": "channel-max",
+          "type": "number",
+          "prompt": "一个 8 位颜色通道的数值最小为 0，最大是多少？",
+          "required": true,
+          "answer": 255,
+          "explanation": "8 位共有 256 种组合，从 0 开始编号，最大值就是 255。"
+        }
+      ]
+    },
+    {
+      "id": "enlarge",
+      "step": 1,
+      "title": "放大图像",
+      "optional": false,
+      "questions": [
+        {
+          "id": "enlarge-size",
+          "type": "single",
+          "prompt": "原图是 24×15 像素，宽和高分别放大 2 倍后，图像尺寸是多少？",
+          "required": true,
+          "options": [
+            {
+              "value": "48x30",
+              "label": "48×30 像素"
+            },
+            {
+              "value": "48x15",
+              "label": "48×15 像素"
+            },
+            {
+              "value": "24x30",
+              "label": "24×30 像素"
+            }
+          ],
+          "answer": "48x30",
+          "explanation": "宽为 24×2=48，高为 15×2=30。宽、高都需要乘 2。"
+        },
+        {
+          "id": "enlarge-count",
+          "type": "number",
+          "prompt": "接上题，放大后的图像一共有多少个像素？",
+          "required": true,
+          "answer": 1440,
+          "explanation": "48×30=1440 个像素。一个原像素复制成 2×2 个像素，总数变为原来的 4 倍。"
+        }
+      ]
+    },
+    {
+      "id": "shrink",
+      "step": 2,
+      "title": "缩小图像",
+      "optional": false,
+      "questions": [
+        {
+          "id": "mean-channel",
+          "type": "number",
+          "prompt": "缩小时，某个 3×3 区域的 R 通道数值依次为 80、90、100、110、120、130、140、150、160。取平均后，新像素的 R 通道值是多少？",
+          "required": true,
+          "answer": 120,
+          "explanation": "九个数的和为 1080，1080÷9=120。R、G、B 三个通道分别计算，再组成新颜色。"
+        },
+        {
+          "id": "shrink-count",
+          "type": "number",
+          "prompt": "24×15 的原图，宽、高分别缩为原来的三分之一后，一共剩下多少个像素？",
+          "required": true,
+          "answer": 40,
+          "explanation": "新图宽 24÷3=8，高 15÷3=5，共 8×5=40 个像素。"
+        }
+      ]
+    },
+    {
+      "id": "restore",
+      "step": 3,
+      "title": "再次放大",
+      "optional": false,
+      "questions": [
+        {
+          "id": "restore",
+          "type": "single",
+          "prompt": "对于本实验的山水图，先取平均缩小，再复制放大回原尺寸，能完全恢复原图吗？",
+          "required": true,
+          "options": [
+            {
+              "value": "yes",
+              "label": "能，尺寸恢复就代表内容恢复"
+            },
+            {
+              "value": "no",
+              "label": "不能，取平均时丢失的细节无法靠复制找回"
+            }
+          ],
+          "answer": "no",
+          "explanation": "不同的原像素经过平均可能变成同一个数值。再次放大只是复制平均后的颜色，不能还原原先每格的差异。"
+        },
+        {
+          "id": "pixel-observation",
+          "type": "text",
+          "prompt": "在“再次放大”中，找一处与原图颜色不同的位置，记录你看到的变化。再用自己的话解释：为什么尺寸一样了，图像却没有完全恢复？",
+          "required": true,
+          "review": true,
+          "max_length": 1200
+        }
+      ]
+    }
+  ]
+}

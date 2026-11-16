@@ -1,0 +1,22 @@
+<section id="animal-improvement" class="animal-improvement" data-student-id="{{ student.id }}" data-api="{{ url_for('worksheet.animal_comparison') }}" hidden aria-label="优化与检验">
+  <nav class="improvement-tabs" aria-label="优化实验子活动">
+    <button type="button" data-improvement-step="0" aria-pressed="true"><small>01</small>正规实验</button>
+    <button type="button" data-improvement-step="1" aria-pressed="false"><small>02</small>自由拓展 <em>选做</em></button>
+    <button type="button" data-improvement-step="2" aria-pressed="false"><small>03</small>前后比较</button>
+  </nav>
+  <p class="improvement-intro" data-improvement-intro></p>
+  <div data-improvement-panel="0" class="animal-classifier"></div>
+  <div data-improvement-panel="1" class="animal-classifier" hidden></div>
+  <div data-improvement-panel="2" hidden>
+    <header class="improvement-heading"><div><h3>同图再验 · 前后对照</h3><p data-comparison-scope></p></div><button type="button" data-comparison-refresh>刷新统计</button></header>
+    <div class="animal-chart-legend"><span><i></i>金丝猴</span><span><i></i>雪豹</span><small>平均预测比例（%）</small></div>
+    <div class="improvement-comparisons" data-comparison-rows></div>
+    <p class="improvement-caption">各图仅比较两轮都有有效记录的同一批学生，已同步教师排除信息。尚无配对时，2.2原结果标为“未配对”，仅供回看。摄像头画面不同，只作观察参考。图6、7、8为类别外的虚构对象；两类比例不等于识别正确率。</p>
+    <p data-comparison-feedback role="status" aria-live="polite"></p>
+  </div>
+  <dialog class="animal-review-image improvement-image" aria-labelledby="improvement-image-title">
+    <header><h3 id="improvement-image-title"></h3><button type="button" data-comparison-close aria-label="关闭大图">×</button></header>
+    <div class="animal-review-image-frame"><img data-comparison-image alt=""><button type="button" class="animal-review-previous" data-comparison-direction="-1" aria-label="上一张">‹</button><button type="button" class="animal-review-next" data-comparison-direction="1" aria-label="下一张">›</button></div>
+    <p data-comparison-position></p><div data-comparison-detail></div>
+  </dialog>
+</section>

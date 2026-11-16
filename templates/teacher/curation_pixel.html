@@ -1,0 +1,85 @@
+{% set pixel = (curations|default({})).get('pixel', {}).get(activity.id) %}
+{% if pixel is not none %}
+{% set works = pixel.works %}
+{% set stats = pixel.stats %}
+{% set is_redraw = (activity.id == 'lesson-1-task-3') %}
+{% set scope_label = selected.name if selected else '全部班级' %}
+<section class="curation-section pixel-curation" id="pixel-gallery-{{ activity.id }}" data-activity-id="{{ activity.id }}" data-csrf="{{ csrf }}" data-class-id="{{ selected_class_id or '' }}" data-lesson-id="{{ lesson_id or '' }}">
+  <div class="curation-heading">
+    <div>
+      <h4>{{ '1.3 观察展示后再绘制 · 作品展览挑选' if is_redraw else '1.2 小熊猫礼帽 · 作品展览挑选' }}</h4>
+      <p class="muted curation-stats-line">当前查看「{{ scope_label }}」：待审核 <strong data-stat-pending>{{ stats.scope_pending }}</strong> 件 · 已通过 <strong data-stat-approved>{{ stats.scope_total }}</strong> 件（已选中 <strong data-stat-staged>{{ stats.scope_staged }}</strong> 件）{% if stats.scope_returned %} · 已驳回 <strong data-stat-returned>{{ stats.scope_returned }}</strong> 件{% endif %} ｜ 全校本任务当前展出 <strong data-stat-global-active>{{ stats.active }}</strong> 件。</p>
+    </div>
+  </div>
+  <section class="sample-publication">
+    <div>
+      <h3>{{ '1.3「1.3 重绘第二稿」学生观摩区' if is_redraw else '1.3「1.2 第一稿」学生观摩区' }}</h3>
+      <p>学生端「1.3 观察展示后再绘制」按全校展示入选的 {{ '1.3 重绘第二稿' if is_redraw else '1.2 第一稿' }}作品（当前全校共展出 <strong>{{ stats.active }}</strong> 件）。选择班级仅用于分批整理；勾选或取消已通过作品后点击「保存并发布」即同步生效。</p>
+    </div>
+  </section>
+  {% if works %}
+  <div class="sample-toolbar">
+    <div class="sample-bulk-actions">
+      <button type="button" class="secondary compact creation-select-all" data-included="1">当前筛选全选 ✓</button>
+      <button type="button" class="secondary compact creation-select-all" data-included="0">当前筛选取消 ✕</button>
+    </div>
+    <form class="sample-batch-save creation-batch-form" method="post" action="{{ url_for('pixel_paint.batch_save') }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="activity_id" value="{{ activity.id }}">
+      <input type="hidden" name="class_id" value="{{ selected_class_id or '' }}">
+      <input type="hidden" name="lesson_id" value="{{ lesson_id or '' }}">
+      <input type="hidden" name="changes" class="creation-batch-changes" value="[]">
+      <span class="sample-dirty-hint creation-dirty-hint">点击已通过卡片 ✓ / ✕ 后保存并发布</span>
+      <button type="submit" class="compact creation-batch-save-btn" disabled>保存并发布</button>
+    </form>
+  </div>
+  {% endif %}
+  <div class="creation-teacher-grid">
+    {% for work in works %}
+    {% set st = work.status %}
+    {% set is_approved = (st == 'completed') %}
+    <article class="teacher-sample-card creation-work-card pixel-work-card is-state-{{ st }}{% if is_approved %} {% if work.included %}is-included{% else %}is-excluded{% endif %}{% endif %}{% if work.teacher_excellent %} is-excellent{% endif %}"
+             data-curation-card
+             data-curation-kind="pixel"
+             data-record-id="{{ work.record_id }}"
+             data-work-key="{{ work.work_key }}"
+             data-revision="{{ work.revision }}"
+             data-question-id="{{ work.question_id }}"
+             data-review-url="{{ url_for('worksheet.review_question', record_id=work.record_id) }}"
+             data-excellent-url="{{ url_for('worksheet.toggle_excellent', record_id=work.record_id) }}"
+             data-review-state="{{ st }}"
+             data-can-excellent="{{ '1' if is_approved else '0' }}"
+             data-excellent="{{ '1' if work.teacher_excellent else '0' }}"
+             {% if is_approved %}data-init-included="{{ '1' if work.included else '0' }}" data-included="{{ '1' if work.included else '0' }}"{% endif %}>
+      <div class="sample-card-head">
+        <a class="sample-card-sub creation-card-author" href="{{ url_for('teacher.dashboard', student_id=work.student_id, class_id=selected_class_id or '', activity_id=activity.id) }}" title="点击查看 {{ work.class_name }} · {{ work.student_name }} 的学习札记">{{ work.student_name }}{% if not selected %}·{{ work.class_name }}{% endif %}</a>
+        <span class="curation-status-badge is-{{ st }}" data-status-badge{% if is_approved %} hidden{% endif %}>{{ '待审核' if st == 'pending' else ('已驳回' if st == 'returned' else '已通过') }}</span>
+        <button type="button" class="sample-toggle-btn {% if work.included %}is-included{% else %}is-excluded{% endif %}" aria-pressed="{{ 'true' if work.included else 'false' }}" aria-label="切换作品「{{ work.title }}」入选状态" title="点击切换入选/停用"{% if not is_approved %} hidden{% endif %}>{% if work.included %}✓{% else %}✕{% endif %}</button>
+      </div>
+      <a class="creation-thumb-link pixel-thumb-link" href="/api/creation/media/{{ work.media_id }}" target="_blank" rel="noopener" title="点击查看原图">
+        <img class="creation-teacher-image pixel-teacher-image" loading="lazy" src="/api/creation/media/{{ work.media_id }}/thumbnail" alt="{{ work.title }}">
+      </a>
+      <div class="creation-card-title" title="{{ work.title }}">{{ work.title }}</div>
+      <div class="curation-card-footer">
+        <div class="curation-review-actions" data-review-actions{% if st != 'pending' %} hidden{% endif %}>
+          <button type="button" class="compact curation-approve-btn" data-curation-approve>通过</button>
+          <button type="button" class="secondary compact curation-reject-toggle" data-curation-reject-open>驳回</button>
+        </div>
+        <div class="curation-reject-box" data-reject-box hidden>
+          <textarea class="curation-reject-input" data-reject-input rows="2" maxlength="2000" placeholder="填写简短修改建议（必填）…"></textarea>
+          <div class="curation-reject-btns">
+            <button type="button" class="compact curation-reject-confirm" data-curation-reject-confirm>确认驳回</button>
+            <button type="button" class="secondary compact" data-curation-reject-cancel>取消</button>
+          </div>
+        </div>
+        <button type="button" class="compact curation-excellent-btn{% if work.teacher_excellent %} is-active{% endif %}" data-curation-excellent data-next-excellent="{{ '0' if work.teacher_excellent else '1' }}"{% if not is_approved %} hidden{% endif %}>{{ '已优秀 · 金圈' if work.teacher_excellent else '标为优秀 · 金圈' }}</button>
+        <p class="curation-feedback-note" data-feedback-note{% if st != 'returned' or not work.feedback %} hidden{% endif %}{% if work.feedback %} title="{{ work.feedback }}"{% endif %}>{% if st == 'returned' and work.feedback %}驳回建议：{{ work.feedback }}{% endif %}</p>
+        <p class="curation-card-msg" data-card-msg role="status" aria-live="polite" hidden></p>
+      </div>
+    </article>
+    {% else %}
+    <p class="muted">学生提交像素作品后，可在这里直接审核并挑选入展。</p>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}

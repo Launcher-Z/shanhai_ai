@@ -1,0 +1,45 @@
+/* 地图沿用独立页面，通过 iframe 隔离同名样式；外层负责模态窗口。 */
+.atlas-entry { display:flex; flex-shrink:0; align-items:center; gap:7px; padding:8px 0 8px 16px; border:0; border-left:1px solid var(--line); background:transparent; color:var(--green); font-size:16px; white-space:nowrap; }
+.atlas-entry[hidden] { display:none; }
+.atlas-entry svg { width:36px; height:27px; }
+.atlas-entry:hover { color:var(--accent); }
+/* 留出四周的学习页，让地图像一张展开的旧纸；纸纹中央淡化以保证阅读。 */
+.paper-dialog { position:fixed; inset:0; margin:auto; padding:0; width:90vw; height:88dvh; max-width:1320px; max-height:800px; border:1px solid #9c795d55; color:var(--ink); background-color:#eee3ca; background-image:linear-gradient(#faf4e32b,#faf4e32b),url('atlas-paper.png'); background-position:center; background-size:cover; box-shadow:0 18px 65px #2630233d,0 3px 12px #4e3c2524; overflow:hidden; }
+.paper-dialog::backdrop { background:#26352b2b; }
+.atlas-frame-host,.atlas-frame-host iframe { display:block; width:100%; height:100%; border:0; }
+.atlas-entry-status { position:absolute; inset:45% 20px auto; text-align:center; color:var(--green); pointer-events:none; }
+.paper-dialog-close { position:absolute; z-index:2; top:14px; right:calc(4% - 3px); width:44px; height:44px; padding:0; border:0; background:transparent; opacity:.8; }
+.paper-dialog-close img { display:block; width:100%; height:100%; object-fit:contain; }
+.paper-dialog-close:hover { opacity:1; }
+/* 隐藏滚动条时保留宽度，避免翻卷布局在开关地图时跳动。 */
+html { scrollbar-gutter:stable; }
+html.atlas-open { overflow:hidden; }
+@media(max-width:1150px) {
+  .atlas-entry { gap:4px; padding-left:10px; font-size:14px; }
+  .atlas-entry svg { width:29px; height:24px; }
+}
+@media(min-width:761px) and (max-width:1000px) {
+  .masthead { gap:12px; }
+  .masthead .brand { font-size:18px; gap:8px; }
+  .masthead .brand small { display:none; }
+  .masthead .volume-navigation a { flex-direction:column; gap:3px; }
+  .masthead .volume-navigation a strong { font-size:13px; }
+}
+@media(min-width:1000px) and (max-height:750px) { .paper-dialog-close { top:7px; } }
+@media(max-width:760px) {
+  .atlas-entry { margin-left:auto; padding:5px 10px; font-size:14px; }
+  .atlas-entry svg { width:25px; height:21px; }
+  .masthead .student-menu { margin-left:0; }
+}
+@media(max-width:800px) {
+  /* 窄屏保留少量纸页外沿，地图内部继续使用原有上下排版和滚动。 */
+  .paper-dialog { width:96vw; height:94dvh; }
+  .paper-dialog-close { top:10px; right:12px; }
+}
+@media(max-width:400px) {
+  .masthead { padding-left:4vw; padding-right:4vw; }
+  .masthead .brand { font-size:17px; }
+  .masthead .student-menu>span { max-width:54px; }
+  .masthead .student-menu { gap:7px; }
+  .atlas-entry { gap:3px; padding-left:7px; padding-right:7px; }
+}

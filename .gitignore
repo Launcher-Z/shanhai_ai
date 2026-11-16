@@ -1,0 +1,26 @@
+# 课堂运行数据与密钥（仅保存在本地）
+/data/*
+!/data/.gitkeep
+*.sqlite3
+*.sqlite3-*
+session.key
+.env
+.env.*
+
+# 打包运行时（随 GitHub Releases 分发，不纳入源码仓库）
+/runtime/
+
+# Python 缓存与虚拟环境
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# 编辑器与系统文件
+/.vscode/
+/.idea/
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

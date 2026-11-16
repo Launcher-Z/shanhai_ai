@@ -1,0 +1,30 @@
+<nav class="feature-steps hog-steps" aria-label="HOG 探究步骤">
+  {% for label in ['为什么需要HOG', '找像素的方向', '一块变成一组数', '区域大小有讲究', '组成最终特征'] %}
+  <button type="button" data-hog-step="{{ loop.index0 }}"><span>0{{ loop.index }}</span>{{ label }}</button>
+  {% endfor %}
+</nav>
+<div class="feature-intro hog-intro"><div><h3 data-hog-ui="heading"></h3><p data-hog-ui="intro"></p></div></div>
+
+{% include 'activities/hog_intro.html' %}
+
+<div class="feature-toolbar hog-toolbar" data-hog-ui="toolbar" hidden>
+  <span>试验图</span><button type="button" data-hog-sample="house">小屋</button><button type="button" data-hog-sample="fish">何罗鱼</button>
+  <span data-hog-ui="image-size"></span>
+</div>
+
+{% include 'activities/hog_pixels.html' %}
+
+<section data-hog-panel="histogram" hidden>
+  <div class="hog-vote-workbench">
+    <figure class="hog-figure"><figcaption><strong>选一个 8×8 区域</strong><span data-hog-ui="cell-position"></span></figcaption><canvas width="480" height="480" data-hog-canvas="vote-source" tabindex="0" role="img" aria-label="分区灰度图，点击或用方向键选择单元格"></canvas><p>点击选区，方向键切换。</p></figure>
+    <figure class="hog-figure"><figcaption><strong>放大这64个像素</strong></figcaption><canvas width="400" height="400" data-hog-canvas="vote-cell" role="img" aria-label="所选区域的真实像素，统计过的像素逐个出现梯度箭头"></canvas><p>箭头越长，变化越强；圆点表示0。</p></figure>
+    <div class="hog-vote-console"><div class="hog-vote-current"><div><h4 data-hog-ui="vote-coordinate"></h4><p data-hog-ui="vote-contribution"></p></div></div><div class="hog-histogram" data-hog-ui="histogram" aria-label="九个梯度方向的加权统计"></div><div class="feature-actions"><button type="button" data-hog-action="vote-one">统计一个像素</button><button type="button" data-hog-action="vote-auto">自动继续</button><button type="button" data-hog-action="vote-reset">重播本区域</button><button type="button" data-hog-action="vote-all">完成本区域</button></div><p class="hog-caption" data-hog-ui="vote-status" role="status"></p><p class="hog-caption">统计各区域的方向分布；相反方向合并。</p></div>
+  </div>
+
+  <div class="hog-observation hog-region-numbers"><strong>一块区域，可以用一组数字表示。</strong><p>① 完成这64个像素的统计。　② 看九根柱子分别记录什么。　③ 换一区域，比较数字怎样变化。</p><div data-hog-ui="region-numbers"></div><p>从左到右、从上到下，每个区域都能得到自己的一组数。打开札记，整理你的发现。</p></div>
+</section>
+
+{% include 'activities/hog_later.html' %}
+<p class="hog-feedback" data-hog-ui="status" role="status"></p>
+<div class="hog-learning-notes"><details class="hog-details hog-takeaway"><summary>本步发现</summary><p data-hog-ui="takeaway"></p></details><div data-hog-help-step="1" hidden>  <details class="hog-details"><summary>方向与强度</summary><p>方向以向右为0°，逆时针增加：向上90°、向左180°、向下270°。箭头使用实际计算角度，读数保留1位小数；下一步统计时再合并相反方向并分组。</p><p>强度＝√(左右差²＋上下差²)。两项差都是0时没有方向。方向由 atan2(上下差, 左右差) 求得，不限制为8个方向。</p><p>自动演示逐像素推进，当前算式与左右选点同步。</p></details></div><div data-hog-help-step="2" hidden><details class="hog-details"><summary>九个方向怎样分组？</summary><p>梯度箭头使用同一比例尺，长度正比于原始强度，换区域或换图也不拉伸。统计时，相同方向按各自强度累加。</p><p>角度范围为0°至不足180°。本教学版把强度全部投给最近的20°方向，不做方向或空间插值；恰好居中的方向统一投向角度增加一侧。真实应用也常把贡献分给相邻方向与区域，以减小跳变。</p></details></div></div>
+<div class="feature-navigation"><button type="button" data-hog-action="previous">上一步</button><span data-hog-ui="step-count"></span><button type="button" class="feature-primary" data-hog-action="next">下一步 →</button></div>

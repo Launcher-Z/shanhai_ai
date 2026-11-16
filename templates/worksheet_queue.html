@@ -1,0 +1,16 @@
+{% extends 'teacher/base.html' %}
+{% block title %}札记评阅 · 再绘山海经{% endblock %}
+{% block console_content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='worksheet-teacher.css') }}">
+<div class="teacher-head"><div><p class="eyebrow">学习札记</p><h1>札记评阅</h1><p class="muted">查看学生的实验记录，给出反馈。</p></div><a class="review-link" href="{{ url_for('teacher.dashboard', class_id=selected.id if selected else '') }}">返回班级管理 →</a></div>
+<section class="panel">
+  <form method="get" class="review-filters">
+    <label>班级<select name="class_id">{% for c in classes %}<option value="{{ c.id }}"{% if selected and selected.id == c.id %} selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></label>
+    <label>状态<select name="status">{% for value, label in [('pending','待审核'),('returned','已驳回'),('completed','已完成'),('all','全部提交记录')] %}<option value="{{ value }}"{% if state == value %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+    <button class="compact">查看</button>
+  </form>
+  {% if records %}<div class="table-wrap"><table><thead><tr><th>学生</th><th>学习札记</th><th>首次答对 / 已提交固定题</th><th>状态</th><th>操作</th></tr></thead><tbody>
+  {% for r in records %}<tr><td>{{ r.student_name }}</td><td>{{ r.definition.title }}</td><td>{{ r.first_correct }}/{{ r.results|length }}</td><td>{{ labels[r.status] }}</td><td><a class="review-link" href="{{ url_for('worksheet.detail', record_id=r.id) }}">{{ '评阅' if r.status == 'pending' else '查看' }} →</a></td></tr>{% endfor %}
+  </tbody></table></div>{% else %}<p class="empty">当前条件下没有札记。学生完成固定题订正并提交后，需要评阅的札记会出现在这里。</p>{% endif %}
+</section>
+{% endblock %}

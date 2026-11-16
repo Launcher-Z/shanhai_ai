@@ -1,0 +1,92 @@
+{% from 'teacher/answers.html' import answer_sections %}
+<header class="student-heading">
+  <div><p class="eyebrow">{{ work.student.class_name }}</p><h2>{{ work.student.name }}</h2><p class="muted">{{ '设备占用中' if work.student.bound else '未绑定或已到期' }}</p></div>
+  <div class="student-actions">
+    <form class="student-rename-form" method="post" action="{{ url_for('teacher.rename_student', student_id=work.student.id) }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="scope_class_id" value="{{ selected_class_id or '' }}">
+      <label class="sr-only" for="rename-student-{{ work.student.id }}">修改姓名</label>
+      <input id="rename-student-{{ work.student.id }}" name="name" value="{{ work.student.name }}" maxlength="30" required>
+      <button class="secondary compact">改名</button>
+    </form>
+    <form method="post" action="{{ url_for('teacher.unlock', student_id=work.student.id) }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="scope_class_id" value="{{ selected_class_id or '' }}">
+      <button class="secondary compact" {% if not work.student.bound %}disabled{% endif %}>解除绑定</button>
+    </form>
+    <form method="post" action="{{ url_for('teacher.delete_student', student_id=work.student.id) }}" onsubmit="return confirm('确定删除学生「{{ work.student.name }}」及其全部作答与作品记录吗？此操作不可恢复。');">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="scope_class_id" value="{{ selected_class_id or '' }}">
+      <button class="danger-outline compact">删除学生</button>
+    </form>
+  </div>
+</header>
+{% if work.pending_tasks %}
+<div class="student-pending-banner" role="region" aria-label="待审核任务">
+  <strong class="pending-banner-title"><i class="status-triangle pending" aria-hidden="true"></i>待审核任务（{{ work.pending_tasks|length }} 项）</strong>
+  <div class="pending-banner-links">
+    {% for task in work.pending_tasks %}
+    <a class="pending-task-pill{% if task.is_current %} is-current{% endif %}" href="{{ url_for('teacher.dashboard', class_id=selected_class_id or '', student_id=work.student.id, activity_id=task.activity_id) }}" data-workspace-url="{{ url_for('teacher.student_workspace', student_id=work.student.id, class_id=selected_class_id or '', activity_id=task.activity_id) }}">{{ task.title }}{% if task.count %}（{{ task.count }} 题待审）{% endif %}{% if task.is_current %} · 当前{% endif %}</a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+<nav class="record-nav-scroll" aria-label="学生札记">
+  <table class="student-matrix-nav">
+    <thead>
+      <tr class="nav-lesson-row">
+        {% for l in work.lesson_nav %}<th colspan="{{ l.colspan }}" class="{{ 'has-pending' if l.pending else '' }}">第 {{ l.number }} 课 · {{ l.title }}</th>{% endfor %}
+      </tr>
+      <tr class="nav-activity-row">
+        {% for l in work.lesson_nav %}{% for a in l.activities %}{% set is_current = (work.record and a.id == work.record.activity_id) or (work.selected_activity and a.id == work.selected_activity.id) %}<th colspan="{{ a.colspan }}" class="activity-nav-cell{% if a.is_pending %} is-pending{% endif %}{% if not a.started %} is-unstarted{% endif %}{% if is_current %} is-current{% endif %}"><a href="{{ url_for('teacher.dashboard', class_id=selected_class_id or '', student_id=work.student.id, activity_id=a.id) }}" data-workspace-url="{{ url_for('teacher.student_workspace', student_id=work.student.id, class_id=selected_class_id or '', activity_id=a.id) }}" {% if is_current %}aria-current="page"{% endif %}><span class="nav-act-title">{{ a.title }}</span><small>{{ a.progress.label }}</small></a></th>{% endfor %}{% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="nav-sub-row">
+        {% for l in work.lesson_nav %}{% for a in l.activities %}{% set is_current = (work.record and a.id == work.record.activity_id) or (work.selected_activity and a.id == work.selected_activity.id) %}{% for cell in a.sections %}<td class="sub-nav-cell{% if cell.optional %} is-optional{% endif %}{% if is_current %} is-current{% endif %}"><a href="{{ url_for('teacher.dashboard', class_id=selected_class_id or '', student_id=work.student.id, activity_id=a.id) }}" data-workspace-url="{{ url_for('teacher.student_workspace', student_id=work.student.id, class_id=selected_class_id or '', activity_id=a.id) }}" title="{{ cell.code }} {{ cell.section_title }}{% if cell.optional %}（选做）{% endif %} · {{ cell.label }}"><span class="sub-code">{{ cell.code }}</span><span class="{{ 'status-triangle pending' if cell.matrix_state == 'pending' else 'status-dot ' ~ cell.ring }}" aria-hidden="true"></span></a></td>{% endfor %}{% endfor %}{% endfor %}
+      </tr>
+    </tbody>
+  </table>
+</nav>
+<div class="workspace-body">
+{% set record = work.record %}
+{% if record %}
+{% set note_heading %}<div class="workspace-note-heading"><h3>{{ record.definition.title }}</h3><div class="note-facts"><span class="note-status {{ 'pending' if record.status == 'pending' else record.progress.ring }}">{% if record.status == 'pending' %}<i class="status-triangle pending" aria-hidden="true"></i>{% endif %}{{ record.progress.label }}</span><span>已提交 {{ record.progress.flow.submitted }}/{{ record.progress.flow.total }} 段</span>{% if record.has_objectives %}<span>首次答对 {{ record.first_correct or 0 }}/{{ record.results|length }} 题</span>{% endif %}</div></div>{% endset %}
+{% if record.status == 'pending' or (record.status in ['in_progress', 'correction', 'returned'] and work.review_progress) %}
+<form method="post" action="{{ url_for('worksheet.review', record_id=record.id) }}" class="workspace-review" data-review-form>
+  <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="revision" value="{{ record.revision }}"><input type="hidden" name="return_to" value="workbench"><input type="hidden" name="scope_class_id" value="{{ selected_class_id or '' }}">
+  <div class="workspace-answers">
+    {{ note_heading }}
+    <div class="review-quick-bar">
+      <div class="quick-bar-meta">
+        {% if work.review_progress %}<span class="review-progress-note">单题已批 {{ work.review_progress.done }} / {{ work.review_progress.total }} 题{% if work.review_progress.has_returned %}（含驳回）{% endif %}</span>{% endif %}
+        <span class="hint">{{ '可逐题点击通过，或直接整份结算；学生后续仍可补充收藏本。' if record.activity_id == 'lesson-9-task-2' else ('已有分段提交待审，可逐题批阅；其余分段待学生完成或订正。' if record.status != 'pending' else '每题可单独批阅与写建议，全部批完将自动结算。') }}</span>
+      </div>
+      {% if record.status == 'pending' %}
+      <div class="decision-buttons">
+        <button class="compact" name="decision" value="approve">{{ '其余通过并结算退回' if work.review_progress and work.review_progress.has_returned else ('其余待审题全部通过' if work.review_progress and work.review_progress.done else '全部通过') }}</button>
+        {% if not record.has_objectives %}<button class="compact btn-excellent" name="decision" value="excellent"{{ ' disabled' if work.review_progress and work.review_progress.has_returned else '' }}>全部通过并优秀 · 金圈</button>{% endif %}
+      </div>
+      {% endif %}
+      <p data-review-message role="status" aria-live="polite"></p>
+    </div>
+    {{ answer_sections(record, true) }}
+  </div>
+</form>
+{% else %}
+  {{ note_heading }}
+  {% if record.feedback %}<aside class="workspace-feedback"><strong>教师总评</strong><p>{{ record.feedback }}</p></aside>{% endif %}
+  <div class="workspace-next-bar">
+    {% if record.status == 'completed' and not record.has_objectives %}
+    <button type="button" class="{{ 'secondary compact' if record.progress.excellent else 'compact btn-excellent-inline' }}" data-excellent-toggle data-excellent-url="{{ url_for('worksheet.toggle_excellent', record_id=record.id) }}" data-csrf="{{ csrf }}" data-revision="{{ record.revision }}" data-scope-class-id="{{ selected_class_id or '' }}" data-next-excellent="{{ '0' if record.progress.excellent else '1' }}">{{ '取消优秀 · 金圈' if record.progress.excellent else '标为优秀 · 金圈' }}</button>
+    {% endif %}
+    {% if work.next_pending %}
+    <a class="next-pending-link" href="{{ url_for('teacher.dashboard', class_id=selected_class_id or '', student_id=work.student.id, activity_id=work.next_pending.activity_id) }}" data-workspace-url="{{ url_for('teacher.student_workspace', student_id=work.student.id, class_id=selected_class_id or '', activity_id=work.next_pending.activity_id) }}">继续审核该生下一份：{{ work.next_pending.definition.title|replace(' · 学习札记','') }}</a>
+    {% endif %}
+    <button type="button" class="secondary compact" data-next-pending-student>前往下一位待审学生</button>
+  </div>
+  {{ answer_sections(record) }}
+{% endif %}
+{% elif work.selected_activity %}<div class="console-empty"><h3>{{ work.selected_activity.title }}</h3><p>这名学生尚未保存或提交该活动的札记。</p></div>
+{% else %}<div class="console-empty"><h3>尚无札记记录</h3><p>学生暂存或提交札记后，会显示在这里。</p></div>{% endif %}
+</div>

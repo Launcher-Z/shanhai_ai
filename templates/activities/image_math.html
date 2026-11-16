@@ -1,0 +1,95 @@
+<section id="image-math" class="image-math" data-student-id="{{ student.id }}" aria-label="图像数字运算实验" hidden>
+  <nav class="math-steps" aria-label="实验步骤">
+    <button type="button" data-step="0" aria-current="step"><span>01</span>读懂像素</button>
+    <button type="button" data-step="1"><span>02</span>放大图像</button>
+    <button type="button" data-step="2"><span>03</span>缩小图像</button>
+    <button type="button" data-step="3"><span>04</span>再次放大</button>
+  </nav>
+  <div class="math-introduction"><h3 data-part="heading">山，藏在一格格数字里</h3><p data-part="intro">点击山中的任意像素，观察 RGB 三个通道的数值。</p></div>
+  <div class="math-lab">
+    <div class="math-boards" data-count="1">
+      {% for index in range(3) %}
+      <figure class="math-board" data-board="{{ index }}"{% if index > 0 %} hidden{% endif %}>
+        <figcaption><strong data-board-title></strong><span data-board-size></span>{% if index == 0 %}<button type="button" class="math-data-toggle" data-action="toggle-data" aria-controls="math-pixel-data" aria-pressed="false" hidden>化图为数 <span aria-hidden="true">↔</span></button>{% endif %}</figcaption>
+        <div class="math-canvas-mount"><canvas tabindex="0" role="img" aria-label="可选择像素的 RGB 图像" aria-describedby="math-grid-help" width="420" height="300"></canvas></div>
+        {% if index == 0 %}<div id="math-pixel-data" class="math-data-viewport" data-part="data-view" role="region" aria-label="原图 RGB 数据，可上下左右滚动" hidden></div>{% endif %}
+        <p class="math-board-note" data-board-note></p>
+        {% if index == 0 %}
+        <section class="math-enlarge-console" data-part="enlarge-console" aria-label="最近邻放大操作" hidden>
+          <div class="math-enlarge-example">
+            <p class="math-enlarge-coordinate" data-part="enlarge-coordinate"></p>
+            <div class="math-copy-diagram" data-part="copy-diagram" aria-label="将一个原像素复制为四个同色像素">
+              <div class="math-copy-source"><span></span><small>1 个像素</small></div>
+              <span class="math-copy-arrow" aria-hidden="true">→</span>
+              <div class="math-copy-result"><div><span></span><span></span><span></span><span></span></div><small>2×2 个像素</small></div>
+            </div>
+            <output class="math-copy-color" data-part="copy-color"></output>
+          </div>
+          <div class="math-enlarge-actions">
+            <button type="button" class="math-primary" data-action="enlarge-apply">处理当前</button>
+            <button type="button" class="math-secondary" data-action="enlarge-auto">自动填充</button>
+            <button type="button" class="math-secondary" data-action="enlarge-replay">重播</button>
+          </div>
+          <div class="math-enlarge-progress"><progress data-part="enlarge-progress" value="0" max="360" aria-label="已复制的原像素"></progress><span data-part="enlarge-count" role="status"></span></div>
+        </section>
+        {% endif %}
+      </figure>
+      {% endfor %}
+      <p id="math-grid-help" class="math-grid-help">点击像素选择位置；也可聚焦图像后，用方向键移动。每个颜色通道的数值范围为 0—255。</p>
+    </div>
+    <aside class="math-inspector" aria-label="像素与计算过程">
+      <section data-part="readout">
+        <p class="math-small-heading">选中的像素 <span data-part="coordinate"></span></p>
+        <div class="math-decimal-line"><span class="math-gray-swatch" data-part="swatch" aria-hidden="true"></span><div><span class="math-readout-label">当前像素的 RGB 颜色</span><output class="math-rgb-code" data-part="rgb-code" aria-live="polite"></output></div></div>
+        <table class="math-rgb-table" aria-label="选中像素的 RGB 十进制与二进制">
+          <thead><tr><th scope="col">通道</th><th scope="col">十进制</th><th scope="col">8 位二进制</th></tr></thead>
+          <tbody>
+            <tr class="math-channel-red"><th scope="row">R · 红</th><td><output data-part="red-value"></output></td><td><output data-part="red-binary"></output></td></tr>
+            <tr class="math-channel-green"><th scope="row">G · 绿</th><td><output data-part="green-value"></output></td><td><output data-part="green-binary"></output></td></tr>
+            <tr class="math-channel-blue"><th scope="row">B · 蓝</th><td><output data-part="blue-value"></output></td><td><output data-part="blue-binary"></output></td></tr>
+          </tbody>
+        </table>
+        <label class="math-check-option" data-part="number-option"><input type="checkbox" data-action="numbers">在图中显示 RGB 通道数值</label>
+      </section>
+      <section data-part="calculation" hidden>
+        <div class="math-shrink-title"><h4>选一格，落一色</h4><span data-part="manual-count" role="status">已手算 0 / 2 格</span></div>
+        <div data-part="shrink-target" class="math-shrink-target"></div>
+        <div class="math-calculation-heading"><p class="math-small-heading" data-part="source-label"></p><button type="button" class="math-calculator-trigger" popovertarget="math-calculator" aria-label="打开算盘计算器"><img src="{{ url_for('static', filename='learning/image-math/ink-abacus.svg') }}" alt="" width="42" height="32"><span>借算盘</span></button></div>
+        <div class="math-shrink-channels" role="tablist" aria-label="选择计算通道">
+          {% for channel in ['R', 'G', 'B'] %}<button type="button" class="math-shrink-channel math-channel-{{ ['red', 'green', 'blue'][loop.index0] }}" id="math-channel-tab-{{ loop.index0 }}" data-shrink-channel="{{ loop.index0 }}" role="tab" aria-selected="{{ 'true' if loop.first else 'false' }}" aria-controls="math-channel-panel" tabindex="{{ 0 if loop.first else -1 }}"><span class="status-ring" aria-hidden="true"><img src="{{ url_for('static', filename='learning/ink-circle-red.png') }}" data-incomplete-src="{{ url_for('static', filename='learning/ink-circle-red.png') }}" data-complete-src="{{ url_for('static', filename='learning/ink-circle-green.png') }}" alt=""><b>{{ channel }}</b></span></button>{% endfor %}
+        </div>
+        <div id="math-channel-panel" role="tabpanel" aria-labelledby="math-channel-tab-0">
+          <div class="math-sample" data-part="sample"></div>
+          <p class="math-rule" data-part="formula"></p>
+          <div data-part="exercise">
+            <label for="math-answer" class="math-question" data-part="question"></label>
+            <div class="math-answer-row"><input id="math-answer" type="number" min="0" max="255" step="1" inputmode="numeric" autocomplete="off"><button type="button" class="math-primary" data-action="check">验证 R</button></div>
+          </div>
+        </div>
+        <p class="math-feedback" data-part="feedback" role="status"></p>
+        <div class="math-process-controls" data-part="process-controls" hidden><button type="button" class="math-primary" data-action="auto" disabled>自动继续</button><button type="button" class="math-secondary" data-action="replay" disabled>重播过程</button><span data-part="process-progress" role="status"></span></div>
+      </section>
+      <section data-part="comparison" hidden>
+        <p class="math-small-heading">先作一个预测</p>
+        <p class="math-question">缩小后再放大，能完全恢复原图吗？</p>
+        <div class="math-predictions"><label><input type="radio" name="math-prediction" value="yes">能完全恢复</label><label><input type="radio" name="math-prediction" value="no">不能完全恢复</label></div>
+        <button type="button" class="math-primary" data-action="restore">放大并对照</button>
+        <p class="math-feedback" data-part="comparison-feedback" role="status"></p>
+        <label class="math-check-option"><input type="checkbox" data-action="differences" disabled>标出颜色发生变化的像素</label>
+        <p class="math-comparison-count" data-part="comparison-count"></p>
+        <p class="math-rule" data-part="comparison-pixel"></p>
+      </section>
+    </aside>
+  </div>
+  <div class="math-takeaway"><span>观察线索</span><p data-part="takeaway"></p></div>
+  <div class="math-navigation"><button type="button" class="math-secondary" data-action="previous" disabled>上一步</button><span data-part="navigation-note"></span><button type="button" class="math-primary" data-action="next">去放大图像 →</button></div>
+  <div id="math-calculator" class="math-calculator" popover="auto" aria-labelledby="math-calculator-title">
+    <div class="math-calculator-header"><h4 id="math-calculator-title">案上算盘</h4><button type="button" popovertarget="math-calculator" popovertargetaction="hide" aria-label="收起算盘">×</button></div>
+    <label class="math-calculator-expression">算式<input type="text" data-calc-display value="0" readonly autofocus aria-label="算盘算式，可用键盘输入"></label>
+    <output class="math-calculator-result" data-calc-result aria-live="polite">0</output>
+    <div class="math-calculator-keys">
+      {% for key in ['C', '(', ')', '⌫', '7', '8', '9', '÷', '4', '5', '6', '×', '1', '2', '3', '−', '0', '.', '=', '+'] %}<button type="button" data-calc-key="{{ key }}"{% if key == '=' %} class="math-calculator-equals"{% endif %}{% if key == '⌫' %} aria-label="退一位"{% elif key == 'C' %} aria-label="清空算式"{% endif %}>{{ key }}</button>{% endfor %}
+    </div>
+    <p data-calc-hint></p>
+  </div>
+</section>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 150" preserveAspectRatio="none">
+  <defs>
+    <!-- 顶部与右侧接入纸页边沿，左侧和下沿自然化开，避免矩形底板。 -->
+    <filter id="wash" x="-20%" y="-30%" width="140%" height="160%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".018 .035" numOctaves="2" seed="12" result="grain"/>
+      <feDisplacementMap in="SourceGraphic" in2="grain" scale="10" xChannelSelector="R" yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="11"/>
+    </filter>
+  </defs>
+  <path d="M78-28H490V93C451 104 427 93 398 107S349 110 321 116S274 101 247 111S202 94 172 99S137 77 108 84S63 65 42 69S14 48 31 32S51 8 78-28Z" fill="white" filter="url(#wash)"/>
+</svg>

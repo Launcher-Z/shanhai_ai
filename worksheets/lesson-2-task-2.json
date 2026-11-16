@@ -1,0 +1,161 @@
+{
+  "activity_id": "lesson-2-task-2",
+  "version": 3,
+  "title": "训练并测试动物分类器 · 学习札记",
+  "intro": "按左侧类别顺序填写9张图片的预测比例；也可记录摄像头某一时刻的两类结果。",
+  "sections": [
+    {
+      "id": "testing",
+      "step": 0,
+      "title": "图片与摄像头测试结果",
+      "optional": false,
+      "questions": [
+        {
+          "id": "animal-tests",
+          "type": "text",
+          "prompt": "填写9张图片的两类判断数值（%），摄像头结果选填。",
+          "required": true,
+          "review": false,
+          "max_length": 4000,
+          "record_table": {
+            "kind": "animal_predictions",
+            "fields": [
+              {
+                "key": "class-1",
+                "label": "类别1名称",
+                "text": true
+              },
+              {
+                "key": "class-2",
+                "label": "类别2名称",
+                "text": true
+              },
+              {
+                "key": "image-1-class-1",
+                "label": "图1·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-1-class-2",
+                "label": "图1·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-2-class-1",
+                "label": "图2·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-2-class-2",
+                "label": "图2·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-3-class-1",
+                "label": "图3·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-3-class-2",
+                "label": "图3·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-4-class-1",
+                "label": "图4·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-4-class-2",
+                "label": "图4·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-5-class-1",
+                "label": "图5·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-5-class-2",
+                "label": "图5·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-6-class-1",
+                "label": "图6·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-6-class-2",
+                "label": "图6·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-7-class-1",
+                "label": "图7·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-7-class-2",
+                "label": "图7·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-8-class-1",
+                "label": "图8·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-8-class-2",
+                "label": "图8·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-9-class-1",
+                "label": "图9·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-9-class-2",
+                "label": "图9·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "camera-class-1",
+                "label": "摄像头·类别1",
+                "min": 0,
+                "max": 100,
+                "required": false
+              },
+              {
+                "key": "camera-class-2",
+                "label": "摄像头·类别2",
+                "min": 0,
+                "max": 100,
+                "required": false
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

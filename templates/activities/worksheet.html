@@ -1,0 +1,19 @@
+<section id="learning-note" class="learning-note" popover="manual" role="dialog" aria-modal="false" aria-labelledby="note-title" hidden>
+  <header class="note-heading">
+    <button type="button" class="note-drag" aria-label="拖动札记，也可用方向键移动"><span aria-hidden="true"></span></button>
+    <button type="button" class="note-close" aria-label="收起学习札记"><img src="{{ url_for('static', filename='learning/ink-close.png') }}" alt="" width="32" height="32"></button>
+    <p class="note-eyebrow">案上小纸 · 学习札记</p>
+    <h3 id="note-title">学习札记</h3>
+    <p class="note-state" aria-live="polite"></p>
+    <div class="note-progress" role="progressbar" aria-label="必做札记首次提交进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+    <nav class="note-sections" aria-label="按子活动查看札记"></nav>
+  </header>
+  <div class="note-body">
+    <div id="note-scroll" class="note-reader reading" role="region" tabindex="0" aria-label="学习札记题目，可上下滚动"><form class="note-content reading-content" id="note-form"></form></div>
+    <div class="ink-scrollbar" hidden><div class="ink-track"><button type="button" class="ink-thumb" role="scrollbar" aria-label="札记滚动位置" aria-controls="note-scroll" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div></div>
+  </div>
+  <footer class="note-foot">
+    <p class="note-message" role="status" aria-live="polite"></p>
+    <div class="note-actions"><button type="button" data-note-action="save">暂存本段</button><button type="submit" form="note-form" data-note-action="submit">提交本段</button><button type="button" data-note-action="next" hidden>继续下一步 →</button><button type="button" data-note-action="reload" hidden>重新读取</button></div>
+  </footer>
+</section>

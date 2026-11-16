@@ -1,0 +1,32 @@
+{% macro branch(node) %}
+{% set is_cond = node.get('feature') %}
+{% set animal = decision_animals.get(node.get('animal')) if node.get('animal') else none %}
+<div class="t-tree-node{% if is_cond %} has-branches{% endif %}" data-kind="{{ 'condition' if is_cond else ('leaf' if animal else 'empty') }}">
+  <div class="t-tree-card">
+    <span class="t-tree-badge">{{ '判断条件' if is_cond else ('分类结果' if animal else '待选择') }}</span>
+    {% if is_cond %}
+      <strong class="t-tree-label">{{ decision_features[node.feature].label }}</strong>
+    {% elif animal %}
+      <strong class="t-tree-label">{{ animal.icon }} {{ animal.name }}</strong>
+    {% else %}
+      <strong class="t-tree-label">待分类</strong>
+    {% endif %}
+  </div>
+  {% if is_cond %}
+  <div class="t-tree-branches">
+    <div class="t-tree-branch is-yes"><span class="t-tree-edge is-yes">是</span>{{ branch(node.yes) }}</div>
+    <div class="t-tree-branch is-no"><span class="t-tree-edge is-no">否</span>{{ branch(node.no) }}</div>
+  </div>
+  {% endif %}
+</div>
+{% endmacro %}
+{% macro decision_answer(value) %}
+{% set data = value|decision_tree_data %}
+{% if data %}
+<div class="teacher-decision-tree" aria-label="学生提交的决策树">
+  <div class="t-tree-scroll">{{ branch(data.tree) }}</div>
+</div>
+{% else %}
+<p class="review-student-answer">尚未带入决策树</p>
+{% endif %}
+{% endmacro %}

@@ -1,0 +1,17 @@
+/* 地图资料与学生活动共用墨痕滚动条，内容继续由原生容器滚动。 */
+.has-ink-scroll .reading { scrollbar-width:none; }
+.has-ink-scroll .reading::-webkit-scrollbar { display:none; }
+.ink-scrollbar { position:absolute; top:16px; right:1px; bottom:18px; width:12px; }
+/* 明确覆盖首页横向进度条的同名样式，避免卷导航影响竖向轨道。 */
+.ink-scrollbar .ink-track { position:relative; width:100%; height:100%; margin:0; background:transparent; clip-path:none; cursor:pointer; }
+.ink-scrollbar .ink-track::before { content:''; position:absolute; top:0; bottom:0; left:5px; width:3px; background:#88997b30; clip-path:polygon(20% 0,75% 2%,50% 15%,100% 30%,55% 48%,85% 65%,40% 83%,90% 99%,10% 100%,28% 79%,0 61%,30% 43%,5% 21%); }
+.ink-scrollbar .ink-thumb { position:absolute; top:0; left:2px; width:9px; min-height:32px; padding:0; border:0; touch-action:none; background:linear-gradient(90deg,#7484658c,#5c765a 45%,#788967bd); clip-path:polygon(25% 0,70% 2%,62% 9%,95% 19%,70% 33%,100% 48%,78% 65%,90% 83%,62% 96%,35% 100%,10% 95%,20% 80%,0 62%,24% 44%,5% 22%,30% 13%); cursor:grab; }
+.ink-scrollbar .ink-thumb:hover,.ink-scrollbar .ink-thumb.dragging { background:#4d6d51; }
+.ink-scrollbar .ink-thumb.dragging { cursor:grabbing; }
+.ink-scrollbar .ink-thumb:focus-visible { outline:0; background:#385b47; }
+.ink-scrollbar[hidden] { display:none; }
+@media(forced-colors:active) {
+  .has-ink-scroll .reading { scrollbar-width:auto; }
+  .has-ink-scroll .reading::-webkit-scrollbar { display:initial; }
+  .ink-scrollbar { display:none!important; }
+}

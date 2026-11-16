@@ -1,0 +1,100 @@
+{
+  "activity_id": "lesson-8-task-1",
+  "version": 2,
+  "title": "再识四只异兽 · 学习札记",
+  "intro": "每张图只记录AI的关键回答和自己的判断，做完一张提交一张。",
+  "sections": [
+    {
+      "id": "recognition-1",
+      "title": "编号图 1",
+      "step": 0,
+      "questions": [
+        {
+          "id": "ai-answer-1",
+          "type": "text",
+          "prompt": "AI的关键回答",
+          "required": true,
+          "review": true,
+          "max_length": 4000
+        },
+        {
+          "id": "ai-judgment-1",
+          "type": "text",
+          "prompt": "我的判断：哪些可信，哪些有疑问？",
+          "required": true,
+          "review": true,
+          "max_length": 2000
+        }
+      ]
+    },
+    {
+      "id": "recognition-2",
+      "title": "编号图 2",
+      "step": 1,
+      "questions": [
+        {
+          "id": "ai-answer-2",
+          "type": "text",
+          "prompt": "AI的关键回答",
+          "required": true,
+          "review": true,
+          "max_length": 4000
+        },
+        {
+          "id": "ai-judgment-2",
+          "type": "text",
+          "prompt": "我的判断：哪些可信，哪些有疑问？",
+          "required": true,
+          "review": true,
+          "max_length": 2000
+        }
+      ]
+    },
+    {
+      "id": "recognition-3",
+      "title": "编号图 3",
+      "step": 2,
+      "questions": [
+        {
+          "id": "ai-answer-3",
+          "type": "text",
+          "prompt": "AI的关键回答",
+          "required": true,
+          "review": true,
+          "max_length": 4000
+        },
+        {
+          "id": "ai-judgment-3",
+          "type": "text",
+          "prompt": "我的判断：哪些可信，哪些有疑问？",
+          "required": true,
+          "review": true,
+          "max_length": 2000
+        }
+      ]
+    },
+    {
+      "id": "recognition-4",
+      "title": "编号图 4",
+      "step": 3,
+      "questions": [
+        {
+          "id": "ai-answer-4",
+          "type": "text",
+          "prompt": "AI的关键回答",
+          "required": true,
+          "review": true,
+          "max_length": 4000
+        },
+        {
+          "id": "ai-judgment-4",
+          "type": "text",
+          "prompt": "我的判断：哪些可信，哪些有疑问？",
+          "required": true,
+          "review": true,
+          "max_length": 2000
+        }
+      ]
+    }
+  ]
+}

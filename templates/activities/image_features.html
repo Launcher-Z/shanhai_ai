@@ -1,0 +1,6 @@
+{% for mode in ['edge', 'hog'] %}
+<section id="feature-{{ mode }}" class="feature-lab{% if mode == 'hog' %} hog-lab{% endif %}" data-mode="{{ mode }}" data-student-id="{{ student.id }}" aria-label="{{ '轮廓提取实验' if mode == 'edge' else 'HOG 方向统计与特征实验' }}" hidden>
+  {% if mode == 'edge' %}{% include 'activities/image_edge.html' %}
+  {% else %}{% include 'activities/image_hog.html' %}{% endif %}
+</section>
+{% endfor %}

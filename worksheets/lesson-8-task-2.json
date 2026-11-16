@@ -1,0 +1,40 @@
+{
+  "activity_id": "lesson-8-task-2",
+  "version": 2,
+  "title": "纯原文绘兽与简评 · 学习札记",
+  "intro": "先上传原文生成的作品，再对照图文打分并说明理由。",
+  "sections": [
+    {
+      "id": "upload",
+      "title": "上传作品",
+      "step": 0,
+      "questions": [
+        {
+          "id": "original-upload",
+          "type": "text",
+          "prompt": "选择原文并上传第一次直接生成的图片",
+          "required": true,
+          "review": true,
+          "max_length": 30000,
+          "record_form": "original_upload"
+        }
+      ]
+    },
+    {
+      "id": "evaluation",
+      "title": "打分与评价",
+      "step": 1,
+      "questions": [
+        {
+          "id": "original-evaluation",
+          "type": "text",
+          "prompt": "回看原文与作品，给出评分和具体理由",
+          "required": true,
+          "review": true,
+          "max_length": 12000,
+          "record_form": "original_rating"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{% macro pixel_editor(editor_id, caption) %}
+  <div class="paint-layout">
+    <div class="paint-desk">
+      <div class="paint-tools" role="group" aria-label="绘画工具">
+        <button type="button" data-paint-tool="brush" aria-pressed="true">画笔</button><button type="button" data-paint-tool="eraser" aria-pressed="false">橡皮</button><button type="button" data-paint-tool="picker" aria-pressed="false">取色</button><button type="button" data-paint-action="undo" disabled>撤销</button>
+        <button type="button" data-paint-action="zoom" aria-label="放大画布" aria-pressed="false">放大</button>
+      </div>
+      <figure class="paint-main"><figcaption><strong>{{ caption }}</strong><span>64 × 64 像素</span></figcaption><div class="paint-canvas-window"><canvas width="640" height="640" tabindex="0" data-paint-canvas="main" role="img" aria-label="64行64列方形像素画布，所有格子均可涂色；可用方向键移动，空格涂色"></canvas></div></figure>
+      <p class="paint-hint" data-paint-ui="position" role="status">点击或拖动画帽子，也可用方向键和空格。</p>
+    </div>
+    <aside class="paint-palette" aria-label="整体预览和调色">
+      <figure class="paint-preview"><figcaption>整体预览</figcaption><canvas width="256" height="256" data-paint-canvas="preview" role="img" aria-label="不带网格的作品预览"></canvas></figure>
+      <div class="paint-colors" aria-label="常用颜色"></div>
+      <div class="paint-color-heading"><label for="{{ editor_id }}-color">当前画笔</label><input type="color" id="{{ editor_id }}-color" data-paint-picker value="#814937"><output data-paint-ui="hex">#814937</output></div>
+      <div class="paint-rgb">{% for channel in ['R','G','B'] %}<label class="paint-rgb-row"><span>{{ channel }}</span><input id="{{ editor_id }}-channel-{{ channel }}" type="range" data-paint-channel="{{ loop.index0 }}" aria-label="画笔{{ channel }}分量" min="0" max="255" step="1" value="{{ [129,73,55][loop.index0] }}"><output for="{{ editor_id }}-channel-{{ channel }}" data-paint-value="{{ loop.index0 }}">{{ [129,73,55][loop.index0] }}</output></label>{% endfor %}</div>
+      <button type="button" class="paint-note-button" data-paint-action="note">打开札记，提交作品</button>
+    </aside>
+  </div>
+{% endmacro %}

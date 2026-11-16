@@ -1,0 +1,154 @@
+{
+  "activity_id": "lesson-4-task-1",
+  "version": 1,
+  "title": "四类动物与异兽测试 · 学习札记",
+  "intro": "对照实验结果，记录四张异兽图片的预测比例。",
+  "sections": [
+    {
+      "id": "testing",
+      "step": 0,
+      "title": "异兽测试结果",
+      "optional": false,
+      "questions": [
+        {
+          "id": "beast-tests",
+          "type": "text",
+          "prompt": "填写4张异兽图片的四类预测比例（%）。",
+          "required": true,
+          "review": false,
+          "max_length": 2000,
+          "record_table": {
+            "kind": "animal_predictions",
+            "columns": [
+              "短尾猴",
+              "果子狸",
+              "穿山甲",
+              "章鱼"
+            ],
+            "rows": [
+              {
+                "key": "image-1",
+                "label": "何罗鱼",
+                "number": 1
+              },
+              {
+                "key": "image-2",
+                "label": "鯥",
+                "number": 2
+              },
+              {
+                "key": "image-3",
+                "label": "天狗",
+                "number": 3
+              },
+              {
+                "key": "image-4",
+                "label": "长右",
+                "number": 4
+              }
+            ],
+            "sum_tolerance": 0.2,
+            "fields": [
+              {
+                "key": "image-1-class-1",
+                "label": "何罗鱼·短尾猴",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-1-class-2",
+                "label": "何罗鱼·果子狸",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-1-class-3",
+                "label": "何罗鱼·穿山甲",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-1-class-4",
+                "label": "何罗鱼·章鱼",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-2-class-1",
+                "label": "鯥·短尾猴",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-2-class-2",
+                "label": "鯥·果子狸",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-2-class-3",
+                "label": "鯥·穿山甲",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-2-class-4",
+                "label": "鯥·章鱼",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-3-class-1",
+                "label": "天狗·短尾猴",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-3-class-2",
+                "label": "天狗·果子狸",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-3-class-3",
+                "label": "天狗·穿山甲",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-3-class-4",
+                "label": "天狗·章鱼",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-4-class-1",
+                "label": "长右·短尾猴",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-4-class-2",
+                "label": "长右·果子狸",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-4-class-3",
+                "label": "长右·穿山甲",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-4-class-4",
+                "label": "长右·章鱼",
+                "min": 0,
+                "max": 100
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

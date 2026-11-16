@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-10",
+  "method": "内置 imagegen",
+  "assets": [
+    {
+      "file": "ink-lock-white.png",
+      "usage": "学习首页活动、课时标签、课时内容和整卷的锁定蒙版图标，保留透明通道",
+      "width": 1536,
+      "height": 1024,
+      "prompt": "Use case: stylized-concept.\nAsset type: a small raster UI icon, shown centered over a translucent black overlay on a Chinese ink-painting educational website.\nPrimary request: ONE WHITE Chinese traditional antique padlock painted with a calligraphy brush, in the CLOSED locked state.\nSubject: recognizable old Chinese horizontal warded lock (guang lock / Chinese antique cabinet padlock), a wide horizontal rectangular lock body with subtly curved end shoulders, a short closed squared arch shackle rising above it, and a tiny understated keyhole. Front facing, minimal and balanced, readable at 40-48 pixels tall.\nStyle/medium: expressive traditional Chinese ink wash and dry-brush painting, but using WHITE ink pigment only; bold opaque ivory-white central brushstrokes, slightly ragged bristle edges and restrained translucent white wash. Handmade ink aesthetic matching antique paper and shan hai jing illustration. Clear thick silhouette rather than fine decorative engraving.\nComposition/framing: one isolated centered lock occupying about 78 percent of a square canvas width and 65 percent of height, complete uncut silhouette with even transparent padding. No floor, no scene, no shadow.\nColor palette: WHITE ink only, with alpha transparency for brush texture and the negative spaces; no black or colored outlines.\nScene/backdrop: genuinely TRANSPARENT background with preserved alpha, including the spaces inside the closed shackle.\nConstraints: no text, no Chinese characters, no seal, no key, no chain, no ribbon, no circle border, no background rectangle, no glow, no metallic photo realism, no modern rounded app padlock icon, no second object, no watermark. The deliverable is the standalone white ancient Chinese lock graphic, not the overlay or an interface mockup."
+    }
+  ]
+}

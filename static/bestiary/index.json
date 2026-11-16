@@ -1,0 +1,651 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "id": "xingxing",
+      "name": "狌狌",
+      "names": [
+        "狌狌"
+      ],
+      "textIncludes": [],
+      "file": "display/xingxing.png",
+      "originalFile": "xingxing.png",
+      "alt": "白耳、深灰毛的猿猴形狌狌水墨示意",
+      "description": "形似猿猴，耳朵是白色的。原文写它既会伏行，也能像人一样行走。",
+      "sourceBook": "南山经",
+      "sourceMountain": "招摇之山"
+    },
+    {
+      "id": "phoenix",
+      "name": "凤皇",
+      "names": [
+        "凤皇",
+        "凤凰"
+      ],
+      "textIncludes": [],
+      "file": "display/phoenix.png",
+      "originalFile": "phoenix.png",
+      "alt": "形似鸡、具五彩羽毛的凤皇水墨示意",
+      "description": "原文形容它外形像鸡，羽毛具有五彩纹样，并以德、义、礼、仁、信解释不同部位的纹理。",
+      "sourceBook": "南山经",
+      "sourceMountain": "丹穴之山"
+    },
+    {
+      "id": "jingwei",
+      "name": "精卫",
+      "names": [
+        "精卫"
+      ],
+      "textIncludes": [],
+      "file": "display/jingwei.png",
+      "originalFile": "jingwei.png",
+      "alt": "头有斑纹、白喙红足、口衔小枝的精卫水墨示意",
+      "description": "形似乌鸦，头部有花纹，白色的喙、红色的脚是它的特征。原文还记载它衔木石填海的故事。",
+      "sourceBook": "北山经",
+      "sourceMountain": "发鸠之山"
+    },
+    {
+      "id": "nine-tailed-fox",
+      "name": "九尾狐",
+      "displayName": "九尾狐（依形态称呼）",
+      "names": [],
+      "textIncludes": [
+        "其状如狐而九尾"
+      ],
+      "file": "display/nine-tailed-fox.png",
+      "originalFile": "nine-tailed-fox.png",
+      "alt": "狐形、身后舒展九条独立长尾的青丘山瑞兽水墨示意",
+      "description": "原文未直接写出专名，记载其外形似狐而长有九条尾巴，声音如婴儿。",
+      "sourceBook": "南山经",
+      "sourceMountain": "青丘之山"
+    },
+    {
+      "id": "fuzhu",
+      "name": "夫诸",
+      "names": [
+        "夫诸"
+      ],
+      "textIncludes": [],
+      "file": "display/fuzhu.png",
+      "originalFile": "fuzhu.png",
+      "alt": "白鹿形、头生四根独立长角的夫诸水墨示意",
+      "description": "原文记载它外形像白鹿，头上有四根独立的角，出现时往往预示当地会有大水。",
+      "sourceBook": "中山经",
+      "sourceMountain": "敖岸之山"
+    },
+    {
+      "id": "xuangui",
+      "name": "旋龟",
+      "names": [
+        "旋龟"
+      ],
+      "textIncludes": [],
+      "file": "display/xuangui.png",
+      "originalFile": "xuangui.png",
+      "alt": "龟身、鸟首、细长蛇尾的旋龟水墨示意",
+      "description": "原文记载它具有龟的身体、鸟的头部和蛇一样的尾巴，叫声像劈开木头的声音。",
+      "sourceBook": "南山经",
+      "sourceMountain": "杻阳之山"
+    },
+    {
+      "id": "lushu",
+      "name": "鹿蜀",
+      "names": [
+        "鹿蜀"
+      ],
+      "textIncludes": [],
+      "file": "display/lushu.png",
+      "originalFile": "lushu.png",
+      "alt": "白首、虎纹、赤尾、马蹄的鹿蜀水墨示意",
+      "description": "外形像马，头部为白色，身体带虎一样的斑纹，尾巴呈赤色。原文形容它的叫声如歌谣。",
+      "sourceBook": "南山经",
+      "sourceMountain": "杻阳之山"
+    },
+    {
+      "id": "changyou",
+      "name": "长右",
+      "names": [],
+      "textIncludes": [
+        "其名长右"
+      ],
+      "file": "display/changyou.png",
+      "originalFile": "changyou.png",
+      "alt": "头部左右各有两只耳朵、猿形四肢的长右水墨示意",
+      "description": "原文写它形似猿猴，具有四只耳朵，叫声像人在吟咏。",
+      "sourceBook": "南山经",
+      "sourceMountain": "长右之山",
+      "displayName": "长右"
+    },
+    {
+      "id": "gudiao",
+      "name": "蛊雕",
+      "names": [
+        "蛊雕"
+      ],
+      "textIncludes": [],
+      "file": "display/gudiao.png",
+      "originalFile": "gudiao.png",
+      "alt": "雕形鸟身、头部有角的蛊雕水墨示意",
+      "description": "原文写它的形状像雕而长有角，声音像婴儿。图中的角形与羽色属于写意处理。",
+      "sourceBook": "南山经",
+      "sourceMountain": "鹿吴之山"
+    },
+    {
+      "id": "lu-fish",
+      "name": "鯥",
+      "names": [
+        "鯥"
+      ],
+      "textIncludes": [],
+      "file": "display/lu-fish.png",
+      "originalFile": "lu-fish.png",
+      "alt": "牛形、胁下生羽翼、单根尖细蛇尾的鯥水墨示意",
+      "description": "原文将它记为鱼，形状像牛，具有蛇一样的尾巴和翅翼，羽毛生在胁下。",
+      "sourceBook": "南山经",
+      "sourceMountain": "柢山"
+    },
+    {
+      "id": "lei",
+      "name": "类",
+      "names": [
+        "类"
+      ],
+      "textIncludes": [],
+      "file": "display/lei.png",
+      "originalFile": "lei.png",
+      "alt": "类水墨写意示意",
+      "description": "原文描述其形状如狸而有长毛。",
+      "sourceBook": "南山经",
+      "sourceMountain": "亶爰之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "boshi",
+      "name": "猼𫍙",
+      "names": [
+        "猼𫍙"
+      ],
+      "textIncludes": [],
+      "file": "display/boshi.png",
+      "originalFile": "boshi.png",
+      "alt": "猼𫍙水墨写意示意",
+      "description": "",
+      "sourceBook": "南山经",
+      "sourceMountain": "基山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "guanguan",
+      "name": "灌灌",
+      "names": [
+        "灌灌"
+      ],
+      "textIncludes": [],
+      "file": "display/guanguan.png",
+      "originalFile": "guanguan.png",
+      "alt": "灌灌水墨写意示意",
+      "description": "",
+      "sourceBook": "南山经",
+      "sourceMountain": "青丘之山",
+      "reviewStatus": "pending",
+      "optimizationPending": true
+    },
+    {
+      "id": "chiru",
+      "name": "赤鱬",
+      "names": [
+        "赤鱬"
+      ],
+      "textIncludes": [],
+      "file": "display/chiru.png",
+      "originalFile": "chiru.png",
+      "alt": "赤鱬水墨写意示意",
+      "description": "",
+      "sourceBook": "南山经",
+      "sourceMountain": "青丘之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "lili",
+      "name": "狸力",
+      "names": [
+        "狸力"
+      ],
+      "textIncludes": [],
+      "file": "display/lili.png",
+      "originalFile": "lili.png",
+      "alt": "狸力水墨写意示意",
+      "description": "",
+      "sourceBook": "南山经",
+      "sourceMountain": "柜山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "quru",
+      "name": "瞿如",
+      "names": [
+        "瞿如"
+      ],
+      "textIncludes": [],
+      "file": "display/quru.png",
+      "originalFile": "quru.png",
+      "alt": "瞿如水墨写意示意",
+      "description": "",
+      "sourceBook": "南山经",
+      "sourceMountain": "祷过之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "yong",
+      "name": "颙",
+      "names": [
+        "颙"
+      ],
+      "textIncludes": [],
+      "file": "display/yong.png",
+      "originalFile": "yong.png",
+      "alt": "颙水墨写意示意",
+      "description": "",
+      "sourceBook": "南山经",
+      "sourceMountain": "令丘之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "luwu",
+      "name": "陆吾",
+      "names": [
+        "陆吾"
+      ],
+      "textIncludes": [],
+      "file": "display/luwu.png",
+      "originalFile": "luwu.png",
+      "alt": "陆吾水墨写意示意",
+      "description": "",
+      "sourceBook": "西山经",
+      "sourceMountain": "昆仑之丘",
+      "reviewStatus": "pending",
+      "optimizationPending": true
+    },
+    {
+      "id": "bifang",
+      "name": "毕方",
+      "names": [
+        "毕方"
+      ],
+      "textIncludes": [],
+      "file": "display/bifang.png",
+      "originalFile": "bifang.png",
+      "alt": "毕方水墨写意示意",
+      "description": "",
+      "sourceBook": "西山经",
+      "sourceMountain": "章莪之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "yingzhao",
+      "name": "英招",
+      "names": [
+        "英招"
+      ],
+      "textIncludes": [],
+      "file": "display/yingzhao.png",
+      "originalFile": "yingzhao.png",
+      "alt": "英招水墨写意示意",
+      "description": "",
+      "sourceBook": "西山经",
+      "sourceMountain": "槐江之山",
+      "reviewStatus": "pending",
+      "optimizationPending": true
+    },
+    {
+      "id": "luanniao",
+      "name": "鸾鸟",
+      "names": [
+        "鸾鸟"
+      ],
+      "textIncludes": [],
+      "file": "display/luanniao.png",
+      "originalFile": "luanniao.png",
+      "alt": "鸾鸟水墨写意示意",
+      "description": "",
+      "sourceBook": "西山经",
+      "sourceMountain": "女床之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "zhuyan",
+      "name": "朱厌",
+      "names": [
+        "朱厌"
+      ],
+      "textIncludes": [],
+      "file": "display/zhuyan.png",
+      "originalFile": "zhuyan.png",
+      "alt": "朱厌水墨写意示意",
+      "description": "",
+      "sourceBook": "西山经",
+      "sourceMountain": "小次之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "tulou",
+      "name": "土蝼",
+      "names": [
+        "土蝼"
+      ],
+      "textIncludes": [],
+      "file": "display/tulou.png",
+      "originalFile": "tulou.png",
+      "alt": "土蝼水墨写意示意",
+      "description": "",
+      "sourceBook": "西山经",
+      "sourceMountain": "昆仑之丘",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "qinyuan",
+      "name": "钦原",
+      "names": [
+        "钦原"
+      ],
+      "textIncludes": [],
+      "file": "display/qinyuan.png",
+      "originalFile": "qinyuan.png",
+      "alt": "钦原水墨写意示意",
+      "description": "",
+      "sourceBook": "西山经",
+      "sourceMountain": "昆仑之丘",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "tiangou",
+      "name": "天狗",
+      "names": [
+        "天狗"
+      ],
+      "textIncludes": [],
+      "file": "display/tiangou.png",
+      "originalFile": "tiangou.png",
+      "alt": "天狗水墨写意示意",
+      "description": "",
+      "sourceBook": "西山经",
+      "sourceMountain": "阴山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "qiongqi",
+      "name": "穷奇",
+      "names": [
+        "穷奇"
+      ],
+      "textIncludes": [],
+      "file": "display/qiongqi.png",
+      "originalFile": "qiongqi.png",
+      "alt": "穷奇水墨写意示意",
+      "description": "",
+      "sourceBook": "西山经",
+      "sourceMountain": "邽山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "zheng",
+      "name": "狰",
+      "names": [],
+      "textIncludes": [
+        "其名如狰"
+      ],
+      "file": "display/zheng.png",
+      "originalFile": "zheng.png",
+      "alt": "狰水墨写意示意",
+      "description": "",
+      "sourceBook": "西山经",
+      "sourceMountain": "章莪之山",
+      "reviewStatus": "pending",
+      "optimizationPending": true,
+      "displayName": "狰"
+    },
+    {
+      "id": "ershu",
+      "name": "耳鼠",
+      "names": [
+        "耳鼠"
+      ],
+      "textIncludes": [],
+      "file": "display/ershu.png",
+      "originalFile": "ershu.png",
+      "alt": "耳鼠水墨写意示意",
+      "description": "",
+      "sourceBook": "北山经",
+      "sourceMountain": "丹熏之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "mengji",
+      "name": "孟极",
+      "names": [
+        "孟极"
+      ],
+      "textIncludes": [],
+      "file": "display/mengji.png",
+      "originalFile": "mengji.png",
+      "alt": "孟极水墨写意示意",
+      "description": "",
+      "sourceBook": "北山经",
+      "sourceMountain": "石者之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "zhujian",
+      "name": "诸犍",
+      "names": [
+        "诸犍"
+      ],
+      "textIncludes": [],
+      "file": "display/zhujian.png",
+      "originalFile": "zhujian.png",
+      "alt": "诸犍水墨写意示意",
+      "description": "",
+      "sourceBook": "北山经",
+      "sourceMountain": "单张之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "heluo-fish",
+      "name": "何罗之鱼",
+      "names": [
+        "何罗之鱼"
+      ],
+      "textIncludes": [],
+      "file": "display/heluo-fish.png",
+      "originalFile": "heluo-fish.png",
+      "alt": "何罗之鱼水墨写意示意",
+      "description": "",
+      "sourceBook": "北山经",
+      "sourceMountain": "谯明之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "paoxiao",
+      "name": "狍鸮",
+      "names": [
+        "狍鸮"
+      ],
+      "textIncludes": [],
+      "file": "display/paoxiao.png",
+      "originalFile": "paoxiao.png",
+      "alt": "狍鸮水墨写意示意",
+      "description": "",
+      "sourceBook": "北山经",
+      "sourceMountain": "钩吾之山",
+      "reviewStatus": "pending",
+      "optimizationPending": true
+    },
+    {
+      "id": "tianma",
+      "name": "天马",
+      "names": [
+        "天马"
+      ],
+      "textIncludes": [],
+      "file": "display/tianma.png",
+      "originalFile": "tianma.png",
+      "alt": "天马水墨写意示意",
+      "description": "",
+      "sourceBook": "北山经",
+      "sourceMountain": "马成之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "suanyu",
+      "name": "酸与",
+      "names": [
+        "酸与"
+      ],
+      "textIncludes": [],
+      "file": "display/suanyu.png",
+      "originalFile": "suanyu.png",
+      "alt": "酸与水墨写意示意",
+      "description": "",
+      "sourceBook": "北山经",
+      "sourceMountain": "景山",
+      "reviewStatus": "pending",
+      "optimizationPending": true
+    },
+    {
+      "id": "dangkang",
+      "name": "当康",
+      "names": [
+        "当康"
+      ],
+      "textIncludes": [],
+      "file": "display/dangkang.png",
+      "originalFile": "dangkang.png",
+      "alt": "当康水墨写意示意",
+      "description": "",
+      "sourceBook": "东山经",
+      "sourceMountain": "钦山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "congcong",
+      "name": "从从",
+      "names": [
+        "从从"
+      ],
+      "textIncludes": [],
+      "file": "display/congcong.png",
+      "originalFile": "congcong.png",
+      "alt": "从从水墨写意示意",
+      "description": "",
+      "sourceBook": "东山经",
+      "sourceMountain": "栒状之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "qiuyu",
+      "name": "犰狳",
+      "names": [
+        "犰狳"
+      ],
+      "textIncludes": [],
+      "file": "display/qiuyu.png",
+      "originalFile": "qiuyu.png",
+      "alt": "犰狳水墨写意示意",
+      "description": "",
+      "sourceBook": "东山经",
+      "sourceMountain": "馀峩之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "zhuru",
+      "name": "朱獳",
+      "names": [
+        "朱獳"
+      ],
+      "textIncludes": [],
+      "file": "display/zhuru.png",
+      "originalFile": "zhuru.png",
+      "alt": "朱獳水墨写意示意",
+      "description": "",
+      "sourceBook": "东山经",
+      "sourceMountain": "耿山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "bibi",
+      "name": "獙獙",
+      "names": [
+        "獙獙"
+      ],
+      "textIncludes": [],
+      "file": "display/bibi.png",
+      "originalFile": "bibi.png",
+      "alt": "獙獙水墨写意示意",
+      "description": "",
+      "sourceBook": "东山经",
+      "sourceMountain": "姑逢之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "longzhi",
+      "name": "蠪侄",
+      "names": [
+        "蠪侄"
+      ],
+      "textIncludes": [],
+      "file": "display/longzhi.png",
+      "originalFile": "longzhi.png",
+      "alt": "蠪侄水墨写意示意",
+      "description": "",
+      "sourceBook": "东山经",
+      "sourceMountain": "凫丽之山",
+      "reviewStatus": "pending",
+      "optimizationPending": true
+    },
+    {
+      "id": "feifei",
+      "name": "朏朏",
+      "names": [
+        "朏朏"
+      ],
+      "textIncludes": [],
+      "file": "display/feifei.png",
+      "originalFile": "feifei.png",
+      "alt": "朏朏水墨写意示意",
+      "description": "",
+      "sourceBook": "中山经",
+      "sourceMountain": "霍山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "qinggeng",
+      "name": "青耕",
+      "names": [
+        "青耕"
+      ],
+      "textIncludes": [],
+      "file": "display/qinggeng.png",
+      "originalFile": "qinggeng.png",
+      "alt": "青耕水墨写意示意",
+      "description": "",
+      "sourceBook": "中山经",
+      "sourceMountain": "堇理之山",
+      "reviewStatus": "pending"
+    },
+    {
+      "id": "mafu",
+      "name": "马腹",
+      "names": [
+        "马腹"
+      ],
+      "textIncludes": [],
+      "file": "display/mafu.png",
+      "originalFile": "mafu.png",
+      "alt": "马腹水墨写意示意",
+      "description": "",
+      "sourceBook": "中山经",
+      "sourceMountain": "蔓渠之山",
+      "reviewStatus": "pending"
+    }
+  ]
+}

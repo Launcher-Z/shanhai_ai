@@ -1,0 +1,18 @@
+{
+  "activity_id": "lesson-2-task-1",
+  "version": 2,
+  "title": "人工识别 · 学习札记",
+  "intro": "按图片编号记录你的回答；不认识时也可以先记下“不认识”。",
+  "sections": [
+    {
+      "id": "animals", "step": 0, "title": "五种动物的回答", "optional": false,
+      "questions": [
+        {"id": "animal-1", "type": "text", "prompt": "图1：你的回答", "required": true, "review": false, "max_length": 300},
+        {"id": "animal-2", "type": "text", "prompt": "图2：你的回答", "required": true, "review": false, "max_length": 300},
+        {"id": "animal-3", "type": "text", "prompt": "图3：你的回答", "required": true, "review": false, "max_length": 300},
+        {"id": "animal-4", "type": "text", "prompt": "图4：你的回答", "required": true, "review": false, "max_length": 300},
+        {"id": "animal-5", "type": "text", "prompt": "图5：你的回答", "required": true, "review": false, "max_length": 300}
+      ]
+    }
+  ]
+}

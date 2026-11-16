@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>活动2 · 单层神经网络对0—9的学习探究</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="data.js" defer></script>
+  <script src="model.js" defer></script>
+  <link rel="stylesheet" href="../theme.css?v=20261115b">
+  <link rel="stylesheet" href="layout.css?v=20261115d">
+  <script src="../storage.js" defer></script>
+  <script src="../../handwriting-api.js" defer></script>
+  <script src="app.js?v=20261115d" defer></script>
+  <script src="../handwriting.js?v=20261115c" defer></script><script src="../classroom-training.js" defer></script><script src="../bridge.js?v=20261115d" defer></script>
+</head>
+<body data-lab="digits">
+  <header class="page-header"><div><p class="eyebrow">深度学习［0—9］ / 活动 2</p><h1>十个数字，神经网络怎样学会区分？</h1></div><button id="resetButton" class="quiet">重新开始</button></header>
+  <main>
+    <div class="workflow" role="list" aria-label="实验状态">
+      <div class="workflow-step" role="listitem" data-stage="before"><span class="step-number">1</span><span><strong>训练前测试</strong><small id="beforeNav">0 / 5 张初测</small></span></div>
+      <div class="workflow-step" role="listitem" data-stage="manual"><span class="step-number">2</span><span><strong>完整训练</strong><small id="singleNav">点击一次，完成一次训练</small></span></div>
+      <div class="workflow-step" role="listitem" data-stage="auto"><span class="step-number">3</span><span><strong>继续训练</strong><small id="autoNav">100 → 300 → 500 次</small></span></div>
+      <div class="workflow-step" role="listitem" data-stage="after"><span class="step-number">4</span><span><strong>测试与手写探究</strong><small id="afterNav">比较训练前后</small></span></div>
+    </div>
+    <div class="task-strip"><span id="taskText"></span><span class="architecture">216 个输入 · 10 个输出 · 无隐藏层</span></div>
+    <div class="lab">
+      <section class="panel input-panel learning-region" data-region="input" aria-labelledby="inputHeading">
+        <div class="panel-heading"><span class="section-letter">X</span><h2 id="inputHeading">输入</h2><span class="panel-caption">送入什么？</span></div>
+        <div class="mode-switch" role="group" aria-label="选择模式"><button id="trainMode" data-mode="train">训练模式</button><button id="testMode" data-mode="test">测试模式</button><button id="drawMode" data-mode="draw">手写模式</button></div>
+        <p id="modeHint" class="hint"></p>
+        <div class="sample-header"><strong id="sampleName"></strong><span id="sampleTag"></span></div>
+        <div id="drawingMappingControls" class="drawing-mapping" hidden>
+          <div class="mapping-controls"><label class="mapping-switch" for="drawWeightToggle"><input id="drawWeightToggle" type="checkbox" role="switch" aria-controls="drawInkOpacity drawWeightDigit">权重映射</label><input id="drawInkOpacity" class="mapping-opacity" type="range" min="0" max="100" step="1" value="40" aria-label="笔迹不透明度" aria-valuetext="40%" disabled><div class="mapping-selection"><select id="drawWeightDigit" aria-label="权重映射数字" disabled></select></div></div>
+        </div>
+        <div class="source-display"><canvas id="sourceCanvas" width="240" height="360" role="img" aria-label="当前数字的12列18行二值输入"></canvas><canvas id="drawingCanvas" width="240" height="360" tabindex="0" aria-label="手写输入板：鼠标或触摸绘制，也可用方向键移动，空格涂写，Delete擦除" hidden></canvas></div>
+        <p class="source-caption">12 列 × 18 行 · 有笔迹为 1，无笔迹为 0</p>
+        <div id="drawingTools" hidden><div class="drawing-toolbar" role="group" aria-label="手写工具"><button id="penButton" aria-pressed="true">画笔</button><button id="eraserButton" aria-pressed="false">橡皮</button><button id="clearDrawing">清空</button></div><p class="hint">在板上写一个数字，尽量居中并写满中间区域。可用方向键和空格涂写。</p></div>
+        <div id="inputLabelBox" class="input-footer" hidden><span>正确标签</span><strong id="inputLabel">—</strong><small>标签用于核对和训练，不参与输入计算。</small></div>
+        <div class="training-counter"><span>当前模型已训练</span><strong><span id="trainCount">0</span><small> 次</small></strong></div>
+        <p id="trainingSource" class="hint" hidden></p>
+        <div class="input-actions">
+          <div id="testPicker" class="test-picker" role="group" aria-label="选择固定测试图片"></div>
+          <button id="testCurrentButton" class="primary lesson-action">测试当前图片</button>
+          <button id="drawPredictButton" class="primary lesson-action" hidden>预测手写数字</button>
+          <div id="trainingControls" class="training-controls" role="group" aria-label="选择追加训练次数" hidden><button id="trainOnceButton" class="primary lesson-action" data-train-count="1">训练1次</button><button id="train100Button" class="primary lesson-action" data-train-count="100" disabled>自动训练100次</button><button id="train300Button" class="primary lesson-action" data-train-count="300" disabled>自动训练300次</button><button id="train500Button" class="primary lesson-action" data-train-count="500" disabled>自动训练500次</button></div>
+          <div id="autoControls" hidden><progress id="autoProgress" max="100" value="0" aria-label="本批训练进度"></progress><p id="autoHint" class="hint"></p><button id="stopAutoButton" class="outline">本张完成后停止</button></div>
+          <p id="inputActionHint" class="hint"></p>
+        </div>
+      </section>
+      <section class="panel compute-panel learning-region" data-region="compute" aria-labelledby="computeHeading">
+        <div class="panel-heading"><span class="section-letter">Σ</span><h2 id="computeHeading">加权计算</h2><span class="panel-caption">怎么算？</span></div>
+        <div class="formula"><div class="formula-expression"><span>z<sub>j</sub> =</span><span>x<sub>1</sub> × w<sub>1,j</sub></span><span>+ x<sub>2</sub> × w<sub>2,j</sub></span><span>+ …</span><span>+ x<sub>216</sub> × w<sub>216,j</sub></span><span>+ b<sub>j</sub></span></div><p>j 为数字 0—9。每个输出都有 216 个权重和 1 个偏置。</p></div>
+        <div class="scan-progress"><progress id="scanProgress" max="216" value="0" aria-label="已参与计算的像素数"></progress><span id="scanCount">0 / 216</span></div>
+        <p id="scanLocation" class="scan-location">等待计算</p>
+        <div class="calculation-graph" aria-label="同一份输入分成十路，分别与数字0到9的权重相乘、累加并加偏置">
+          <figure class="shared-input"><figcaption>共享输入 x</figcaption><canvas id="computePixels" width="120" height="180" role="img" aria-label="参与计算的共享输入"></canvas></figure>
+          <div class="fork-lines" aria-hidden="true"><svg viewBox="0 0 24 1000" preserveAspectRatio="none"><path d="M0 500 H8 M8 50 V950 M8 50 H24 M8 150 H24 M8 250 H24 M8 350 H24 M8 450 H24 M8 550 H24 M8 650 H24 M8 750 H24 M8 850 H24 M8 950 H24" fill="none" stroke="#91adbe" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg></div>
+          <div id="computeRoutes" class="compute-routes"></div>
+        </div>
+        <div class="weight-legend"><span><i class="swatch negative"></i>负权重</span><span><i class="swatch zero"></i>0</span><span><i class="swatch positive"></i>正权重</span><small>固定色阶 ±0.5</small></div>
+        <p id="computeHint" class="hint">一张输入 → 十组权重 → 十个加权和。所有 216 个输入都参与计算。</p>
+      </section>
+      <div class="result-panel">
+        <section class="panel prediction-section learning-region" data-region="prediction" aria-labelledby="resultHeading">
+          <div class="panel-heading"><span class="section-letter">Y</span><h2 id="resultHeading">预测与分析</h2><span class="panel-caption">预测什么？</span></div>
+          <p class="result-rule">加权和 → 预测比例 → 取最大类别</p>
+          <details class="softmax"><summary>查看比例怎么算</summary><p>p<sub>j</sub> = e<sup>zⱼ</sup> / (e<sup>z₀</sup> + e<sup>z₁</sup> + … + e<sup>z₉</sup>)</p><small>这一步叫 softmax。十个类别的预测比例合计 100%。</small></details>
+          <div id="probabilityChart" class="probability-chart" role="img" aria-label="等待预测"></div>
+          <div id="verdict" class="verdict"><div class="prediction-tile"><span>模型预测</span><strong id="prediction">—</strong></div><div id="answerTile" hidden><span>正确标签</span><strong id="answer"></strong></div><div id="judgmentTile" hidden><span>预测结果</span><strong id="verdictText"></strong></div></div>
+          <div id="lossBox" hidden><div class="loss-line"><span>误差（损失） <strong id="lossValue">—</strong></span><span id="lossAfter"></span></div><details class="loss-detail"><summary>损失怎样得到？</summary><p>取出正确类别的预测比例 p，计算损失 = −ln(p)。</p><p id="lossCalculation"></p><small>猜对时，损失仍可能不为 0，模型仍可继续学习。</small></details></div>
+        </section>
+        <section class="panel update-section learning-region" data-region="update" aria-labelledby="updateHeading">
+          <div class="panel-heading"><span class="section-letter">Δ</span><h2 id="updateHeading">权重更新与变化</h2><span id="updateStatus" class="panel-caption">初始参数</span></div>
+          <p id="updateHint" class="hint">十个数字各自拥有一组权重。</p>
+          <div id="weightSnapshots" class="weight-snapshots"></div>
+          <div class="weight-legend"><span><i class="swatch negative"></i>负</span><span><i class="swatch zero"></i>0</span><span><i class="swatch positive"></i>正</span><small>与计算区同色阶；超过 ±0.5 的值用最深色</small></div>
+          <div class="timeline-box"><div class="timeline-heading"><label for="timeline">训练时间轴</label><strong id="timelineLabel">第 0 次 · 初始</strong></div><input id="timeline" type="range" min="0" max="0" value="0" step="1" aria-label="回看每一次训练后的权重"><div class="timeline-ends"><span>初始 0 次</span><span id="timelineEnd">当前 0 次</span></div><div class="timeline-bottom"><span id="timelineInfo">拖动回看权重，当前模型保持不变。</span><button id="liveWeights" class="quiet">回到最新</button></div></div>
+          <details class="learning-detail"><summary>参数怎样调整？</summary><p>权重改变量 = 学习率 ×（目标比例 − 预测比例）× 输入值<br>偏置改变量 = 学习率 ×（目标比例 − 预测比例）</p><small>正确类别的目标比例为 1，其他九类为 0。输入为 0 的位置，本次权重不变，偏置仍可变化。</small></details>
+        </section>
+      </div>
+    </div>
+    <div class="snapshot-deck">
+<section id="testSnapshotPanel" class="input-records" aria-labelledby="testSnapshotHeading">
+            <h3 id="testSnapshotHeading">测试结果快照</h3>
+            <div class="snapshot-select"><label for="testSnapshotSelect">查看快照</label><select id="testSnapshotSelect"></select></div>
+            <p id="testSnapshotInfo" class="hint"></p>
+            <table class="snapshot-table" aria-label="所选训练次数的固定测试结果"><thead><tr><th scope="col">测试图片</th><th scope="col">模型预测</th><th scope="col">概率</th></tr></thead><tbody id="testSnapshotTable"></tbody></table>
+            <p class="hint">比例由 softmax 计算；未测图片留空。</p>
+          </section>
+<section id="drawSnapshotPanel" class="input-records" aria-labelledby="drawSnapshotHeading" hidden>
+            <h3 id="drawSnapshotHeading">手写结果快照</h3>
+            <div class="snapshot-select"><label for="drawSnapshotSelect">查看快照</label><select id="drawSnapshotSelect"><option value="all">全部训练次数</option></select></div>
+            <p id="drawSnapshotEmpty" class="hint">预测后在此保存笔迹和结果。</p>
+            <div id="drawSnapshotScroll" class="draw-record-scroll" tabindex="0" role="region" aria-label="已保存的手写快照" hidden><table class="snapshot-table" aria-label="手写图片与预测结果"><thead><tr><th scope="col">手写图片</th><th scope="col">模型预测</th><th scope="col">概率</th><th scope="col">第二预测（比例）</th></tr></thead><tbody id="drawSnapshotTable"></tbody></table></div>
+            <p class="hint">点图片回看当时结果；“再次测试”使用当前模型，相同笔迹与训练次数不重复记录。</p>
+          </section>
+    </div>
+    <section id="handwriting-extension" class="extension-panel" hidden></section>
+    <section id="classroom-training" class="extension-panel" hidden></section>
+    <section class="dataset-panel" aria-labelledby="datasetHeading"><div class="record-heading"><h2 id="datasetHeading">本次实验的全部图片</h2><span>点击图片，查看点阵</span></div><p class="hint">12×18人工教学笔迹，每个数字10种训练字形，包含大小、宽窄、倾斜、笔画和粗细变化；测试字形单独绘制，教学图片按笔迹居中，手写保留原始位置。教学样本对自由手写的识别能力仍有限。</p><div class="dataset-group"><div class="dataset-label"><h3>训练集</h3><p>100 张 · 每个数字 10 张</p><small>按数字0—9分组，组内按编号排列</small></div><div id="trainingGallery" class="gallery"></div></div><div class="dataset-group"><div class="dataset-label"><h3>固定测试集</h3><p>10 张 · 任意次数复测同一组</p><small>只展示图片，不提供标签</small></div><div id="testingGallery" class="gallery"></div></div></section>
+    <footer>活动 2 · 单层神经网络对 0—9 的学习探究<span>计算预测 → 衡量误差 → 更新参数 → 回看变化</span></footer>
+
+  </main>
+  <div id="status" role="status" aria-live="polite"></div>
+  <dialog id="sampleDialog"><div class="dialog-heading"><h2 id="dialogTitle"></h2><button id="closeDialog" class="quiet">关闭</button></div><div id="dialogContent"></div></dialog>
+</body>
+</html>
+

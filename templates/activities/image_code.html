@@ -1,0 +1,58 @@
+<section id="image-code" class="image-code" data-student-id="{{ student.id }}" aria-label="像素与数值探索实验" hidden>
+  <nav class="code-steps" aria-label="实验步骤">
+    {% for label in ['画一个数字1', '把图变成数字', '表示8级灰度', '调出自己的颜色'] %}
+    <button type="button" data-code-step="{{ loop.index0 }}"{% if loop.first %} aria-current="step"{% endif %}><span>0{{ loop.index }}</span>{{ label }}</button>
+    {% endfor %}
+  </nav>
+  <header class="code-heading"><h3 data-code-ui="heading"></h3><p data-code-ui="intro"></p></header>
+
+  <section data-code-panel="0" class="code-workbench code-draw">
+    <figure class="code-figure">
+      <figcaption><strong>我的数字“1”</strong><span>5 × 5</span></figcaption>
+      <div class="code-grid" data-code-grid="draw" role="group" aria-label="5行5列画板，点击或用空格涂色，方向键移动"></div>
+      <p class="code-caption">点击涂色，再点一次擦除；也可用方向键和空格。</p>
+    </figure>
+    <aside class="code-observe">
+      <p class="code-eyebrow">从一格开始</p>
+      <div class="code-pixel-symbol" aria-hidden="true"></div>
+      <h4>一格，就是一个像素</h4>
+      <p>用这些小格子，拼出你自己的“1”。</p>
+      <output data-code-ui="draw-count" aria-live="polite"></output>
+    </aside>
+  </section>
+
+  <section data-code-panel="1" hidden>
+    <div class="code-mapping"><label for="code-mapping">黑白约定</label><select id="code-mapping"><option value="0">白色 = 0，黑色 = 1</option><option value="1">白色 = 1，黑色 = 0</option></select></div>
+    <div class="code-workbench code-encoding">
+      <figure class="code-figure"><figcaption><strong>刚才画的图</strong><span>5 × 5</span></figcaption><div class="code-grid code-grid-static" data-code-grid="source" role="img" aria-label="刚才绘制的数字图像"></div></figure>
+      <div class="code-convert"><span aria-hidden="true">→</span><button type="button" data-code-action="verify">验证转换</button></div>
+      <figure class="code-figure"><figcaption><strong>自己填写0与1</strong><span>5 × 5</span></figcaption><div class="code-grid" data-code-grid="encoded" role="group" aria-label="手动编码，点击或按空格切换0与1"></div></figure>
+    </div>
+    <p class="code-verification" data-code-ui="verification" role="status"></p>
+    <div class="code-sequence"><p>你的编码 · 从左到右，从上到下</p><output data-code-ui="sequence" aria-label="学生填写的25位二进制序列"></output><p data-code-ui="position" role="status"></p></div>
+  </section>
+
+  <section data-code-panel="2" hidden>
+    <div class="code-gray-strip" data-code-ui="gray-strip" role="img" aria-label="从黑到白连续排列的8级灰度"></div>
+    <fieldset class="code-bit-count"><legend>试试用几位记录</legend>{% for count in [1, 2, 3] %}<label><input type="radio" name="code-bit-count" value="{{ count }}"{% if count == 1 %} checked{% endif %}>{{ count }} 位</label>{% endfor %}</fieldset>
+    <p class="code-gray-example" data-code-ui="gray-example">1位示例：黑色用0，灰1用1。继续给其余灰度填写编码，看看能否都不重复。</p>
+    <div class="code-gray-cards" data-code-ui="gray-cards" aria-label="为从黑到白的8级灰度填写编码"></div>
+    <div class="code-gray-check"><p data-code-ui="gray-feedback" role="status"></p><button type="button" data-code-action="verify-gray">验证编码</button></div>
+  </section>
+
+  <section data-code-panel="3" hidden>
+    <div class="code-workbench code-color">
+      <div class="code-mixer">
+        {% for channel, label in [('r', '红'), ('g', '绿'), ('b', '蓝')] %}
+        <div class="code-channel code-channel-{{ channel }}"><label for="code-{{ channel }}">{{ channel|upper }} <span>{{ label }}</span></label><input id="code-{{ channel }}" data-code-channel="{{ loop.index0 }}" type="range" min="0" max="255" value="0"><output for="code-{{ channel }}" data-code-value="{{ loop.index0 }}">0</output></div>
+        {% endfor %}
+        <div class="code-color-readout"><span data-code-ui="color-chip" aria-hidden="true"></span><output data-code-ui="rgb" aria-live="polite"></output></div>
+        <div class="code-presets" aria-label="尝试基本颜色">{% for name in ['红', '绿', '蓝', '黄', '白', '黑'] %}<button type="button" data-code-preset="{{ loop.index0 }}">{{ name }}</button>{% endfor %}</div>
+        <p class="code-caption">拖动红、绿、蓝三个分量，再点击右边的像素上色。</p>
+      </div>
+      <figure class="code-figure"><figcaption><strong>用颜色点亮“1”</strong><span>5 × 5</span></figcaption><div class="code-grid" data-code-grid="color" role="group" aria-label="彩色画板，点击或用空格为像素涂上当前颜色"></div><p class="code-caption">每一格的颜色，都由三个数值记录。</p></figure>
+    </div>
+  </section>
+
+  <div class="code-navigation"><button type="button" data-code-action="previous">上一步</button><span data-code-ui="step-label"></span><button type="button" data-code-action="next">下一步 →</button></div>
+</section>

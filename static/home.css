@@ -1,0 +1,55 @@
+/* 优先使用系统隶书；未安装时使用本机中文字体。 */
+body, h1, h2, .brand, .brand small, .seal, .stamp, .ridge {
+  font-family: LiSu, "隶书", "STLiti", "Microsoft YaHei", sans-serif;
+}
+
+/* 学生入口：让古屋保留在画面右侧，表单落在左侧暗部。 */
+.home-page { min-height: 100vh; background: #101e25; color: #e7e5d7; }
+.storm-scene { position: fixed; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; background: #10212a; }
+.storm-image { position: absolute; width: max(100vw, 159.52vh); height: max(100vh, 62.69vw); left: 50%; top: 50%; background: url('shanhai-storm.png') center / 100% 100% no-repeat; transform: translate(-50%, -50%) scale(1.06); }
+/* 以柔和蒙版区分古屋和近岸，减少单张图切层时的硬边。 */
+.storm-house { mask-image: radial-gradient(ellipse 26% 28% at 78% 40%, black 35%, transparent 100%); }
+.storm-foreground { mask-image: linear-gradient(to bottom, transparent 55%, black 80%); }
+.storm-house::after { content: ""; position: absolute; left: 64.2%; top: 41.6%; width: 5%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(255,185,88,.25), transparent 70%); animation: candle-glow 3s ease-in-out infinite alternate; }
+.storm-scene::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(7,17,23,.93) 0%, rgba(9,20,27,.8) 31%, rgba(10,23,30,.24) 65%, rgba(8,18,23,.14) 100%), linear-gradient(0deg, rgba(5,13,18,.72), transparent 40%); }
+.storm-rain { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; opacity: .9; }
+@keyframes candle-glow { 0%, 35%, 80% { opacity: .4; } 25%, 60%, 100% { opacity: 1; } }
+.home-page .topbar, .home-page main, .home-page footer { position: relative; z-index: 1; }
+.home-page .topbar { height: 76px; color: #eae9dc; border-color: rgba(204,218,211,.18); background: rgba(8,20,26,.45); }
+.home-page .topbar nav { color: #d2d9d1; }
+.home-page .brand small { color: #afc0bd; }
+.home-page .seal, .home-page .stamp { background: #8e4939; }
+.home-page main { max-width: 1400px; }
+.home-page .landing { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 0; min-height: calc(100vh - 155px); padding: 32px 0; }
+.home-page .intro { padding: 0; max-width: 510px; }
+.home-page .intro .eyebrow { color: #c7ad7c; margin-bottom: 8px; }
+.home-page .intro h1 { color: #f0eddd; font-size: clamp(35px, 4vw, 54px); line-height: 1.23; margin: 12px 0; font-weight: 400; letter-spacing: .1em; }
+.home-page .intro h1 span { color: #e6cc9b; }
+.home-page .lead { color: #c1ceca; font-size: 16px; margin-bottom: 22px; }
+.home-page .login-card { position: relative; justify-self: auto; max-width: 410px; padding: 25px 30px 22px; color: #eee9da; background: rgba(12,26,31,.88); border: 1px solid rgba(202,179,129,.48); border-radius: 2px; box-shadow: 0 18px 55px rgba(0,0,0,.3), inset 0 0 35px rgba(169,125,65,.05); }
+.home-page .login-card::before { content: ""; position: absolute; left: -1px; top: 22px; bottom: 22px; width: 2px; background: #b59763; }
+.home-page .card-heading .stamp { width: 38px; height: 38px; font-size: 21px; }
+.home-page .card-heading .eyebrow { color: #bda579; font-weight: 400; }
+.home-page .card-heading h2 { font-size: 24px; font-weight: 400; letter-spacing: .1em; }
+.home-page .login-card > .muted { color: #bdc7bf; margin: 12px 0 13px; }
+.home-page label { color: #d8d8c9; margin: 12px 0 5px; font-weight: 400; font-size: 15px; }
+.home-page input, .home-page select { color: #f2eee1; background: #172b30; border-color: #52665e; border-radius: 2px; padding: 10px 12px; }
+.home-page input::placeholder { color: #a8b6ae; }
+.home-page form > button:not(.compact) { margin-top: 18px; background: #a26d42; border-color: #bd9162; color: #fff8e7; border-radius: 2px; font-size: 17px; font-weight: 400; letter-spacing: .08em; }
+.home-page form > button:hover { background: #b37a49; }
+.home-page .hint { color: #acbcb2; margin: 13px 0 0; }
+.home-page .empty { background: #20363a; color: #e2e1d4; }
+.home-page footer { margin: 0 auto; padding-top: 16px; padding-bottom: 18px; color: #b0bcb5; border-color: rgba(204,218,211,.18); }
+.home-page footer span { color: #d0ac7a; }
+@media (max-width: 760px) {
+  .home-page .topbar { height: 70px; }
+  .home-page .storm-image { background-position: 62% center; }
+  .home-page .landing { min-height: calc(100vh - 142px); padding: 30px 0; }
+  .home-page .intro h1 { font-size: 38px; }
+  .home-page .login-card { padding: 23px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .storm-image { transition: none; }
+  .storm-rain { display: none; }
+  .storm-house::after { animation: none; }
+}

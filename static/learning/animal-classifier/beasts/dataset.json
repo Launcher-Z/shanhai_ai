@@ -1,0 +1,218 @@
+{
+  "classes": [
+    {
+      "name": "短尾猴",
+      "images": [
+        {
+          "id": "macaque-1",
+          "file": "macaque-1.jpg"
+        },
+        {
+          "id": "macaque-2",
+          "file": "macaque-2.jpg"
+        },
+        {
+          "id": "macaque-3",
+          "file": "macaque-3.jpg"
+        },
+        {
+          "id": "macaque-4",
+          "file": "macaque-4.jpg"
+        },
+        {
+          "id": "macaque-5",
+          "file": "macaque-5.jpg"
+        },
+        {
+          "id": "macaque-6",
+          "file": "macaque-6.jpg"
+        },
+        {
+          "id": "macaque-7",
+          "file": "macaque-7.jpg"
+        },
+        {
+          "id": "macaque-8",
+          "file": "macaque-8.jpeg"
+        },
+        {
+          "id": "macaque-9",
+          "file": "macaque-9.png"
+        },
+        {
+          "id": "macaque-10",
+          "file": "macaque-10.jpeg"
+        }
+      ]
+    },
+    {
+      "name": "果子狸",
+      "images": [
+        {
+          "id": "civet-1",
+          "file": "civet-1.png"
+        },
+        {
+          "id": "civet-2",
+          "file": "civet-2.png"
+        },
+        {
+          "id": "civet-3",
+          "file": "civet-3.jpg"
+        },
+        {
+          "id": "civet-4",
+          "file": "civet-4.png"
+        },
+        {
+          "id": "civet-5",
+          "file": "civet-5.png"
+        },
+        {
+          "id": "civet-6",
+          "file": "civet-6.jpg"
+        },
+        {
+          "id": "civet-7",
+          "file": "civet-7.jpg"
+        },
+        {
+          "id": "civet-8",
+          "file": "civet-8.png"
+        },
+        {
+          "id": "civet-9",
+          "file": "civet-9.jpg"
+        },
+        {
+          "id": "civet-10",
+          "file": "civet-10.jpg"
+        }
+      ]
+    },
+    {
+      "name": "穿山甲",
+      "images": [
+        {
+          "id": "pangolin-1",
+          "file": "pangolin-1.jpeg"
+        },
+        {
+          "id": "pangolin-2",
+          "file": "pangolin-2.png"
+        },
+        {
+          "id": "pangolin-3",
+          "file": "pangolin-3.jpg"
+        },
+        {
+          "id": "pangolin-4",
+          "file": "pangolin-4.jpg"
+        },
+        {
+          "id": "pangolin-5",
+          "file": "pangolin-5.jpg"
+        },
+        {
+          "id": "pangolin-6",
+          "file": "pangolin-6.jpg"
+        },
+        {
+          "id": "pangolin-7",
+          "file": "pangolin-7.jpg"
+        },
+        {
+          "id": "pangolin-8",
+          "file": "pangolin-8.jpg"
+        },
+        {
+          "id": "pangolin-9",
+          "file": "pangolin-9.jpg"
+        },
+        {
+          "id": "pangolin-10",
+          "file": "pangolin-10.jpg"
+        }
+      ]
+    },
+    {
+      "name": "章鱼",
+      "images": [
+        {
+          "id": "octopus-1",
+          "file": "octopus-1.jpg"
+        },
+        {
+          "id": "octopus-2",
+          "file": "octopus-2.png"
+        },
+        {
+          "id": "octopus-3",
+          "file": "octopus-3.jpg"
+        },
+        {
+          "id": "octopus-4",
+          "file": "octopus-4.jpg"
+        },
+        {
+          "id": "octopus-5",
+          "file": "octopus-5.jpg"
+        },
+        {
+          "id": "octopus-6",
+          "file": "octopus-6.jpg"
+        },
+        {
+          "id": "octopus-7",
+          "file": "octopus-7.jpg"
+        },
+        {
+          "id": "octopus-8",
+          "file": "octopus-8.jpg"
+        },
+        {
+          "id": "octopus-9",
+          "file": "octopus-9.jpg"
+        },
+        {
+          "id": "octopus-10",
+          "file": "octopus-10.jpg"
+        }
+      ]
+    }
+  ],
+  "testing": [
+    {
+      "id": "test-1",
+      "number": 1,
+      "name": "何罗鱼",
+      "file": "test-1.png",
+      "truth": null,
+      "kind": "challenge"
+    },
+    {
+      "id": "test-2",
+      "number": 2,
+      "name": "鯥",
+      "file": "test-2.png",
+      "truth": null,
+      "kind": "challenge"
+    },
+    {
+      "id": "test-3",
+      "number": 3,
+      "name": "天狗",
+      "file": "test-3.png",
+      "truth": null,
+      "kind": "challenge"
+    },
+    {
+      "id": "test-4",
+      "number": 4,
+      "name": "长右",
+      "file": "test-4.png",
+      "truth": null,
+      "kind": "challenge"
+    }
+  ]
+}

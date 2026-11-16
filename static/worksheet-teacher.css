@@ -1,0 +1,64 @@
+/* 教师端沿用现有班级管理排版，评语栏与学生原文并排，便于课堂快速评阅。 */
+.review-link { color:var(--green); text-decoration:underline; text-underline-offset:4px; white-space:nowrap; }
+.review-filters { display:flex; align-items:flex-end; gap:16px; margin-bottom:25px; flex-wrap:wrap; }
+.review-filters label { min-width:180px; margin:0; }
+.review-filters select { margin-top:7px; }
+.review-filters>button.compact { width:auto; margin:0 0 2px; }
+.review-layout { display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:24px; align-items:start; }
+.review-layout>.panel { min-width:0; }
+.review-layout .review-decision { position:sticky; top:20px; }
+.review-layout .review-answer { padding:15px 0 20px; border-bottom:1px solid var(--line); }
+.review-layout .review-answer h3 { font-size:15px; font-weight:600; line-height:1.8; }
+.review-layout .review-answers h2:not(:first-child) { margin-top:30px; }
+.review-layout .review-student-answer { white-space:pre-wrap; overflow-wrap:anywhere; color:#3e574b; background:#edf0e63d; padding:12px 14px; border-left:2px solid #a6b59c; }
+.review-return { display:flex; gap:8px; align-items:center; font-weight:400; color:var(--red); }
+.review-return input { width:16px; height:16px; margin:0; }
+.review-actions { display:grid; gap:10px; margin-top:16px; }
+/* 教师端决策树可视化：沿用墨绿与宣纸色调，横向可滚动。 */
+.teacher-decision-tree { border:1px solid #d5dece; background:#f8faf5; padding:14px 12px; border-radius:4px; }
+.t-tree-scroll { overflow-x:auto; max-width:100%; padding:4px 0; }
+.t-tree-scroll>.t-tree-node { width:max-content; min-width:100%; }
+.t-tree-node { display:flex; flex-direction:column; align-items:center; text-align:center; min-width:124px; padding:0 4px; }
+.t-tree-card { position:relative; display:flex; flex-direction:column; gap:4px; min-width:118px; max-width:168px; padding:7px 9px; border:1px solid #c6d2bf; border-top:3px solid #365f58; background:#fff; box-shadow:1px 2px 0 #8a765918; }
+.t-tree-node[data-kind="leaf"]>.t-tree-card { border-color:#d6c6aa; border-top-color:#814937; background:#fbf6ea; }
+.t-tree-node[data-kind="empty"]>.t-tree-card { border-style:dashed; border-top-width:1px; border-color:#c6cdb8; background:#faf9f4; }
+.t-tree-badge { align-self:flex-start; font-size:10px; line-height:1.2; padding:1px 5px; border:1px solid #365f5844; color:#365f58; background:#365f580f; }
+.t-tree-node[data-kind="leaf"] .t-tree-badge { border-color:#81493744; color:#814937; background:#8149370f; }
+.t-tree-label { font-size:13px; font-weight:600; color:#2f473c; line-height:1.35; }
+.t-tree-node[data-kind="leaf"] .t-tree-label { color:#744030; }
+.t-tree-node.has-branches>.t-tree-card::after { content:''; position:absolute; left:50%; top:100%; width:1.5px; height:12px; background:#6d8064; transform:translateX(-50%); }
+.t-tree-branches { position:relative; display:flex; align-items:flex-start; justify-content:center; margin-top:12px; min-width:max-content; }
+.t-tree-branches::before { content:''; position:absolute; top:-2.5px; left:50%; width:5px; height:5px; border-radius:50%; background:#6d8064; transform:translateX(-50%); }
+.t-tree-branch { position:relative; padding:18px 4px 0; min-width:124px; display:flex; flex-direction:column; align-items:center; }
+.t-tree-branch::before { content:''; position:absolute; top:0; height:1.5px; background:#6d8064; }
+.t-tree-branch:first-child::before { left:50%; right:0; }
+.t-tree-branch:last-child::before { left:0; right:50%; }
+.t-tree-branch::after { content:''; position:absolute; top:0; left:50%; width:1.5px; height:18px; background:#6d8064; transform:translateX(-50%); }
+.t-tree-edge { position:relative; z-index:1; display:inline-block; margin:-14px 0 6px; padding:1px 6px; font-size:11px; font-weight:700; line-height:1.25; border:1px solid #6d8064; background:#fff; color:#365f58; }
+.t-tree-edge.is-yes { border-color:#365f5880; background:#eaf1ea; color:#2b544d; }
+.t-tree-edge.is-no { border-color:#81493770; background:#f8ebe5; color:#814937; }
+.teacher-decision-tree.is-compact { padding:10px 8px; }
+.teacher-decision-tree.is-compact .t-tree-node { min-width:102px; padding:0 3px; }
+.teacher-decision-tree.is-compact .t-tree-card { min-width:96px; max-width:138px; padding:5px 7px; }
+.teacher-decision-tree.is-compact .t-tree-label { font-size:12px; }
+.teacher-decision-tree.is-compact .t-tree-branch { min-width:102px; padding:15px 3px 0; }
+.teacher-tree-variants { display:grid; gap:10px; margin-bottom:12px; }
+.tree-variant-tabs { display:flex; flex-wrap:wrap; gap:6px; }
+.tree-variant-tab { display:inline-flex; align-items:center; gap:6px; width:auto; padding:6px 11px; border:1px solid #cbd7c2; border-radius:4px; background:#fff; color:#3d5242; font-size:12px; cursor:pointer; }
+.tree-variant-tab strong { font-weight:600; }
+.tree-variant-tab span { font-size:11px; color:var(--console-muted); }
+.tree-variant-tab:hover { border-color:var(--green); background:#f3f7ef; }
+.tree-variant-tab.is-active { border-color:var(--green); background:var(--green); color:#fff; }
+.tree-variant-tab.is-active span { color:#e6efe7; }
+.tree-variants-grid { display:grid; gap:12px; }
+.tree-variant-card[hidden] { display:none; }
+.tree-variant-card { display:grid; gap:8px; padding:12px 14px; border:1px solid #d5e0cd; background:#f8faf5; border-radius:6px; }
+.tree-variant-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.tree-variant-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:12px; color:#314634; }
+.tree-variant-meta small { color:var(--console-muted); font-size:11px; }
+.tree-variant-badge { padding:2px 7px; border-radius:3px; background:var(--green); color:#fff; font-size:11px; font-weight:600; }
+.tree-variant-count { font-size:12px; font-weight:600; color:var(--green); }
+.tree-variant-bar { height:5px; background:#e2e9dc; border-radius:3px; overflow:hidden; }
+.tree-variant-bar>span { display:block; height:100%; background:var(--green); }
+.tree-variant-who { margin:0; font-size:11px; color:var(--console-muted); }
+@media(max-width:850px) { .review-layout { grid-template-columns:1fr; } .review-layout .review-decision { position:static; } .teacher-head { gap:15px; flex-wrap:wrap; } }

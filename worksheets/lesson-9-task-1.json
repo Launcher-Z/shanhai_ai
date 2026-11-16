@@ -1,0 +1,40 @@
+{
+  "activity_id": "lesson-9-task-1",
+  "version": 2,
+  "title": "赋予动物灵气 · 初创 · 学习札记",
+  "intro": "先上传初稿图片与完整提示词，提交后再对照图片完成自评。",
+  "sections": [
+    {
+      "id": "upload",
+      "title": "上传初稿与提示词",
+      "step": 0,
+      "questions": [
+        {
+          "id": "draft-upload",
+          "type": "text",
+          "prompt": "上传一张满意的初稿图片，并保留实际使用的完整提示词。",
+          "required": true,
+          "review": true,
+          "max_length": 150000,
+          "record_form": "draft_upload"
+        }
+      ]
+    },
+    {
+      "id": "evaluation",
+      "title": "初稿自评",
+      "step": 1,
+      "questions": [
+        {
+          "id": "draft-evaluation",
+          "type": "text",
+          "prompt": "回看刚才上传的图片与提示词，完成自评与记录。",
+          "required": true,
+          "review": true,
+          "max_length": 12000,
+          "record_form": "draft_rating"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "activity_id": "lesson-6-task-2",
+  "version": 2,
+  "title": "体验轮廓提取 · 学习札记",
+  "intro": "实验做到哪一步，就填写对应的一段札记。首次提交本段后，下一步实验和札记一起开放；错题可以稍后订正。",
+  "sections": [
+    {
+      "id": "gray",
+      "step": 0,
+      "title": "看颜色与灰度",
+      "optional": false,
+      "questions": [
+        {
+          "id": "gray-pixels",
+          "type": "single",
+          "prompt": "本实验把彩色图像转成灰度图像后，图像的像素数量怎样变化？",
+          "required": true,
+          "options": [
+            {
+              "value": "same",
+              "label": "不变"
+            },
+            {
+              "value": "third",
+              "label": "变为三分之一"
+            },
+            {
+              "value": "triple",
+              "label": "变为三倍"
+            }
+          ],
+          "answer": "same",
+          "explanation": "灰度转换保留图像的宽和高。减少的是每个像素记录的通道数，像素数量没有减少。"
+        },
+        {
+          "id": "gray-bits",
+          "type": "number",
+          "prompt": "本实验的灰度值范围是 0—255，一个灰度像素需要多少位二进制来记录？",
+          "required": true,
+          "answer": 8,
+          "explanation": "0—255 共 256 种数值，8 位二进制恰好可以表示。"
+        },
+        {
+          "id": "data-ratio",
+          "type": "single",
+          "prompt": "只比较像素数值本身，彩色每像素 24 位、灰度每像素 8 位。同尺寸灰度图的数据量是彩色图的多少？",
+          "required": true,
+          "options": [
+            {
+              "value": "third",
+              "label": "三分之一"
+            },
+            {
+              "value": "same",
+              "label": "一样多"
+            },
+            {
+              "value": "triple",
+              "label": "三倍"
+            }
+          ],
+          "answer": "third",
+          "explanation": "像素数相同，8÷24=1/3。这里比较原始像素位数，不是 PNG、JPEG 等压缩文件的大小。"
+        }
+      ]
+    },
+    {
+      "id": "horizontal",
+      "step": 1,
+      "title": "尝试横向卷积核",
+      "optional": false,
+      "questions": [
+        {
+          "id": "horizontal-kernel",
+          "type": "single",
+          "prompt": "实验中的横向卷积核比较左右明暗变化，通常更容易突出哪一种边缘？",
+          "required": true,
+          "options": [
+            {
+              "value": "vertical",
+              "label": "竖直边缘"
+            },
+            {
+              "value": "horizontal",
+              "label": "水平边缘"
+            }
+          ],
+          "answer": "vertical",
+          "explanation": "跨过竖直边缘时，左右像素往往存在明显差异。“横向”指比较的方向，不是留下的边缘方向。"
+        },
+        {
+          "id": "uniform-response",
+          "type": "number",
+          "prompt": "一个 3×3 区域的九个灰度值全是 100。使用本实验的横向核（−1,0,1；−2,0,2；−1,0,1），相乘求和的原始结果是多少？",
+          "required": true,
+          "answer": 0,
+          "explanation": "核中正、负系数相互抵消，总和为 0；九个灰度值相同，说明左右没有明暗变化。"
+        }
+      ]
+    },
+    {
+      "id": "vertical",
+      "step": 2,
+      "title": "尝试纵向卷积核",
+      "optional": false,
+      "questions": [
+        {
+          "id": "vertical-kernel",
+          "type": "single",
+          "prompt": "实验中的纵向卷积核比较上下明暗变化，通常更容易突出哪一种边缘？",
+          "required": true,
+          "options": [
+            {
+              "value": "vertical",
+              "label": "竖直边缘"
+            },
+            {
+              "value": "horizontal",
+              "label": "水平边缘"
+            }
+          ],
+          "answer": "horizontal",
+          "explanation": "跨过水平边缘时，上下像素往往存在明显差异，因此纵向比较容易突出水平边缘。"
+        }
+      ]
+    },
+    {
+      "id": "combine",
+      "step": 3,
+      "title": "尝试合并",
+      "optional": false,
+      "questions": [
+        {
+          "id": "threshold",
+          "type": "multiple",
+          "prompt": "在同一张图上提高“轮廓门槛”，哪些描述正确？（多选）",
+          "required": true,
+          "options": [
+            {
+              "value": "fewer",
+              "label": "留下的轮廓像素不会更多"
+            },
+            {
+              "value": "stronger",
+              "label": "更倾向保留明暗变化较强的位置"
+            },
+            {
+              "value": "restore",
+              "label": "能找回灰度转换丢失的颜色"
+            }
+          ],
+          "answer": [
+            "fewer",
+            "stronger"
+          ],
+          "explanation": "提高门槛会过滤较弱的响应，留下的像素可能减少，也可能暂时不变；它不能还原颜色。多选题须全部选对且不多选才算正确。"
+        },
+        {
+          "id": "edge-observation",
+          "type": "text",
+          "prompt": "选择一张实验图片，记录两个不同的轮廓门槛值，以及各自留下或消失的细节。你觉得哪个门槛更适合观察这张图？说明理由。",
+          "required": true,
+          "review": true,
+          "max_length": 1200
+        }
+      ]
+    },
+    {
+      "id": "custom",
+      "step": 4,
+      "title": "设计我的卷积核",
+      "optional": true,
+      "questions": [
+        {
+          "id": "custom-kernel",
+          "type": "text",
+          "prompt": "选做：试用或修改一个卷积核，记下你的设置和图像变化。没有进行这一步，可以留空。",
+          "required": false,
+          "review": false,
+          "max_length": 1200
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "activity_id":"lesson-5-task-1","version":1,
+  "title":"构建决策树 · 学习札记",
+  "intro":"先在活动里分类，再把判断和搭好的树记入札记。",
+  "sections":[
+    {"id":"two","step":0,"title":"两种动物与判断条件","optional":false,"questions":[
+      {"id":"tree-route","type":"single","prompt":"按“主要吃肉吗？”判断，雪豹应走哪条路径？","required":true,"options":[{"value":"yes-leopard","label":"是 → 雪豹"},{"value":"no-leopard","label":"否 → 雪豹"}],"answer":"yes-leopard","explanation":"依据本活动特征卡片，雪豹主要吃肉，走“是”分支。"},
+      {"id":"another-condition","type":"text","prompt":"除了“主要吃肉吗？”，再写一个能区分金丝猴和雪豹的判断条件，并写出两种动物分别回答“是”还是“否”。","required":true,"review":true,"max_length":500}
+    ]},
+    {"id":"four","step":1,"title":"四种动物与更多分支","optional":false,"questions":[
+      {"id":"four-tree","type":"text","prompt":"带入你搭好的四动物决策树，核对预览后提交。","required":true,"review":false,"max_length":12000,"decision_tree":{"stage":1}},
+      {"id":"why-branch","type":"text","prompt":"加入东北虎和黑猩猩后，为什么仅问“主要吃肉吗？”不够了？举一组仍分不开的动物说明。","required":true,"review":true,"max_length":500}
+    ]},
+    {"id":"six","step":2,"title":"六种动物，自建决策树","optional":false,"questions":[
+      {"id":"six-tree","type":"text","prompt":"带入你的六动物决策树。不同的合理搭法都可以；提交前请确认全部动物已正确分类。","required":true,"review":false,"max_length":12000,"decision_tree":{"stage":2}}
+    ]}
+  ]
+}

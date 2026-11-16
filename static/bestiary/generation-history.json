@@ -1,0 +1,375 @@
+{
+  "completed": [
+    {
+      "date": "2026-11-09",
+      "id": "xuangui",
+      "name": "旋龟",
+      "originalFile": "xuangui.png",
+      "displayFile": "display/xuangui.png",
+      "reviewedFeatures": [
+        "龟壳与龟身完整",
+        "鸟类头部清楚",
+        "单根蛇形尾巴无第二个头",
+        "四足可辨",
+        "透明背景与墨色风格"
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "id": "lushu",
+      "name": "鹿蜀",
+      "originalFile": "lushu.png",
+      "displayFile": "display/lushu.png",
+      "reviewedFeatures": [
+        "马形及四条马腿明确",
+        "白色马头",
+        "身体虎纹",
+        "单根赤色马尾",
+        "无鹿角、无虎爪",
+        "透明背景"
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "id": "changyou",
+      "name": "长右",
+      "originalFile": "changyou.png",
+      "displayFile": "display/changyou.png",
+      "reviewedFeatures": [
+        "猿猴形态",
+        "左右各两只耳廓共四耳",
+        "单一头部",
+        "四肢完整",
+        "无衣服、盔甲或多头",
+        "透明背景"
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "id": "gudiao",
+      "name": "蛊雕",
+      "originalFile": "gudiao.png",
+      "displayFile": "display/gudiao.png",
+      "reviewedFeatures": [
+        "雕形鸟头鸟喙",
+        "羽毛双翼与鸟身",
+        "头上有角",
+        "双鸟足",
+        "未混入龙身羊身或人面",
+        "透明背景"
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "id": "lu-fish",
+      "name": "鯥",
+      "originalFile": "lu-fish.png",
+      "displayFile": "display/lu-fish.png",
+      "reviewedFeatures": [
+        "牛形身体与头部",
+        "羽翼位于胁下",
+        "单根鳞片蛇尾",
+        "已去除首版错误的尾端蛇头",
+        "无普通鱼尾",
+        "透明背景"
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "id": "lei",
+      "name": "类",
+      "originalFile": "lei.png",
+      "displayFile": "display/lei.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "boshi",
+      "name": "猼𫍙",
+      "originalFile": "boshi.png",
+      "displayFile": "display/boshi.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "guanguan",
+      "name": "灌灌",
+      "originalFile": "guanguan.png",
+      "displayFile": "display/guanguan.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "chiru",
+      "name": "赤鱬",
+      "originalFile": "chiru.png",
+      "displayFile": "display/chiru.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "lili",
+      "name": "狸力",
+      "originalFile": "lili.png",
+      "displayFile": "display/lili.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "quru",
+      "name": "瞿如",
+      "originalFile": "quru.png",
+      "displayFile": "display/quru.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "yong",
+      "name": "颙",
+      "originalFile": "yong.png",
+      "displayFile": "display/yong.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "luwu",
+      "name": "陆吾",
+      "originalFile": "luwu.png",
+      "displayFile": "display/luwu.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "bifang",
+      "name": "毕方",
+      "originalFile": "bifang.png",
+      "displayFile": "display/bifang.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "yingzhao",
+      "name": "英招",
+      "originalFile": "yingzhao.png",
+      "displayFile": "display/yingzhao.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "luanniao",
+      "name": "鸾鸟",
+      "originalFile": "luanniao.png",
+      "displayFile": "display/luanniao.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "zhuyan",
+      "name": "朱厌",
+      "originalFile": "zhuyan.png",
+      "displayFile": "display/zhuyan.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "tulou",
+      "name": "土蝼",
+      "originalFile": "tulou.png",
+      "displayFile": "display/tulou.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "qinyuan",
+      "name": "钦原",
+      "originalFile": "qinyuan.png",
+      "displayFile": "display/qinyuan.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "tiangou",
+      "name": "天狗",
+      "originalFile": "tiangou.png",
+      "displayFile": "display/tiangou.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "qiongqi",
+      "name": "穷奇",
+      "originalFile": "qiongqi.png",
+      "displayFile": "display/qiongqi.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "zheng",
+      "name": "狰",
+      "originalFile": "zheng.png",
+      "displayFile": "display/zheng.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "ershu",
+      "name": "耳鼠",
+      "originalFile": "ershu.png",
+      "displayFile": "display/ershu.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "mengji",
+      "name": "孟极",
+      "originalFile": "mengji.png",
+      "displayFile": "display/mengji.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "zhujian",
+      "name": "诸犍",
+      "originalFile": "zhujian.png",
+      "displayFile": "display/zhujian.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "heluo-fish",
+      "name": "何罗之鱼",
+      "originalFile": "heluo-fish.png",
+      "displayFile": "display/heluo-fish.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "paoxiao",
+      "name": "狍鸮",
+      "originalFile": "paoxiao.png",
+      "displayFile": "display/paoxiao.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "tianma",
+      "name": "天马",
+      "originalFile": "tianma.png",
+      "displayFile": "display/tianma.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "suanyu",
+      "name": "酸与",
+      "originalFile": "suanyu.png",
+      "displayFile": "display/suanyu.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "dangkang",
+      "name": "当康",
+      "originalFile": "dangkang.png",
+      "displayFile": "display/dangkang.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "congcong",
+      "name": "从从",
+      "originalFile": "congcong.png",
+      "displayFile": "display/congcong.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "qiuyu",
+      "name": "犰狳",
+      "originalFile": "qiuyu.png",
+      "displayFile": "display/qiuyu.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "zhuru",
+      "name": "朱獳",
+      "originalFile": "zhuru.png",
+      "displayFile": "display/zhuru.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "bibi",
+      "name": "獙獙",
+      "originalFile": "bibi.png",
+      "displayFile": "display/bibi.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "longzhi",
+      "name": "蠪侄",
+      "originalFile": "longzhi.png",
+      "displayFile": "display/longzhi.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "feifei",
+      "name": "朏朏",
+      "originalFile": "feifei.png",
+      "displayFile": "display/feifei.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "qinggeng",
+      "name": "青耕",
+      "originalFile": "qinggeng.png",
+      "displayFile": "display/qinggeng.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    },
+    {
+      "date": "2026-11-09",
+      "id": "mafu",
+      "name": "马腹",
+      "originalFile": "mafu.png",
+      "displayFile": "display/mafu.png",
+      "reviewStatus": "pending",
+      "reviewedFeatures": []
+    }
+  ]
+}

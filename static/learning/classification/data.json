@@ -1,0 +1,32 @@
+{
+  "animals": [
+    {"id":"monkey","name":"金丝猴","icon":"🐒","traits":["tail"]},
+    {"id":"leopard","name":"雪豹","icon":"🐆","traits":["meat","tail","spots"]},
+    {"id":"tiger","name":"东北虎","icon":"🐅","traits":["meat","tail","stripes"]},
+    {"id":"chimp","name":"黑猩猩","icon":"🦍","traits":[]},
+    {"id":"zebra","name":"斑马","icon":"🦓","traits":["tail","stripes","hooves","blackwhite"]},
+    {"id":"panda","name":"大熊猫","icon":"🐼","traits":["blackwhite"]}
+  ],
+  "features": [
+    {"id":"meat","label":"主要吃肉吗？","short":"主要吃肉"},
+    {"id":"stripes","label":"身上有条纹吗？","short":"有条纹"},
+    {"id":"tail","label":"有明显的长尾巴吗？","short":"有长尾"},
+    {"id":"spots","label":"身上有斑点吗？","short":"有斑点"},
+    {"id":"hooves","label":"脚上有蹄吗？","short":"有蹄"},
+    {"id":"blackwhite","label":"身体主要是黑白两色吗？","short":"黑白两色"}
+  ],
+  "stages": [["monkey","leopard"],["monkey","leopard","tiger","chimp"],["monkey","leopard","tiger","chimp","zebra","panda"]],
+  "samples": [
+    {"id":"L1","x":56,"y":50,"type":"leopard"},
+    {"id":"M1","x":50,"y":60,"type":"monkey"},
+    {"id":"M2","x":38,"y":50,"type":"monkey"},
+    {"id":"L2","x":50,"y":36,"type":"leopard"},
+    {"id":"L3","x":66,"y":50,"type":"leopard"},
+    {"id":"M3","x":25,"y":70,"type":"monkey"},
+    {"id":"M4","x":18,"y":75,"type":"monkey"},
+    {"id":"L4","x":80,"y":20,"type":"leopard"},
+    {"id":"L5","x":88,"y":25,"type":"leopard"},
+    {"id":"M5","x":12,"y":88,"type":"monkey"}
+  ],
+  "target":{"x":50,"y":50}
+}

@@ -1,0 +1,235 @@
+/* 实验台：结构表达学习任务，红蓝仅用于权重的正负。 */
+:root{--bg:#eef3f7;--paper:#fff;--ink:#203448;--muted:#607486;--line:#d8e3ec;--accent:#155b77;--light:#e8f3f7;--red:#bd3641;--blue:#2364b0;--green:#247358;--yellow:#efb946;--body:"Microsoft YaHei","PingFang SC",sans-serif;--number:Consolas,"Cascadia Mono",monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.6}button,select{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:white;color:var(--ink);padding:9px 13px;border-radius:6px;transition:background .15s}button:hover:not(:disabled){background:var(--light)}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}[hidden]{display:none!important}h1,h2,h3,p,figure{margin:0}h2{font-size:19px;font-weight:700}h3{font-size:14px;font-weight:700}small{font-size:11px}strong{font-weight:700}.hint{font-size:12px;color:var(--muted);line-height:1.7}.primary{background:var(--accent);border-color:var(--accent);color:white;font-weight:700}.primary:hover:not(:disabled){background:#114a63}.outline{border-color:var(--accent);color:var(--accent)}.quiet{background:transparent}.wide{width:100%}.page-header{max-width:1640px;padding:25px 30px 18px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px}.eyebrow{font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:4px}h1{font-size:26px;line-height:1.5}.header-actions{display:flex;align-items:center;gap:18px}.step-count{color:var(--muted);white-space:nowrap}.step-count strong{font:700 22px var(--number);color:var(--ink)}main{max-width:1640px;padding:0 30px;margin:auto}.workflow{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);background:white;border-radius:10px;overflow:hidden}.workflow .workflow-step{border:0;border-right:1px solid var(--line);border-radius:0;padding:15px 16px;display:flex;align-items:center;gap:12px;text-align:left;opacity:1}.workflow .workflow-step:last-child{border:0}.workflow .workflow-step[aria-current="step"]{background:var(--accent);color:white}.workflow .workflow-step.done .step-number{background:#dceee7;color:var(--green)}.workflow .workflow-step[aria-current="step"] .step-number{background:#ffffff24;color:white}.workflow strong{display:block;font-size:14px}.workflow small{display:block;opacity:.8}.step-number{display:grid;place-items:center;width:30px;height:30px;flex-shrink:0;background:var(--bg);border-radius:50%;font:700 15px var(--number)}.task-strip{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:14px 2px;font-size:13px;min-height:52px}.architecture{color:var(--muted);font-size:12px;white-space:nowrap}.lab{display:grid;grid-template-columns:minmax(235px,.85fr) minmax(380px,1.38fr) minmax(350px,1.28fr);gap:16px;align-items:stretch}.panel{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}.panel-heading{display:flex;align-items:center;gap:9px;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:16px}.section-letter{color:var(--accent);font:700 24px var(--number)}.panel-caption{margin-left:auto;color:var(--muted);font-size:12px}.mode-switch{display:flex;background:var(--bg);padding:4px;border-radius:7px;margin-bottom:10px}.mode-switch button{border:0;background:transparent;flex:1;padding:7px 5px}.mode-switch button[aria-pressed="true"]{background:white;box-shadow:0 1px 4px #20344814;color:var(--accent);font-weight:bold}.sample-header{display:flex;justify-content:space-between;gap:10px;margin-top:18px;align-items:center}.sample-header span{font-size:11px;color:var(--muted)}.source-display{display:grid;place-items:center;min-height:248px;background:#f6f8fa;border:1px solid var(--line);border-radius:7px;margin-top:10px;padding:14px}.source-display img{width:120px;height:200px;image-rendering:pixelated}.source-caption{font-size:12px;text-align:center;margin:8px 0;color:var(--muted)}.pixel-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;aspect-ratio:6/10;width:100%;max-width:150px;margin:auto}.pixel-grid button{border-radius:2px;min-width:0;min-height:0;padding:0;line-height:1;font:12px var(--number);border:1px solid #d3dce5;background:#f9fbfc;color:var(--ink);position:relative}.pixel-grid button.ink{background:var(--ink);color:white;border-color:var(--ink)}.pixel-grid button.selected{outline:2px solid #d49b22;outline-offset:0;z-index:1}.pixel-grid button.scanning{outline:3px solid var(--yellow);outline-offset:0;box-shadow:0 0 0 5px #efb94635;z-index:2}.pixel-grid button.visited:not(.scanning){box-shadow:inset 0 0 0 1px #79aeb9}.source-grid{max-width:132px}.vector-box{margin:12px 0}.vector-box p{font-size:11px;color:var(--muted);margin-bottom:5px}.input-vector{display:grid;grid-template-columns:repeat(12,1fr);gap:2px}.input-vector span{text-align:center;font:11px var(--number);padding:3px 0;background:var(--bg)}.input-vector span.selected{background:#fdebbd}.input-key{display:flex;gap:18px;margin:15px 0 8px;font-size:12px}.swatch{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:baseline;border:1px solid #00000015;border-radius:2px}.swatch.ink{background:var(--ink)}.swatch.paper{background:white}.swatch.negative{background:var(--blue)}.swatch.positive{background:var(--red)}.swatch.zero{background:#f9fafb}.input-footer{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12px}.input-footer strong{margin-left:auto;color:var(--accent)}.input-footer small{width:100%;color:var(--muted)}#continueButton{margin-top:12px}.formula{background:var(--light);border-left:3px solid var(--accent);padding:13px 12px;border-radius:0 6px 6px 0}.formula>div{font:17px var(--number);line-height:1.7}.formula p{font-size:12px;color:var(--accent);margin-top:5px}.speed-label{color:var(--muted);font-size:11px}select{border:1px solid var(--line);border-radius:4px;color:var(--ink);padding:3px;background:white}.weight-grid button{border-color:#cdd9e6}.weight-legend{display:flex;align-items:center;justify-content:center;gap:10px;font-size:11px;margin-top:12px;flex-wrap:wrap}.weight-legend small{color:var(--muted)}.scan-progress{display:flex;gap:10px;align-items:center;font:11px var(--number);margin:12px 0}progress{height:6px;border:0;border-radius:4px;accent-color:var(--accent);flex:1;min-width:0}progress::-webkit-progress-bar{background:var(--bg);border-radius:4px}progress::-webkit-progress-value{background:var(--accent);border-radius:4px}.result-rule{font-size:12px;margin-bottom:7px}.softmax{font-size:11px;color:var(--muted);margin-bottom:10px}summary{cursor:pointer}details p{margin:7px 0;font-size:12px}details small{display:block;line-height:1.7}.prediction-bars{padding:7px 0}.prediction-row{display:flex;gap:9px;align-items:center;margin-bottom:9px;font-size:12px}.prediction-row>span{width:44px}.prediction-row>strong{width:49px;text-align:right;font:13px var(--number)}.bar-track{height:10px;background:var(--bg);border-radius:3px;flex:1;overflow:hidden}.bar-track>div{height:100%;width:0;background:var(--accent);transition:width .25s}.correct{color:var(--green)!important}.wrong{color:#a5483b!important}#analysisHint{min-height:40px}#actionButton{margin:9px 0 16px;min-height:43px}.update-section{border-top:1px solid var(--line);padding-top:12px}.update-heading{display:flex;align-items:center;justify-content:space-between}.update-heading span{font-size:10px;color:var(--muted)}.update-section>.hint{margin:6px 0 10px}.comparison-row{display:grid;grid-template-columns:36px 1fr 20px 1fr;align-items:center;gap:9px;margin-bottom:14px}.comparison-digit{font:700 22px var(--number);text-align:center}.comparison-row figure{min-width:0}.comparison-row figcaption{text-align:center;font-size:10px;color:var(--muted);margin-bottom:5px}.comparison-row .pixel-grid{max-width:95px;gap:2px}.comparison-row .pixel-grid button{border:0;font-size:0}.comparison-arrow{font-size:18px;color:var(--muted)}.bias-label{display:block;text-align:center;font:10px var(--number);margin-top:5px}.empty-grid button{background:repeating-linear-gradient(45deg,#f3f5f7,#f3f5f7 3px,#e8edf2 3px,#e8edf2 4px)!important}.selected-change{font-size:11px;background:var(--bg);padding:9px;border-radius:5px;line-height:1.9}.selected-change strong{font-family:var(--number)}#learningDetail{font-size:11px;color:var(--muted);margin-top:9px}.experiment-record,.dataset-panel{background:white;border:1px solid var(--line);border-radius:10px;margin-top:18px;padding:20px}.record-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:14px}.record-heading span{font-size:12px;color:var(--muted)}table{border-collapse:collapse;width:100%;text-align:left;font-size:12px}th,td{padding:7px 10px;border-bottom:1px solid var(--line)}th{font-size:11px;color:var(--muted);font-weight:normal;background:var(--bg)}td img{width:18px;height:30px;vertical-align:middle;margin-right:8px;image-rendering:pixelated}.auto-controls{display:flex;align-items:center;gap:18px}.auto-controls button{white-space:nowrap}.auto-controls progress{width:60px}#autoHint{margin-top:8px}.dataset-panel>.hint{margin-bottom:16px}.dataset-group{display:grid;grid-template-columns:170px 1fr;gap:20px;align-items:start;border-top:1px solid var(--line);padding-top:18px;margin-top:18px}.dataset-label p,.dataset-label small{font-size:11px;color:var(--muted);margin-top:6px}.gallery{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:7px}.gallery button{padding:9px 3px;font-size:10px;min-width:0;position:relative}.gallery img{width:30px;height:50px;display:block;margin:0 auto 6px;image-rendering:pixelated}.gallery span{display:block}.gallery .sample-label{font-size:10px;color:var(--muted)}.gallery button.current{outline:2px solid var(--accent);outline-offset:0;background:var(--light)}#testingGallery{grid-template-columns:repeat(5,minmax(50px,70px))}.table-scroll{overflow:auto}.status{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);max-width:calc(100% - 36px);background:var(--ink);color:white;border-radius:7px;padding:9px 18px;font-size:12px;box-shadow:0 5px 20px #0002;z-index:10}.status:empty{display:none}footer{display:flex;justify-content:space-between;gap:20px;padding:20px 0 30px;font-size:11px;color:var(--muted)}dialog{border:1px solid var(--line);border-radius:10px;padding:22px;color:var(--ink);width:600px;max-width:calc(100% - 32px);max-height:calc(100% - 40px);overflow:auto}dialog::backdrop{background:#20344888}.dialog-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.dialog-heading h2{font-size:18px}.dialog-data{display:flex;align-items:center;justify-content:center;gap:35px}.dialog-data img{width:90px;height:150px;image-rendering:pixelated}.dialog-data pre{font:15px var(--number);line-height:1.7}.dialog-note{margin-top:16px;color:var(--muted);font-size:12px}
+@media(min-width:1550px){.lab{grid-template-columns:.85fr 1.4fr 1.25fr}.panel{padding:22px}.pixel-grid{max-width:170px}.source-display{min-height:288px}.source-grid{max-width:150px}.comparison-row .pixel-grid{max-width:110px}}
+@media(max-width:1170px){main{padding:0 18px}.page-header{padding:20px 18px}.lab{grid-template-columns:235px minmax(0,1fr)}.result-panel{grid-column:1/-1}.result-panel .update-section{margin-top:4px}.result-panel #weightComparisons{display:grid;grid-template-columns:1fr 1fr;gap:20px}.result-panel .comparison-row .pixel-grid{max-width:110px}.result-panel .prediction-bars{max-width:600px}.gallery{grid-template-columns:repeat(8,1fr)}.workflow .workflow-step{gap:7px;padding:12px 9px}.workflow small{font-size:10px}.architecture{display:none}}
+@media(max-width:700px){main{padding:0 12px}.page-header{padding:16px 12px;align-items:flex-start;flex-direction:column;gap:10px}h1{font-size:22px}.eyebrow{font-size:10px}.header-actions{width:100%;justify-content:space-between}.workflow{grid-template-columns:repeat(5,minmax(0,1fr))}.workflow .workflow-step{flex-direction:column;align-items:center;gap:5px;padding:10px 3px;text-align:center}.workflow strong{font-size:10px}.workflow small{display:none}.step-number{width:25px;height:25px;font-size:12px}.task-strip{font-size:12px;padding:10px 1px}.lab{grid-template-columns:1fr;gap:12px}.result-panel{grid-column:auto}.panel{padding:16px}.input-panel .source-display{min-height:240px}.input-vector{max-width:300px;margin:auto}.source-caption{margin:8px 0}.pixel-grid{max-width:140px}.result-panel #weightComparisons{grid-template-columns:1fr;gap:0}.result-panel .comparison-row .pixel-grid{max-width:100px}.experiment-record,.dataset-panel{padding:16px;margin-top:12px}.record-heading{align-items:flex-start;flex-direction:column;gap:4px}.record-heading h2{font-size:18px}.dataset-group{grid-template-columns:1fr;gap:12px}.gallery{grid-template-columns:repeat(8,minmax(0,1fr));gap:5px}.gallery img{width:24px;height:40px}.gallery button{font-size:9px;padding:7px 2px}#testingGallery{grid-template-columns:repeat(5,1fr)}footer{flex-direction:column;gap:4px}.formula>div{font-size:15px}.speed-label{font-size:11px}.dialog-data{gap:22px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+
+
+
+
+/* 三栏同一行自动等高；说明展开后，整行共同增高。 */
+.lab{align-items:stretch}
+.input-panel{display:flex;flex-direction:column}
+.input-footer{margin-top:auto}
+.input-panel>.hint:last-of-type{margin-bottom:16px}
+
+/* 一个共享输入分叉到两组权重，右侧分别呈现独立的加权和。 */
+.compute-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0 8px}
+.compute-toolbar .hint{font-size:11px}
+.speed-label{white-space:nowrap}
+.scan-location{font-size:11px;color:var(--muted);margin-bottom:10px}
+.calculation-graph{display:grid;grid-template-columns:minmax(70px,.95fr) 24px minmax(85px,1fr) 14px minmax(100px,1.15fr);grid-template-rows:repeat(2,auto);gap:22px 7px;margin:20px 0;align-items:center}
+.calculation-graph figure{min-width:0}
+.calculation-graph figcaption{font-size:11px;text-align:center;margin-bottom:8px}
+.calculation-graph figcaption b{font:700 18px var(--number)}
+.calculation-graph .pixel-grid{max-width:90px;gap:2px}
+.calculation-graph .pixel-grid button{font-size:10px}
+.shared-input{grid-column:1;grid-row:1/span 2}
+.shared-input>small{display:block;text-align:center;font-size:10px;color:var(--muted);margin-top:8px}
+.fork-lines{grid-column:2;grid-row:1/span 2;align-self:stretch;position:relative;min-height:300px}
+.fork-lines svg{position:absolute;inset:0;width:100%;height:100%}
+.branch-multiply{position:absolute;left:78%;transform:translate(-50%,-50%);background:white;font:20px/1 var(--number);color:var(--accent)}
+.branch-zero{top:24%}.branch-one{top:76%}
+.weight-node{grid-column:3;padding:8px 5px;border:1px solid var(--line);background:#fafcfd;border-radius:6px}
+.weight-node .pixel-grid{max-width:82px}
+.input-reading{text-align:center;color:var(--accent);font-size:14px;line-height:1.6;margin-top:8px;white-space:nowrap}
+.input-reading strong{font:700 20px/1.2 var(--number)}
+.route-weight{text-align:center;margin-top:8px;line-height:1.6}
+.route-weight>span{display:block;font-size:10px;color:var(--muted)}
+.route-weight>strong{display:block;font:700 13px/1.6 var(--number);white-space:nowrap;color:var(--accent)}
+.sum-arrow{grid-column:4;font:20px var(--number);color:var(--muted);text-align:center}
+.sum-node{grid-column:5;background:var(--light);border:1px solid #c2dce7;border-radius:6px;padding:10px 8px;min-width:0}
+.sum-node>span:first-child{display:block;font-size:11px;color:var(--accent)}
+.sum-status{display:block;font-style:normal;font-size:10px;line-height:1.6;color:var(--muted)}
+.sum-node>strong{display:block;font:700 21px var(--number);margin:5px 0}
+.step-formula{border-top:1px solid #c2dce7;padding-top:7px;margin-top:7px;min-height:calc(5.4em + 8px);font:11px/1.8 var(--number);color:var(--ink)}
+.step-formula>span{display:block}
+.formula-prior{white-space:nowrap}
+.formula-operation{min-height:3.6em}
+.formula-operation>span{display:inline-block;white-space:nowrap}
+.route-0{grid-row:1}.route-1{grid-row:2}
+
+/* 按学习过程展开信息，顶部只显示状态，不作为导航。 */
+body:not([data-reveal="open"]) .dataset-panel,body:not([data-reveal="open"]) footer{display:none}
+.workflow-step{cursor:default}
+.compute-gateway{padding:32px 5px;max-width:340px;margin:auto}
+.gateway-value{font:700 48px var(--number);color:var(--accent)}
+.gateway-value>span{display:block;font:14px var(--body);margin:8px 0 22px}
+.compute-gateway>p:not(.gateway-value){font-size:13px;color:var(--muted);line-height:1.9;margin-bottom:24px}
+.scan-controls{display:flex;align-items:center;gap:8px;margin:10px 0}
+.scan-controls button{font-size:12px;padding:7px 12px}
+.scan-phase{font-size:12px;padding:8px 10px;background:var(--light);border-radius:5px;color:var(--accent);margin:8px 0}
+.auto-controls{flex-wrap:wrap;margin-bottom:15px}
+.auto-controls>progress{max-width:none;flex-basis:100%}
+.auto-controls>.hint{margin-top:0}
+
+/* 训练结果三个大信息块；测试只保留模型预测，不显示标签、对错或损失。 */
+.verdict{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;border:1px solid #abc9d7;border-radius:7px;padding:7px;background:var(--light);align-items:stretch}
+.verdict>div{text-align:center;border-right:1px solid #c3dbe5;padding:2px 3px;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.verdict>div:last-child{border:0}
+.verdict span{font-size:11px;color:var(--accent);display:block}
+.verdict strong{display:block;font:700 28px/1.2 var(--number);margin-top:3px}
+.verdict .judgment-tile strong{font:700 14px/1.5 var(--body);margin-left:0}
+.verdict.test-verdict{display:block}
+.test-verdict .prediction-tile{flex-direction:row;align-items:center;justify-content:space-between;text-align:left;border:0;padding:1px 15px}
+.test-verdict .prediction-tile strong{font-size:32px;margin:0}
+.loss-line{display:flex;flex-wrap:wrap;justify-content:space-between;gap:5px;font-size:12px;margin:10px 0 5px}
+.loss-line strong{font-family:var(--number)}
+.loss-detail{font-size:11px;color:var(--muted);margin-bottom:8px}
+.comparison-row .pixel-grid{max-width:82px}
+
+/* 两轮测试分别保存为左右两张表；进度只表示已测试张数，不是正确数。 */
+.test-records{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}
+.test-records>div{min-width:0}
+.test-record-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}
+.test-record-heading span{font-size:11px;color:var(--muted)}
+.horizontal-tests{table-layout:fixed;min-width:420px;text-align:center}
+.horizontal-tests th{width:68px;white-space:nowrap;font-size:11px}
+.test-records .horizontal-tests td img{width:30px;height:50px;display:block;image-rendering:pixelated;margin:2px auto 6px}
+.horizontal-tests td>span{display:block;font-size:11px;color:var(--muted)}
+.saved-prediction{font:700 22px/1.25 var(--number);height:72px}
+.horizontal-tests td.saved-prediction{padding:7px 4px}
+.saved-class{vertical-align:middle}
+.saved-probability{display:inline-block;font:400 11px/1.6 var(--number);color:var(--muted);vertical-align:middle;white-space:nowrap}
+.test-record-note{margin-top:10px}
+.auto-controls progress{max-width:380px}
+
+@media(min-width:1550px){
+  .calculation-graph .pixel-grid{max-width:100px}
+  .weight-node .pixel-grid{max-width:90px}
+  .comparison-row .pixel-grid{max-width:90px}
+}
+@media(max-width:700px){
+  .compute-toolbar{flex-wrap:wrap}
+  .calculation-graph{grid-template-columns:minmax(64px,.95fr) 20px minmax(72px,1fr) 12px minmax(84px,1.1fr);gap:20px 5px}
+  .calculation-graph .pixel-grid{max-width:78px}
+  .weight-node .pixel-grid{max-width:68px}
+  .sum-node{padding:8px 5px}.sum-node>strong{font-size:18px}
+  .test-records{gap:16px;grid-template-columns:1fr}
+  .test-record-heading{flex-direction:column;align-items:flex-start;gap:3px}
+  .test-records th,.test-records td{padding:6px;font-size:10px}
+  .test-records .horizontal-tests td img{width:24px;height:40px;margin:2px auto 5px}
+  .test-records .saved-prediction{font-size:20px}
+  .test-record-note{font-size:11px}
+}
+
+/* 操作跟随所在区域：输入负责测试或批量训练，计算负责预测，结果负责学习。 */
+.input-footer{margin-top:14px}
+.input-actions{margin-top:auto;border-top:1px solid var(--line);padding-top:16px}
+.input-actions>.hint{margin:8px 0}
+.training-counter{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);background:var(--light);border-radius:6px;padding:10px 12px;margin:8px 0;font-size:12px;color:var(--accent)}
+.training-counter>strong{font:700 28px var(--number);color:var(--ink)}
+.training-counter small{font:12px var(--body);color:var(--muted)}
+.test-picker{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-bottom:12px}
+.test-picker button{min-width:0;padding:7px 2px;text-align:center}
+.test-picker button[aria-pressed="true"]{border-color:var(--accent);background:var(--light);box-shadow:inset 0 0 0 1px var(--accent)}
+.test-picker img{display:block;width:24px;height:40px;image-rendering:pixelated;margin:0 auto 5px}
+.test-picker span,.test-picker small{display:block;font-size:10px}
+.test-picker .test-state{margin-top:5px;border-radius:3px;padding:2px 0;font-size:9px;line-height:1.5}
+.test-picker .is-untested{border-style:dashed}
+.test-picker .is-untested .test-state{background:var(--bg);color:var(--muted)}
+.test-picker .is-tested .test-state{background:var(--accent);color:white;font-weight:bold}
+.test-picker button[aria-pressed="true"]{border-style:solid;outline:2px solid var(--accent);outline-offset:1px}
+.scan-controls{flex-wrap:wrap;gap:6px}
+.scan-controls>.scan-controls{margin:0}
+.training-actions{display:flex;justify-content:center;margin:12px 0 0}
+.frozen-parameters{color:var(--red)}
+
+/* 0、1 分组，各组固定为更新前、改变量、更新后三张图。 */
+.weight-group{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:7px 8px;margin:6px 0;background:#fafcfd;min-width:0}
+.weight-group:nth-child(2){border-left-color:#6478a1;background:#f8f9fc}
+.weight-group h4{margin:0 0 5px;font-size:11px;font-weight:700}
+.weight-group h4 b{font:700 16px var(--number);margin:0 3px}
+.weight-group .comparison-row{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:0;align-items:start}
+.weight-group .comparison-row .pixel-grid{max-width:70px}
+.weight-group .delta-figure figcaption{color:var(--accent);font-weight:700}
+.weight-group .delta-grid button{border:1px solid #cbdce7}
+.delta-scale{font-size:10px;color:var(--muted);text-align:center;margin:4px 0;line-height:1.5}
+.bias-label{overflow-wrap:anywhere}
+@media(max-width:1170px){.result-panel #weightComparisons{gap:12px}}
+@media(max-width:700px){.weight-group .comparison-row{gap:7px}.result-panel .weight-group .comparison-row .pixel-grid{max-width:70px}}
+
+/* 三个训练步骤使用相同尺寸与主色；辅助扫描按钮保持次级样式。 */
+button.lesson-action{display:inline-flex;align-items:center;justify-content:center;width:180px;max-width:100%;height:44px;padding:10px 12px;border-radius:6px;font-size:14px;font-weight:700;white-space:nowrap}
+.input-actions>button.lesson-action{display:flex;margin-inline:auto}
+.compute-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0}
+.compute-actions .scan-controls{margin:0}
+.prediction-section{padding-bottom:14px}
+.update-section{padding-top:14px}
+.update-section>.hint{font-size:11px;margin:4px 0 6px}
+#selectedDetail{font-size:11px;color:var(--muted);margin-top:6px}
+#selectedDetail .selected-change{margin-top:6px}
+.next-training-controls{display:flex;justify-content:center;margin:10px 0 4px}
+.result-rule{background:var(--light);border-left:3px solid var(--accent);padding:10px 12px;border-radius:0 6px 6px 0;color:var(--accent);font-size:12px;font-weight:700;line-height:1.9;margin-bottom:8px}
+.formula>.formula-line{display:grid;grid-template-columns:43px minmax(0,1fr);gap:7px;font-size:14px;align-items:start}
+.formula-line+.formula-line{border-top:1px solid #c7dfe8;padding-top:10px;margin-top:10px}
+.formula-class{font:700 11px/2 var(--body);color:var(--accent)}
+.formula-expression{display:flex;flex-wrap:wrap;column-gap:5px;line-height:1.9}
+.formula-expression>span{white-space:nowrap}
+
+/* 两个类别共用一条完整长度，呈现比例之间的此消彼长。 */
+.probability-chart{margin:12px 0 14px}
+.probability-values{display:flex;justify-content:space-between;gap:16px;margin-bottom:9px}
+.probability-value>span{display:block;font-size:15px;font-weight:700}
+.probability-value i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;background:var(--category-color)}
+.probability-value.class-one{text-align:right}
+.class-zero{--category-color:#155b77}.class-one{--category-color:#967026}
+.probability-track{display:flex;position:relative;width:100%;height:31px;background:var(--bg);border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.probability-segment{display:flex;align-items:center;justify-content:center;position:relative;height:100%;width:0;background:var(--category-color);transition:width .2s;flex-shrink:0}
+.segment-value{font:700 12px/1 var(--number);color:white;white-space:nowrap}
+/* 小比例贴边用同色文字牌标注，不更改分段的真实长度。 */
+.compact-label .segment-value{position:absolute;background:white;color:var(--category-color);border:1px solid var(--category-color);border-radius:3px;padding:3px 4px;font-size:11px;z-index:1}
+.compact-label.class-zero .segment-value{left:0}.compact-label.class-one .segment-value{right:0}
+.probability-track>span{position:absolute;inset:0;text-align:center;font-size:11px;line-height:29px;color:var(--muted)}
+.probability-caption{font-size:11px;color:var(--muted);text-align:center;margin-top:7px}
+@media(max-width:700px){.formula>.formula-line{font-size:13px;grid-template-columns:39px minmax(0,1fr)}.formula-expression{column-gap:4px}}
+
+/* 动态文字按最大常见行数预留空间，扫描时只更新内容，不改变框的位置。 */
+html{scrollbar-gutter:stable}
+.compute-panel{container-type:inline-size;container-name:computation}
+.compute-actions{min-height:44px;align-items:flex-start;align-content:flex-start}
+.compute-actions .scan-controls{flex-wrap:nowrap}
+#pauseScan{width:86px;white-space:nowrap}
+#nextPixel{width:112px;white-space:nowrap}
+#nextPixel.is-guided{border-color:var(--accent);background:var(--light);box-shadow:0 0 0 2px #155b7740;font-weight:700}
+.sum-node>strong{line-height:1.2;white-space:nowrap}
+#computeHint{min-height:3.4em}
+#inputActionHint{min-height:3.4em}
+@container computation (max-width:410px){
+  .compute-actions{min-height:88px;flex-direction:column}
+}
+/* 测试只需一行扫描控制，按模式预留空间，避免空出训练按钮的整行。 */
+body[data-mode="test"] .compute-actions{min-height:36px}
+
+/* 标签从训练图载入时就可见，强调其监督作用；0、1 切换时保持尺寸一致。 */
+#inputLabelBox{border:1px solid #c7dfe8;background:var(--light);border-radius:7px;padding:10px 12px;gap:4px 8px}
+#inputLabelBox>span{font-size:14px;font-weight:700;color:var(--accent)}
+#inputLabelBox>strong{font-size:26px;line-height:1.3;font-variant-numeric:tabular-nums}
+#inputLabelBox>small{font-size:11px;line-height:1.7}
+
+/* 保持三列，右侧由两个独立区域组成；高亮不改变框的几何尺寸。 */
+.lab>.result-panel{padding:0;border:0;background:transparent;display:flex;flex-direction:column;gap:16px}
+.result-panel>.prediction-section{padding:18px}
+.result-panel>.update-section{padding:18px;margin-top:0;flex:1}
+.result-panel .update-heading{justify-content:flex-start}
+.result-panel .update-heading h2{font-size:17px}
+.result-panel .update-heading>.section-letter{font-size:24px;color:var(--accent)}
+.result-panel .update-heading>.panel-caption{margin-left:auto;white-space:nowrap}
+.learning-region.is-active{border-color:var(--accent);box-shadow:0 0 0 2px #155b7740}
+/* 结果与更新只在执行时淡入，演示结束再将外框引向下一步。 */
+.prediction-section.is-running .probability-chart,.prediction-section.is-running #verdict,
+.update-section.is-running #weightComparisons{animation:lesson-reveal .4s ease-out}
+@keyframes lesson-reveal{from{opacity:.25}to{opacity:1}}
+/* 自动训练每张按固定节奏播放，淡入在下一阶段开始前完成。 */
+body[data-auto="active"] .prediction-section.is-running .probability-chart,
+body[data-auto="active"] .prediction-section.is-running #verdict{animation-duration:.09s}
+body[data-auto="active"] .update-section.is-running #weightComparisons{animation-duration:.14s}
+@media(prefers-reduced-motion:reduce){.learning-region.is-running *{animation:none!important}}
+.auto-controls.is-pending{visibility:hidden;pointer-events:none}
+body[data-mode="test"] .compute-actions{min-height:0;margin:0}
+@media(max-width:700px){
+  .lab>.result-panel{gap:12px}
+  .result-panel>.prediction-section,.result-panel>.update-section{padding:16px}
+}

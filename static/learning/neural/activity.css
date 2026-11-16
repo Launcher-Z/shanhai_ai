@@ -1,0 +1,53 @@
+/* 第7课沿用第6课的隶书、细线步骤导航与紧凑纸页标题。 */
+.learning-activity.has-neural .activity-heading { margin-top:19px; padding-bottom:12px; }
+.learning-activity.has-neural .activity-context { margin-bottom:9px; }
+.learning-activity.has-neural .activity-heading h2 { font-size:29px; }
+.has-neural .activity-number,.has-neural .activity-overview,.has-neural .activity-workspace { display:none; }
+.neural-lab { --neural-line:#7c87664d; --neural-ink:#365f58; color:#45574d; font-family:inherit; font-size:14px; line-height:1.8; padding-bottom:12px; }
+.neural-lab[hidden] { display:none; }
+.neural-steps { display:grid; grid-template-columns:repeat(var(--neural-step-count),minmax(0,1fr)); gap:12px; border-bottom:1px solid var(--neural-line); }
+.neural-steps button { min-width:0; padding:13px 0 11px; border:0; border-bottom:2px solid transparent; text-align:left; background:transparent; color:#858772; font:inherit; font-size:16px; cursor:pointer; }
+.neural-step-number { margin-right:8px; font:11px Consolas,monospace; }
+.neural-steps button[aria-current="step"] { color:var(--neural-ink); border-bottom-color:var(--neural-ink); }
+.neural-steps button:hover:enabled { color:var(--neural-ink); }
+.neural-steps button:disabled { opacity:.4; cursor:default; }
+.neural-lab button:focus-visible { outline:2px solid var(--neural-ink); outline-offset:3px; }
+.neural-heading { margin:17px 0; }
+.neural-heading h3 { margin:0 0 7px; font-family:inherit; font-size:23px; font-weight:400; line-height:1.5; }
+.neural-heading p { margin:0; color:#68705b; font:14px/1.8 KaiTi,'楷体',STKaiti,serif; }
+/* 活动1采用选定的横向实验台，子活动标题与说明共用一行。 */
+#neural-zero-one .neural-heading { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+#neural-zero-one .neural-heading h3 { margin:0; flex-shrink:0; }
+#neural-zero-one .neural-heading p { text-align:right; }
+.neural-frame-host iframe { display:block; width:100%; min-height:0; border:0; background:transparent; }
+.neural-note-actions { display:flex; align-items:center; flex-wrap:wrap; gap:14px; margin-top:17px; padding:14px 0 0; border-top:1px solid var(--neural-line); }
+.neural-note-actions button { padding:8px 12px; border:1px solid #6b846b70; color:#486654; background:transparent; font:inherit; font-size:13px; cursor:pointer; }
+.neural-note-actions button:hover { background:#365f5810; }
+.neural-note-actions span,.neural-load { font:12px/1.8 KaiTi,'楷体',serif; color:#6d7665; }
+@media(max-width:800px) {
+  #neural-zero-one .neural-heading { display:block; }
+  #neural-zero-one .neural-heading h3 { margin-bottom:5px; }
+  #neural-zero-one .neural-heading p { text-align:left; }
+  .neural-steps { gap:6px; }
+  .neural-steps button { font-size:13px; }
+  .neural-step-number { display:block; margin:0 0 4px; }
+}
+/* 与第6课相同，课堂窗口优先压缩标题和留白，保留实验字号。 */
+@media(min-width:851px) and (max-height:850px) {
+  .learning-activity.has-neural { height:94dvh; max-height:800px; }
+  .learning-activity.has-neural .activity-heading { margin-top:12px; padding-bottom:8px; }
+  .learning-activity.has-neural .activity-context { margin-bottom:4px; font-size:11px; }
+  .learning-activity.has-neural .activity-heading h2 { font-size:25px; }
+  .learning-activity.has-neural .activity-foot { min-height:28px; }
+  .neural-steps button { padding:9px 0 8px; font-size:14px; }
+  .neural-heading { margin:9px 0; }
+  .neural-heading h3 { margin-bottom:3px; font-size:21px; }
+  .neural-heading p { font-size:13px; line-height:1.5; }
+}
+@media(max-width:480px) {
+  .neural-steps { grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 12px; }
+  .neural-steps button { padding:9px 0; font-size:14px; }
+  .neural-step-number { display:inline; margin-right:6px; }
+  .neural-heading { margin:14px 0; }
+  .neural-heading h3 { font-size:21px; }
+}

@@ -1,0 +1,22 @@
+<section id="animal-review" class="animal-review" hidden aria-label="观察本班图像识别结果"
+         data-api="{{ url_for('worksheet.animal_summary') }}"
+         data-image-base="{{ url_for('static', filename='learning/animal-classifier/images/') }}"
+         data-beasts-image-base="{{ url_for('static', filename='learning/animal-classifier/beasts/images/') }}">
+  <header class="animal-review-heading"><div><h3>观察本班测试结果</h3><p data-review-scope>正在读取本班结果…</p></div><button type="button" data-review-refresh>刷新结果</button></header>
+  <p class="animal-review-intro">比较各图的预测比例，点开图片再仔细观察。</p>
+  <div class="animal-chart-legend" data-review-legend><span><i></i>金丝猴</span><span><i></i>雪豹</span><small>全班平均预测比例（%）</small></div>
+  <div class="animal-chart-scroll"><div class="animal-chart" role="group" aria-label="本班柱状图，点击图片柱组查看大图"><div class="animal-chart-axis" aria-hidden="true"><span>100</span><span>75</span><span>50</span><span>25</span><span>0</span></div><div class="animal-chart-groups" data-review-groups></div></div></div>
+  <p class="animal-review-note" data-review-note>统计已同步教师的数据排除结果。摄像头画面因人而异，其均值仅供参考。</p>
+  <p class="animal-review-feedback" data-review-feedback role="status" aria-live="polite"></p>
+  <dialog class="animal-review-image" aria-labelledby="animal-review-image-title">
+    <header><h3 id="animal-review-image-title"></h3><button type="button" data-review-close aria-label="关闭测试大图" autofocus>×</button></header>
+    <div class="animal-review-image-frame" data-review-image-frame hidden>
+      <img data-review-image alt="" decoding="async" hidden>
+      <button type="button" class="animal-review-previous" data-review-direction="-1" aria-label="上一张测试图片">‹</button>
+      <button type="button" class="animal-review-next" data-review-direction="1" aria-label="下一张测试图片">›</button>
+    </div>
+    <p class="animal-review-image-position" data-review-image-position hidden></p>
+    <p class="animal-review-camera" data-review-camera hidden>大家使用的摄像头画面不同，没有统一的测试图片。</p>
+    <div class="animal-review-comparison" data-review-values></div><p data-review-count></p>
+  </dialog>
+</section>

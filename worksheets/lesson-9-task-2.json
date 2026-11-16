@@ -1,0 +1,23 @@
+{
+  "activity_id": "lesson-9-task-2",
+  "version": 1,
+  "title": "自由观展与采集 · 学习札记",
+  "intro": "在观展中收藏或记下的提示词会自动送交教师查看；通过或获评优秀后仍可随时增改。",
+  "sections": [
+    {
+      "id": "favorites",
+      "title": "提示词收藏本",
+      "step": 0,
+      "questions": [
+        {
+          "id": "collection-notes",
+          "type": "text",
+          "prompt": "提示词收藏与笔记摘录（实时同步提示词收藏本）",
+          "required": false,
+          "review": true,
+          "record_form": "favorites"
+        }
+      ]
+    }
+  ]
+}

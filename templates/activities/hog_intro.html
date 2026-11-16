@@ -1,0 +1,13 @@
+<section class="hog-intro-game" data-hog-panel="intro">
+  <div class="hog-intro-controls"><output data-hog-intro-ui="offset">原位</output><button type="button" data-hog-intro-action="overlay" data-hog-intro-ui="overlay">标出像素变化</button><button type="button" data-hog-intro-action="home" data-hog-intro-ui="home">回到原位</button></div>
+  <div class="hog-intro-comparison">
+    <figure class="hog-figure"><figcaption><strong>原来的轮廓</strong></figcaption><canvas width="288" height="288" data-hog-intro-canvas="original" role="img" aria-label="原位的小屋轮廓，网格表示固定像素坐标"></canvas></figure>
+    <figure class="hog-figure"><figcaption><strong data-hog-intro-ui="shifted-title">拖动这间小屋</strong></figcaption><canvas width="288" height="288" data-hog-intro-canvas="shifted" tabindex="0" role="img" aria-label="可自由拖动的小屋，也可按方向键移动，Home键回到原位"></canvas></figure>
+    <div class="hog-intro-results"><h4>形状没变，数字呢？</h4><p class="hog-caption">相似程度，不是识别成功率。</p><p class="hog-caption" data-hog-intro-ui="pixel-changes"></p><div class="hog-similarity"><span>直接比较轮廓像素</span><strong data-hog-intro-ui="edge-score"></strong><meter min="0" max="1" data-hog-intro-ui="edge-meter" aria-label="轮廓像素的余弦相似度"></meter></div>
+      <button type="button" data-hog-intro-action="features" data-hog-intro-ui="show-hog">换成HOG特征比较</button>
+      <div class="hog-similarity" data-hog-intro-ui="hog-result" hidden><span>比较HOG特征</span><strong data-hog-intro-ui="hog-score"></strong><meter min="0" max="1" data-hog-intro-ui="hog-meter" aria-label="HOG数值特征的余弦相似度"></meter></div>
+    </div>
+  </div>
+  <div class="hog-intro-idea" data-hog-intro-ui="idea" hidden><p data-hog-intro-ui="conclusion"></p></div>
+  <details class="hog-details"><summary>关于这次比较</summary><p>HOG把局部明暗变化的方向和强弱整理成数字特征。它也受位置影响，并非每次移动都更相似。</p><p>百分比是数值相似程度，不是识别成功率；轮廓提取也能用于识别。</p></details>
+</section>

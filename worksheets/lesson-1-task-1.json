@@ -1,0 +1,41 @@
+{
+  "activity_id": "lesson-1-task-1",
+  "version": 4,
+  "title": "像素与数值探索 · 学习札记",
+  "intro": "在活动区动手探索，在这里记录自己的编码和发现。填写后可暂存，完成本段后主动提交。",
+  "sections": [
+    {
+      "id": "draw", "step": 0, "title": "画一个数字1", "optional": false,
+      "questions": [
+        {"id": "pixel-count", "type": "number", "prompt": "刚才的5×5画板，一共有多少个像素？", "required": true, "answer": 25, "explanation": "每行5个像素，共5行，一共有5×5=25个像素。涂黑或留白都算一个像素。"},
+        {"id": "pixel-unit", "type": "single", "prompt": "在这块画板中，哪一个是一个像素？", "required": true,
+          "options": [{"value": "cell", "label": "一个小格子"}, {"value": "digit", "label": "整个数字1"}, {"value": "black", "label": "所有涂黑的格子合在一起"}],
+          "answer": "cell", "explanation": "每个小格子是一个像素，许多个像素按位置排列，构成图像。"}
+      ]
+    },
+    {
+      "id": "binary", "step": 1, "title": "把图变成数字", "optional": false,
+      "questions": [
+        {"id": "binary-record", "type": "text", "prompt": "按下方的黑白约定，从左到右、从上到下填入这幅图的25位编码，再验证。可以每5位换一行。", "required": true, "review": false, "pixel_code": true, "max_length": 400}
+      ]
+    },
+    {
+      "id": "gray", "step": 2, "title": "灰度编码", "optional": false,
+      "questions": [
+        {"id": "gray-16-bits", "type": "number", "prompt": "要为16级灰度分别编码，最少需要几位二进制？", "required": true, "answer": 4, "explanation": "3位二进制只能表示8种组合，4位可以表示16种组合。因此，16级灰度最少需要4位二进制。"}
+      ]
+    },
+    {
+      "id": "color", "step": 3, "title": "调出自己的颜色", "optional": false,
+      "questions": [
+        {"id": "my-rgb", "type": "text", "prompt": "代入当前RGB，或输入三个数值，调出一种你喜欢的颜色。", "required": true, "review": true, "max_length": 400,
+          "record_table": {"kind": "rgb", "fields": [
+            {"key":"r", "label":"R", "min":0, "max":255, "integer":true},
+            {"key":"g", "label":"G", "min":0, "max":255, "integer":true},
+            {"key":"b", "label":"B", "min":0, "max":255, "integer":true}
+          ]}},
+        {"id": "color-discovery", "type": "text", "prompt": "再试着改变其中一个分量。记录你改变了哪个数值（从多少到多少），颜色发生了什么变化。", "required": true, "review": true, "max_length": 600}
+      ]
+    }
+  ]
+}

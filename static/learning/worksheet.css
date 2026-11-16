@@ -1,0 +1,250 @@
+/* 金圈沿用原有水墨圈的透明笔触，只改变墨色，不给书册图标染色。 */
+.learning-note .note-record-answer[hidden] { display: none !important; }
+.note-record-displacement { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin: 10px 0; }
+.note-record-displacement label { display: flex; flex-direction: column; gap: 5px; }
+.note-record-grid table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+.note-record-grid th, .note-record-grid td { border: 1px solid #7c876670; padding: 7px; text-align: center; }
+.note-record-grid input { width: 100%; min-width: 0; box-sizing: border-box; }
+/* 2.2结果表：像在古籍横线上填写记录，避免表格线与输入框叠成密集方格。 */
+.note-animal-record { margin-top:16px; }
+.note-animal-record table { table-layout:fixed; margin:0; border-top:2px solid #526b4e80; border-bottom:1px solid #84735466; }
+.note-animal-record :is(th,td) { border:0; padding:9px 10px; font-weight:400; vertical-align:middle; }
+.note-animal-record thead th { padding:13px 10px 12px; border-bottom:1px solid #84735466; background:#526b4e08; color:#77765f; font:13px/1.5 KaiTi,'楷体',serif; }
+.note-animal-record th:first-child { width:50px; padding-left:3px; padding-right:3px; }
+.note-animal-record tbody tr+tr { border-top:1px solid #84735425; }
+.note-animal-record tbody tr:nth-child(even) { background:#f6f3e92e; }
+.note-animal-record tbody tr:focus-within { background:#526b4e0c; }
+.note-animal-record [data-animal-class="1"] { --column-ink:#365f50; }
+.note-animal-record [data-animal-class="2"] { --column-ink:#8e4d40; }
+.note-animal-record [data-animal-class="3"] { --column-ink:#957039; }
+.note-animal-record [data-animal-class="4"] { --column-ink:#456b7a; }
+.note-beast-record { overflow-x:auto; }
+.note-beast-record table { min-width:340px; }
+.note-beast-record :is(th,td) { padding:9px 4px; }
+.note-beast-name { display:block; margin-top:4px; color:#68735d; font:12px/1.5 KaiTi,'楷体',serif; }
+.note-animal-column-title { display:block; margin-bottom:5px; color:var(--column-ink); font:12px/1.5 KaiTi,'楷体',serif; letter-spacing:.13em; }
+.note-animal-unit { display:block; margin-top:7px; color:#8a826e; font:10px/1.4 'Microsoft YaHei',sans-serif; }
+.note-question .note-animal-record input[type="text"] { display:block; width:100%; min-width:0; height:31px; margin:0; padding:2px 3px; border:0; border-bottom:1px solid #8473544d; border-radius:0; background:transparent; color:var(--column-ink); text-align:center; font:18px/1.5 KaiTi,'楷体',serif; }
+.note-question .note-animal-record input[type="number"] { display:block; width:100%; max-width:110px; height:30px; margin:0 auto; padding:3px 4px; border:0; border-bottom:1px solid #84735425; border-radius:0; background:transparent; color:var(--column-ink); text-align:center; font:16px/1.5 Consolas,monospace; font-variant-numeric:tabular-nums; appearance:textfield; -moz-appearance:textfield; }
+.note-animal-record input[type="number"]::-webkit-inner-spin-button,.note-animal-record input[type="number"]::-webkit-outer-spin-button { appearance:none; margin:0; }
+.note-animal-record input::placeholder { color:#a39a85; opacity:1; }
+.note-question .note-animal-record input:focus { outline:0; border-bottom-color:var(--column-ink); background:#f6f3e980; box-shadow:0 1px 0 var(--column-ink); }
+.note-animal-image-prefix { display:block; color:#9a8e76; font:11px/1.1 KaiTi,'楷体',serif; }
+.note-animal-image-number { display:block; margin-top:3px; color:#68735d; font:14px/1.2 Consolas,monospace; }
+.note-animal-record input:disabled { border-bottom-color:transparent; }
+.note-animal-record .note-animal-camera-label { color:#68735d; font:12px/1.5 KaiTi,'楷体',serif; white-space:nowrap; }
+.note-animal-camera-label small { display:block; margin-top:3px; color:#9a8e76; font-size:10px; }
+.note-digit-comparison h5 { margin:14px 0 5px; font:16px KaiTi,'楷体',serif; }
+.note-digit-comparison :is(input,select) { width:100%; min-width:0; margin:0!important; padding:5px 2px!important; border:1px solid #8a76594d; border-radius:0; background:#fff9e740; color:#394334; font:14px KaiTi,'楷体',serif; box-sizing:border-box; }
+.note-digit-comparison table { table-layout:fixed; }
+.note-digit-comparison :is(th,td) { padding:5px 3px; font-size:13px; }
+.note-digit-comparison th:first-child { width:36px; }
+.note-custom-steps { display:grid; grid-template-columns:1fr 95px; align-items:center; gap:8px; margin-top:18px; font-size:14px; }
+/* 单张对照表及图文札记在桌面适当展开；窄屏仅表内横向滚动。 */
+.learning-note.is-digits-note { width:min(560px,calc(100% - 28px)); }
+.learning-note.is-creation-note { width:min(520px,calc(100% - 28px)); }
+.is-recognition-note .note-section-name { font:16px/1.4 KaiTi,'楷体',STKaiti,serif; }
+.note-digit-comparison { overflow-x:auto; scrollbar-width:thin; scrollbar-color:#7b8f6a transparent; }
+.note-digit-comparison .note-comparison-matrix { min-width:460px; }
+.note-digit-comparison .note-comparison-matrix th:first-child { width:52px; }
+.note-comparison-matrix .note-diagonal-heading { position:relative; height:48px; padding:0; background:linear-gradient(to top right,transparent calc(50% - .5px),#7c876670 50%,transparent calc(50% + .5px)); }
+.note-diagonal-heading span { position:absolute; font:12px/1.2 KaiTi,'楷体',serif; }
+.note-diagonal-digit { top:5px; right:4px; }
+.note-diagonal-count { bottom:5px; left:4px; }
+.note-comparison-matrix .note-cell-percent { display:flex; align-items:center; gap:3px; margin-top:6px; }
+.note-digit-comparison .note-handwriting-matrix { min-width:400px; margin-top:9px; }
+.note-digit-comparison .note-handwriting-matrix th:first-child { width:70px; }
+.note-digit-comparison .note-handwriting-matrix :is(th,td) { padding:7px 5px; vertical-align:middle; border-color:#7c876649; }
+.note-handwriting-matrix th { background:#687a5710; font-weight:400; }
+.note-handwriting-matrix input[type="number"] { height:32px; padding:4px!important; border:0; border-bottom:1px solid #7c876666; background:#fff9e72a; text-align:center; font:14px/1.5 Consolas,monospace; font-variant-numeric:tabular-nums; }
+.note-handwriting-matrix select { min-height:30px; font-size:12px; }
+/* 预测数字与比例同一行显示，各列保持相同的输入宽度和基线。 */
+.note-handwriting-prediction { display:grid; grid-template-columns:28px minmax(0,1fr); align-items:center; gap:6px; }
+.note-digit-comparison .note-manual-matrix { min-width:396px; margin-top:8px; table-layout:fixed; }
+.note-digit-comparison .note-manual-matrix :is(th,td) { padding:8px 6px; vertical-align:middle; border-color:#7c876649; }
+.note-manual-matrix th { background:#687a5710; font-weight:400; white-space:nowrap; }
+.note-manual-matrix select { height:32px; padding:2px 6px!important; border:1px solid #8a765945; background:#fff9e755; text-align:center; font:14px/1.4 Consolas,'Microsoft YaHei',sans-serif; }
+.note-manual-matrix input[type="number"] { height:32px; padding:3px 4px!important; border:0; border-bottom:1px solid #7c876666; background:#fff9e72a; text-align:center; font:14px/1.4 Consolas,monospace; font-variant-numeric:tabular-nums; }
+.note-manual-matrix .note-handwriting-prediction { grid-template-columns:54px minmax(0,1fr); gap:8px; align-items:center; }
+.note-manual-matrix .note-judgment { min-width:86px; gap:6px; }
+.note-manual-matrix .note-judgment-face { gap:2px; font-size:13px; white-space:nowrap; }
+.note-prediction-percent { display:flex; align-items:center; min-width:0; gap:2px; color:#73745c; font:11px Consolas,monospace; }
+.note-prediction-caption { display:block; margin-top:4px; color:#7a7b63; font:10px/1.4 KaiTi,'楷体',serif; white-space:nowrap; }
+.note-handwriting-matrix .note-attempt-preview { display:block; width:30px; height:45px; margin:6px auto 0; image-rendering:pixelated; }
+.note-handwriting-matrix .note-attempt-preview[hidden] { display:none; }
+.note-sample-upload { padding:10px 0 15px; margin-bottom:15px; border-bottom:1px solid #7c876649; }
+.note-sample-upload h5 { margin:0 0 7px; font:17px KaiTi,'楷体',serif; }
+.note-sample-upload p { margin:6px 0; font:13px/1.7 KaiTi,'楷体',serif; }
+.note-upload-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(76px,1fr)); gap:7px; margin:10px 0; }
+.note-upload-sample { position:relative; display:grid; justify-items:center; gap:5px; padding:7px 4px; border:1px solid #a47a4955; cursor:pointer; }
+.note-upload-sample:has(input:checked) { border-color:#526b4e; background:#526b4e16; }
+.note-upload-sample input { position:absolute; top:5px; left:5px; width:13px; height:13px; accent-color:#526b4e; }
+.note-upload-sample img { width:24px; height:36px; image-rendering:pixelated; }
+.note-upload-sample span { font-size:11px; text-align:center; }
+.note-upload-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.learning-note .note-upload-actions button { padding:7px 10px; border:1px solid #6b846b70; background:transparent; color:#52654b; font:14px KaiTi,'楷体',serif; cursor:pointer; }
+.learning-note .note-upload-actions button[data-upload-send] { background:#526b4e; color:#fff9e7; }
+.learning-note .note-upload-actions button:disabled { opacity:.45; cursor:default; }
+/* 对错左右单选，墨色笔画和底部墨痕共同提示选中状态。 */
+.note-judgment { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:2px; }
+.note-judgment label { position:relative; min-width:0; cursor:pointer; }
+.note-judgment input[type="radio"] { position:absolute; width:1px; height:1px; padding:0!important; opacity:0; }
+.note-judgment-face { display:flex; align-items:center; justify-content:center; gap:1px; min-height:28px; color:#8a826e; font:13px KaiTi,'楷体',serif; border-bottom:2px solid transparent; }
+.note-judgment-face svg { width:14px; height:18px; flex-shrink:0; }
+.note-judgment input:checked+.note-judgment-face { color:#365f58; border-image:linear-gradient(90deg,transparent,#526b4e 15%,#526b4e 85%,transparent) 1; background:#526b4e12; }
+.note-judgment input:focus-visible+.note-judgment-face { outline:2px solid #8a6547; outline-offset:1px; }
+.note-judgment label:hover .note-judgment-face { color:#365f58; }
+.note-judgment input:disabled+.note-judgment-face { cursor:default; opacity:.65; }
+/* 数字仍按数值校验，去掉浏览器自带的步进箭头。 */
+.learning-note input[type="number"] { appearance:textfield; -moz-appearance:textfield; }
+.learning-note input[type="number"]::-webkit-inner-spin-button,
+.learning-note input[type="number"]::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; }
+.status-ring.gold>img:not(.note-entry-book) { filter:brightness(0) saturate(100%) invert(53%) sepia(45%) saturate(761%) hue-rotate(1deg) brightness(94%) contrast(89%); }
+.note-entry { position:absolute; z-index:3; top:var(--activity-control-top); right:calc(var(--activity-control-right) + 54px); display:flex; flex-direction:column; align-items:center; gap:0; border:0; padding:0; color:#6b7159; background:transparent; font-size:11px; }
+.note-entry[hidden] { display:none; }
+.note-entry .status-ring { width:44px; height:44px; flex-basis:44px; }
+.note-entry .note-entry-book { inset:4px; width:36px; height:36px; }
+.note-entry:hover { color:var(--accent); }
+.note-entry[aria-expanded="true"] { color:var(--green); }
+.learning-note { position:fixed; inset:auto; margin:0; z-index:12; top:76px; right:22px; width:min(440px,calc(100% - 28px)); height:min(640px,calc(100% - 92px)); min-height:220px; display:flex; flex-direction:column; border:1px solid #9c795d77; color:#394334; background:#eee3ca url('atlas-paper.png') center/cover; box-shadow:0 12px 42px #27342744,3px 3px 0 #dbcbaa; font-family:KaiTi,'楷体',STKaiti,serif; }
+.learning-note[hidden] { display:none; }
+.note-heading { position:relative; flex-shrink:0; margin:0 22px; padding:29px 25px 9px 0; border-bottom:1px solid #8a76594d; }
+.note-drag { position:absolute; top:0; left:0; right:35px; display:flex; align-items:center; justify-content:center; width:calc(100% - 35px); height:27px; border:0; padding:0; background:transparent; cursor:grab; touch-action:none; }
+.note-drag:active { cursor:grabbing; }
+.note-drag span { width:90px; height:7px; background:#627356b3; clip-path:polygon(0 30%,20% 0,48% 25%,78% 5%,100% 40%,90% 100%,65% 70%,30% 100%,2% 70%); }
+.note-drag:hover span,.note-drag:focus-visible span { background:#4f6545; }
+.note-close { position:absolute; top:9px; right:-11px; padding:0; width:32px; height:32px; border:0; background:transparent; opacity:.8; }
+.note-close img { display:block; width:100%; height:100%; }
+.note-close:hover { opacity:1; }
+.note-eyebrow { margin:0 0 5px; color:#8a7656; font:10px 'Microsoft YaHei',sans-serif; letter-spacing:.13em; }
+.note-heading h3 { margin:0 0 5px; font-family:LiSu,'隶书',serif; font-size:24px; font-weight:400; }
+.note-state { margin:0; color:#5e7155; font:11px/1.6 'Microsoft YaHei',sans-serif; }
+.note-progress { display:flex; gap:8px; height:7px; margin:12px 0 5px; }
+.note-progress span { flex:1; background:#67755e26; clip-path:polygon(0 26%,7% 6%,35% 18%,65% 0,100% 22%,98% 78%,76% 94%,48% 80%,13% 100%,0 72%); }
+.note-progress span.is-submitted { background:#56694d; }
+.note-sections { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr); gap:8px; }
+.note-sections[hidden] { display:none; }
+.note-sections button { flex:1; display:grid; place-items:center; min-width:0; min-height:32px; border:0; border-bottom:2px solid transparent; padding:5px 0; background:transparent; color:#8e8267; }
+.note-section-number { font:16px/1.2 Consolas,monospace; }
+.note-sections button.is-submitted { color:#52684e; }
+.note-sections button.is-current { border-bottom-color:#64765a; color:#354d39; }
+.note-sections button:disabled { opacity:.52; cursor:not-allowed; }
+.math-steps button.is-step-locked,.feature-steps button.is-step-locked { opacity:.5; cursor:not-allowed; }
+.math-steps button.is-step-locked span,.feature-steps button.is-step-locked span { font-size:0; width:15px; height:16px; display:inline-block; vertical-align:middle; background:#7b7c65; mask:url('ink-lock-white.png') center/contain no-repeat; }
+.note-body { position:relative; flex:1; min-height:0; margin:0 17px 0 22px; }
+.note-reader { height:100%; overflow-y:auto; overscroll-behavior:contain; padding:14px 21px 15px 0; }
+.note-content { margin:0; }
+.note-intro { color:#7e785f; font-size:14px; line-height:1.7; }
+.note-section-title { margin:2px 0 10px; font-size:18px; color:#5e7155; font-weight:400; border-bottom:1px solid #8a76592b; padding-bottom:9px; }
+.note-question { min-width:0; margin:0 0 19px; padding:0; border:0; }
+.note-question legend { width:100%; padding:0; font-size:16px; line-height:1.65; }
+.note-question .note-optional { color:#8a7656; font-size:12px; }
+.note-option { display:flex; align-items:flex-start; gap:7px; margin:7px 0; font-size:15px; line-height:1.55; }
+.note-option input { flex-shrink:0; width:15px; height:15px; margin:4px 0 0; accent-color:#516c4e; }
+.note-question input[type="number"],.note-question textarea { display:block; width:100%; margin-top:9px; padding:7px 9px; border:1px solid #8a76594d; border-bottom-color:#748163; border-radius:1px; background:#fff9e740; color:#394334; font:15px/1.7 KaiTi,'楷体',serif; }
+.note-question input[type="number"] { max-width:185px; font-family:Consolas,monospace; }
+.note-question textarea { min-height:100px; resize:vertical; }
+/* 动物名称通常只有几个字，保留单行高度，也可手动拉高补充回答。 */
+.is-animal-note .note-question textarea { min-height:42px; height:42px; }
+/* 回答区沿用正文的墨痕滚动条，下端留出原生拉高手柄。 */
+.note-answer-scroll { position:relative; margin-top:9px; }
+.note-answer-scroll textarea { margin-top:0; padding-right:23px; }
+.note-answer-scroll>.ink-scrollbar { top:8px; right:3px; bottom:18px; }
+/* 避免题内辅助按钮样式覆盖墨痕滑块。 */
+.note-answer-scroll .ink-scrollbar .ink-thumb {
+  display:block; min-height:32px; max-width:none; padding:0; border:0;
+  border-radius:0; box-shadow:none;
+  background:linear-gradient(90deg,#7484658c,#5c765a 45%,#788967bd);
+  cursor:grab;
+}
+.note-answer-scroll .ink-scrollbar .ink-thumb:hover,
+.note-answer-scroll .ink-scrollbar .ink-thumb.dragging { background:#4d6d51; }
+.note-answer-scroll .ink-scrollbar .ink-thumb.dragging { cursor:grabbing; }
+.note-answer-scroll .ink-scrollbar .ink-thumb:focus-visible { outline:0; background:#385b47; }
+/* 题内辅助操作与纸页底部按钮共用样式，避免出现浏览器默认的凸起边框。 */
+.learning-note :is(.note-question button,.note-actions button) {
+  appearance:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:34px;
+  max-width:100%;
+  padding:7px 12px;
+  border:1px solid #6b846b70;
+  border-radius:0;
+  background:#f5ecd430;
+  box-shadow:none;
+  color:#52654b;
+  font:400 14px/1.4 KaiTi,'楷体',STKaiti,serif;
+  text-align:center;
+  cursor:pointer;
+}
+.learning-note :is(.note-question button,.note-actions button):hover:not(:disabled) { background:#526b4e12; border-color:#526b4e; color:#354d39; }
+.learning-note :is(.note-question button,.note-actions button):active:not(:disabled) { background:#526b4e24; }
+.learning-note :is(.note-question button,.note-actions button):disabled { opacity:.45; cursor:default; }
+.note-question .note-import { margin-top:10px; }
+.note-pixel-reference { display:flex; flex-wrap:wrap; align-items:center; gap:16px; margin:12px 0; }
+.note-pixel-reference p { margin:0; font-size:14px; }
+.note-pixel-picture { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; width:110px; height:110px; background:#aaa; border:1px solid #888; }
+.note-pixel-picture span { min-width:0; min-height:0; }
+.note-question .note-pixel-check { margin-top:12px; }
+.note-pixel-feedback { min-height:1.7em; margin:8px 0 0; font:12px/1.7 'Microsoft YaHei',sans-serif; color:#566c4c; }
+.note-rgb-layout { display:grid; grid-template-columns:minmax(0,1fr) 112px; align-items:center; gap:18px; margin:14px 0 12px; }
+.note-rgb-controls label { display:grid; grid-template-columns:24px minmax(0,1fr); gap:8px; align-items:center; margin:0 0 10px; font:18px Consolas,monospace; }
+.note-rgb-controls label:last-child { margin-bottom:0; }
+.note-rgb-controls input[type="number"] { margin:0; padding:6px 8px; }
+.note-rgb-controls [data-channel="0"]>span { color:#9b3931; }
+.note-rgb-controls [data-channel="1"]>span { color:#366c46; }
+.note-rgb-controls [data-channel="2"]>span { color:#365d89; }
+.note-rgb-preview { margin:0; min-width:0; }
+.note-rgb-swatch { width:100%; height:100px; border:1px solid #888; }
+.note-rgb-swatch.is-empty { background:repeating-linear-gradient(135deg,#f6f1e6 0 8px,#e7dfcf 8px 16px); }
+.note-rgb-preview figcaption { margin-top:7px; color:#6d725e; font:11px/1.6 Consolas,'Microsoft YaHei',sans-serif; overflow-wrap:anywhere; }
+.note-rgb-legacy { margin:12px 0; white-space:pre-wrap; overflow-wrap:anywhere; font-size:13px; color:#6d725e; }
+.note-exp-wrap { display:grid; gap:8px; margin-top:4px; }
+.note-exp-table-box { overflow-x:auto; border:1px solid #8a765940; border-radius:4px; background:#fffaf0a8; }
+.note-exp-table { width:100%; border-collapse:collapse; font:12px/1.5 'Microsoft YaHei',sans-serif; }
+.note-exp-table th,.note-exp-table td { padding:5px 7px; border-bottom:1px solid #8a765928; border-right:1px solid #8a765920; text-align:left; white-space:nowrap; }
+.note-exp-table th:last-child,.note-exp-table td:last-child { border-right:none; }
+.note-exp-table tr:last-child td { border-bottom:none; }
+.note-exp-table th { background:#efe7d6; color:#4f4739; font-weight:600; }
+.note-exp-table td.tone-ok { color:#3d6b39; font-weight:600; }
+.note-exp-table td.tone-bad { color:#9c4333; font-weight:600; }
+.note-exp-table td.tone-up { color:#7c5718; font-weight:600; }
+.note-exp-table td.tone-muted { color:#807b6b; }
+.note-raw-fold { font:12px/1.5 'Microsoft YaHei',sans-serif; color:#6b6456; }
+.note-raw-fold>summary { cursor:pointer; user-select:none; padding:2px 0; }
+.note-raw-fold>textarea { margin-top:6px; }
+.note-question input:disabled,.note-question textarea:disabled { opacity:1; color:#646858; -webkit-text-fill-color:#646858; cursor:default; }
+.note-question textarea:disabled { background:transparent; }
+.note-question:disabled .note-option { color:#646858; }
+.note-question:disabled { opacity:1; }
+.note-result { margin:8px 0 0; font:12px/1.7 'Microsoft YaHei',sans-serif; color:#56724e; }
+.note-result.wrong { color:#94513d; }
+.note-explanation { margin:6px 0 0; color:#73745c; font-size:14px; line-height:1.7; }
+.note-feedback { margin:0 0 16px; padding:10px 12px; border-left:2px solid #9c7651; background:#fff5da50; font-size:15px; line-height:1.7; white-space:pre-wrap; overflow-wrap:anywhere; }
+.learning-note .note-foot { position:static; inset:auto; width:auto; z-index:auto; flex-shrink:0; display:block; min-height:63px; max-width:none; margin:0 22px; padding:8px 0 13px; border-top:1px solid #8a76594d; }
+.note-message { margin:0 0 7px; min-height:16px; font:11px/1.6 'Microsoft YaHei',sans-serif; color:#73745c; }
+.note-message.error { color:#984c38; }
+.note-actions { display:flex; justify-content:flex-end; gap:8px; flex-wrap:wrap; }
+.learning-note .note-actions button[data-note-action="submit"] { color:#fff9e7; background:#526b4e; border-color:#526b4e; }
+.learning-note .note-actions button[data-note-action="submit"]:hover:not(:disabled) { background:#405a3d; border-color:#405a3d; color:#fff9e7; }
+.learning-note .note-actions button[data-note-action="submit"]:active:not(:disabled) { background:#354d39; }
+.learning-note .note-actions button[hidden] { display:none; }
+.learning-note :is(button,input,textarea):focus-visible { outline:2px solid #8a6547; outline-offset:2px; }
+/* 输入框紧贴滚动区左沿，外扩轮廓会被裁掉；内侧聚焦框四边完整且不挤动内容。 */
+.learning-note :is(textarea,input[type="text"],input[type="number"],select):focus { outline:2px solid #8a6547; outline-offset:-2px; }
+@media(max-width:600px) {
+  .note-entry .status-ring { width:42px; height:42px; flex-basis:42px; }
+  .note-entry .note-entry-book { width:34px; height:34px; }
+  .learning-note { right:14px; top:70px; height:calc(100% - 84px); }
+  .note-heading { margin:0 17px; }
+  .note-body { margin-left:17px; }
+  .learning-note .note-foot { margin:0 17px; }
+}
+@media(max-height:540px) {
+  .learning-note { top:25px; height:calc(100% - 40px); }
+  .note-heading { padding-top:25px; }
+  .note-heading h3 { font-size:20px; }
+  .note-progress { margin-top:6px; }
+}

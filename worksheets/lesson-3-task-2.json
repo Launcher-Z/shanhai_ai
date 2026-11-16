@@ -1,0 +1,210 @@
+{
+  "activity_id": "lesson-3-task-2",
+  "version": 1,
+  "title": "优化与检验 · 学习札记",
+  "intro": "用同一批测试图片检验新的训练数据，再根据证据作出判断。",
+  "sections": [
+    {
+      "id": "testing",
+      "step": 0,
+      "title": "正规实验 · 测试记录",
+      "optional": false,
+      "questions": [
+        {
+          "id": "animal-tests",
+          "type": "text",
+          "prompt": "填写9张图片的两类判断数值（%），摄像头结果选填。",
+          "required": true,
+          "review": false,
+          "max_length": 4000,
+          "record_table": {
+            "kind": "animal_predictions",
+            "fields": [
+              {
+                "key": "class-1",
+                "label": "类别1名称",
+                "text": true
+              },
+              {
+                "key": "class-2",
+                "label": "类别2名称",
+                "text": true
+              },
+              {
+                "key": "image-1-class-1",
+                "label": "图1·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-1-class-2",
+                "label": "图1·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-2-class-1",
+                "label": "图2·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-2-class-2",
+                "label": "图2·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-3-class-1",
+                "label": "图3·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-3-class-2",
+                "label": "图3·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-4-class-1",
+                "label": "图4·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-4-class-2",
+                "label": "图4·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-5-class-1",
+                "label": "图5·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-5-class-2",
+                "label": "图5·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-6-class-1",
+                "label": "图6·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-6-class-2",
+                "label": "图6·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-7-class-1",
+                "label": "图7·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-7-class-2",
+                "label": "图7·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-8-class-1",
+                "label": "图8·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-8-class-2",
+                "label": "图8·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-9-class-1",
+                "label": "图9·类别1",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "image-9-class-2",
+                "label": "图9·类别2",
+                "min": 0,
+                "max": 100
+              },
+              {
+                "key": "camera-class-1",
+                "label": "摄像头·类别1",
+                "min": 0,
+                "max": 100,
+                "required": false
+              },
+              {
+                "key": "camera-class-2",
+                "label": "摄像头·类别2",
+                "min": 0,
+                "max": 100,
+                "required": false
+              }
+            ]
+          }
+        },
+        {
+          "id": "training-evidence",
+          "type": "text",
+          "prompt": "确认本轮额外使用的训练图片，附给教师查看；未增加个人图片也请确认。",
+          "required": true,
+          "review": true,
+          "record_form": "training_evidence",
+          "max_length": 24000
+        }
+      ]
+    },
+    {
+      "id": "reflection",
+      "step": 1,
+      "title": "前后比较 · 数据与识别",
+      "optional": false,
+      "questions": [
+        {
+          "id": "experiment-plan",
+          "type": "text",
+          "prompt": "本次重点研究哪一个因素？与2.2相比，你怎样调整了训练数据，哪些条件尽量保持一致？",
+          "required": true,
+          "review": true,
+          "max_length": 2000
+        },
+        {
+          "id": "training-quality",
+          "type": "text",
+          "prompt": "新选的图片真的有助于提升训练质量吗？检查类别是否准确、主体是否清晰、背景与数量是否合适；是否需要裁剪、调整尺寸或其他预处理？说明已做的处理或下一步打算。",
+          "required": true,
+          "review": true,
+          "max_length": 2000
+        },
+        {
+          "id": "result-change",
+          "type": "text",
+          "prompt": "结合具体图片和前后结果，初步判断训练数据怎样影响图像识别。哪些变好了，哪些没有？班级统计能否直接代表你自己的模型？",
+          "required": true,
+          "review": true,
+          "max_length": 2000
+        },
+        {
+          "id": "test-influence",
+          "type": "text",
+          "prompt": "图6、7、8是虚构对象，为什么仍有两类预测比例？如果只选普通动物，或只选这些虚构对象测试，会怎样影响你对模型效果的判断？你会怎样选择测试数据？",
+          "required": true,
+          "review": true,
+          "max_length": 2000
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>活动1 · 认识单层神经网络如何学习</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="data.js" defer></script>
+  <script src="model.js" defer></script>
+  <link rel="stylesheet" href="../theme.css?v=20261115b">
+  <link rel="stylesheet" href="layout.css">
+  <script src="../storage.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="../bridge.js" defer></script>
+</head>
+<body data-reveal="input" data-lab="zero-one">
+  <header class="page-header">
+    <div><p class="eyebrow">深度学习［0—9］ / 从 0 开始</p><h1>神经网络的“学习”，发生在哪里？</h1></div>
+    <div class="header-actions"><button id="resetButton" class="quiet">重新开始</button></div>
+  </header>
+  <main>
+    <div class="workflow" role="list" aria-label="实验状态">
+      <div class="workflow-step" role="listitem" data-stage="input"><span class="step-number">1</span><span><strong>认识输入</strong><small>图片 → 二值数值</small></span></div>
+      <div class="workflow-step" role="listitem" data-stage="before"><span class="step-number">2</span><span><strong>训练前测试</strong><small id="beforeNav">固定 5 张图片</small></span></div>
+      <div class="workflow-step" role="listitem" data-stage="manual"><span class="step-number">3</span><span><strong>逐次训练</strong><small id="manualNav">先观察 3 次</small></span></div>
+      <div class="workflow-step" role="listitem" data-stage="auto"><span class="step-number">4</span><span><strong>继续训练</strong><small>再训练 100 次</small></span></div>
+      <div class="workflow-step" role="listitem" data-stage="after"><span class="step-number">5</span><span><strong>训练后测试</strong><small id="afterNav">同一组 5 张图片</small></span></div>
+    </div>
+    <div class="task-strip"><span id="taskText"></span><span class="architecture">60 个输入 · 2 个输出 · 无隐藏层</span></div>
+    <div class="lab">
+      <section class="panel input-panel learning-region" data-region="input" aria-labelledby="inputHeading">
+        <div class="panel-heading"><span class="section-letter">X</span><h2 id="inputHeading">输入</h2><span class="panel-caption">送入什么？</span></div>
+        <div id="modeSwitch" class="mode-switch" role="group" aria-label="选择模式" hidden><button id="trainMode" data-mode="train">训练模式</button><button id="testMode" data-mode="test">测试模式</button></div>
+        <p id="modeHint" class="hint"></p>
+        <div class="sample-header"><strong id="sampleName"></strong><span id="sampleTag"></span></div>
+        <div class="source-display"><img id="sourceImage" alt="当前数字图片"><div id="sourceGrid" class="pixel-grid source-grid" hidden></div></div>
+        <p class="source-caption" id="sourceCaption"></p>
+        <button id="mappingButton" class="outline wide">把图片分成点阵</button>
+        <div class="input-metadata">
+          <div id="inputLabelBox" class="input-footer" hidden><span>正确标签</span><strong id="inputLabel">—</strong></div>
+          <div id="trainingCounter" class="training-counter" hidden><span>累计训练</span><strong><span id="trainCount">0</span><small> 次</small></strong></div>
+          <p class="input-label-note">标签用于核对和训练，不参与输入计算。</p>
+        </div>
+        <div id="nextTrainingControls" class="next-training-controls" hidden><button id="nextTrainingButton" class="primary lesson-action">下一张图像</button></div>
+        <div id="inputActions" class="input-actions" hidden>
+          <div id="testPicker" class="test-picker" role="group" aria-label="选择固定测试图片"></div>
+          <button id="testCurrentButton" class="primary lesson-action">测试当前图片</button>
+          <button id="autoTrainButton" class="primary lesson-action" hidden>自动训练100次</button>
+          <p id="inputActionHint" class="hint"></p>
+          <div id="autoControls" class="auto-controls" hidden><progress id="autoProgress" max="100" value="0" aria-label="追加训练进度"></progress><p id="autoHint" class="hint"></p></div>
+        </div>
+      </section>
+      <section class="panel compute-panel learning-region" data-region="compute" aria-labelledby="computeHeading" hidden>
+        <div class="panel-heading"><span class="section-letter">Σ</span><h2 id="computeHeading">加权计算</h2><span class="panel-caption">怎么算？</span></div>
+        <div id="computeGateway" class="compute-gateway" hidden><p class="gateway-value">60 <span>个二值输入已准备好</span></p><p>先用 5 张固定测试图片，记录模型训练前的预测结果。</p><button id="startTestButton" class="primary wide">开始训练前测试</button></div>
+        <div id="computeContent" hidden>
+        <div class="formula">
+          <div class="formula-line"><span class="formula-class">数字 0</span><div class="formula-expression"><span>z<sub>0</sub> =</span> <span>x<sub>1</sub> × w<sub>1,0</sub></span> <span>+ x<sub>2</sub> × w<sub>2,0</sub></span> <span>+ …</span> <span>+ x<sub>60</sub> × w<sub>60,0</sub></span> <span>+ b<sub>0</sub></span></div></div>
+          <div class="formula-line"><span class="formula-class">数字 1</span><div class="formula-expression"><span>z<sub>1</sub> =</span> <span>x<sub>1</sub> × w<sub>1,1</sub></span> <span>+ x<sub>2</sub> × w<sub>2,1</sub></span> <span>+ …</span> <span>+ x<sub>60</sub> × w<sub>60,1</sub></span> <span>+ b<sub>1</sub></span></div></div>
+        </div>
+        <div class="compute-actions"><button id="computeButton" class="primary lesson-action">计算本张加权和</button><div id="scanControls" class="scan-controls" hidden><button id="pauseScan" class="outline">暂停扫描</button><button id="nextPixel" class="outline" disabled>演示下一点</button></div></div>
+        <div class="scan-progress"><progress id="scanProgress" max="60" value="0" aria-label="已参与计算的像素数"></progress><span id="scanCount">0 / 60</span></div>
+        <p id="scanLocation" class="scan-location">点击任意位置，查看输入与权重</p>
+        <div class="calculation-graph" aria-label="同一份输入分成两路，分别与数字0和1的权重相乘、累加并加偏置">
+          <figure class="shared-input"><figcaption>共享输入 x</figcaption><div id="computePixels" class="pixel-grid"></div><div class="input-reading">输入：<strong id="currentInput">—</strong></div></figure>
+          <div class="fork-lines" aria-hidden="true"><svg viewBox="0 0 30 100" preserveAspectRatio="none"><path d="M0 50 H10 M10 50 V24 H29 M10 50 V76 H29" fill="none" stroke="#91adbe" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg><span class="branch-multiply branch-zero">×</span><span class="branch-multiply branch-one">×</span></div>
+          <figure class="weight-node route-0"><figcaption>权重 · 数字 <b>0</b></figcaption><div id="computeWeights0" class="pixel-grid weight-grid"></div><div class="route-weight"><span>权重</span><strong id="weightValue0">—</strong></div></figure>
+          <span class="sum-arrow route-0" aria-hidden="true">→</span>
+          <div class="sum-node route-0"><span>加权和 z<sub>0</sub><em id="sumStatus0" class="sum-status">待计算</em></span><strong id="sum0">—</strong><div id="accumulator0" class="step-formula" title="当步运算；计算结果显示在上方，数值保留4位小数">等待计算</div></div>
+          <figure class="weight-node route-1"><figcaption>权重 · 数字 <b>1</b></figcaption><div id="computeWeights1" class="pixel-grid weight-grid"></div><div class="route-weight"><span>权重</span><strong id="weightValue1">—</strong></div></figure>
+          <span class="sum-arrow route-1" aria-hidden="true">→</span>
+          <div class="sum-node route-1"><span>加权和 z<sub>1</sub><em id="sumStatus1" class="sum-status">待计算</em></span><strong id="sum1">—</strong><div id="accumulator1" class="step-formula" title="当步运算；计算结果显示在上方，数值保留4位小数">等待计算</div></div>
+        </div>
+        <div class="weight-legend"><span><i class="swatch negative"></i>负权重</span><span><i class="swatch zero"></i>0</span><span><i class="swatch positive"></i>正权重</span><small>绝对值越大，颜色越深</small></div>
+        <p class="hint" id="computeHint">两组各有 60 个权重；扫描到同一位置时，分别相乘并累加。</p>
+        </div>
+      </section>
+      <div class="panel result-panel" hidden>
+        <section class="panel prediction-section learning-region" data-region="prediction" aria-labelledby="resultHeading">
+        <div class="panel-heading"><span class="section-letter">Y</span><h2 id="resultHeading">预测与分析</h2><span class="panel-caption">预测什么？</span></div>
+        <p class="result-rule">两组加权和 → 转为预测比例 → 选择比例较大的类别</p>
+        <details class="softmax"><summary>查看比例怎么算</summary><p>p<sub>0</sub> = e<sup>z₀</sup> / (e<sup>z₀</sup> + e<sup>z₁</sup>)<br>p<sub>1</sub> = e<sup>z₁</sup> / (e<sup>z₀</sup> + e<sup>z₁</sup>)</p><small>这一步叫 softmax。比例之和为 100%，比例较大的类别与加权和较大的类别一致。</small></details>
+        <div class="probability-chart">
+          <div class="probability-values"><div class="probability-value class-zero"><span><i></i>数字 0</span></div><div class="probability-value class-one"><span><i></i>数字 1</span></div></div>
+          <div id="probabilityTrack" class="probability-track" role="img" aria-label="尚未计算预测比例"><div id="bar0" class="probability-segment class-zero"><strong id="prob0" class="segment-value" hidden>—</strong></div><div id="bar1" class="probability-segment class-one"><strong id="prob1" class="segment-value" hidden>—</strong></div><span id="probabilityEmpty">等待计算</span></div>
+          <p class="probability-caption">同一条中的两个预测比例，合计 100%</p>
+        </div>
+        <div id="verdict" class="verdict"><div class="prediction-tile"><span>模型预测</span><strong id="prediction">—</strong></div><div id="answerTile"><span>正确标签</span><strong id="answer">—</strong></div><div id="judgmentTile" class="judgment-tile"><span>预测结果</span><strong id="verdictText">等待计算</strong></div></div>
+        <div id="lossBox"><div class="loss-line"><span>误差（损失） <strong id="lossValue">—</strong></span><span id="lossAfter"></span></div><details id="lossDetail" class="loss-detail"><summary>损失怎样得到？</summary><p>取出模型分配给正确类别的预测比例 p，再计算：<strong>损失 = −ln(p)</strong>。</p><p id="lossCalculation">点击“预测结果”后，可查看本次损失计算。</p><small>这里使用交叉熵损失，ln 是自然对数。正确类别的预测比例越接近 1，损失越接近 0；只看类别猜对或猜错，无法判断误差的大小。</small></details></div>
+        <div id="trainingActions" class="training-actions"><button id="revealButton" class="primary lesson-action">预测结果</button></div>
+        </section>
+      </div>
+    </div>
+    <section class="panel update-section learning-region" data-region="update" aria-labelledby="updateHeading" hidden>
+      <div class="update-toolbar">
+        <div class="update-heading-block"><div class="panel-heading update-heading"><span class="section-letter">Δ</span><h2 id="updateHeading">权重更新与变化</h2><span id="updateStatus" class="panel-caption">等待训练</span></div><p class="hint" id="updateHint">两组输出分别拥有自己的 60 个权重。</p></div>
+        <div id="updateActions" class="training-actions"><button id="updateButton" class="primary lesson-action">更新权重</button></div>
+      </div>
+      <div id="weightComparisons"></div>
+      <div class="update-notes"><p id="deltaScaleHint" class="delta-scale"></p><details id="selectedDetail"><summary>查看选中位置的参数</summary><div class="selected-change" id="selectedChange">点击权重位置，可查看具体数值。</div></details><details id="learningDetail"><summary>参数怎样调整？</summary><p>权重改变量 = 学习率 ×（目标值 − 预测比例）× 输入值<br>偏置改变量 = 学习率 ×（目标值 − 预测比例）</p><small>正确类别的目标值为 1，另一类别为 0。类别猜对时，损失仍可能不为 0，参数仍会调整；输入值为 0 的位置，当前一步权重不变。</small></details></div>
+    </section>
+    <section class="experiment-record" aria-label="两轮测试记录" hidden>
+        <div class="record-heading"><h2>留下学习发生的证据</h2><span>结合学习札记记录</span></div>
+      <div class="test-records"><div><div class="test-record-heading"><h3>训练前测试</h3><span id="beforeProgress">0 / 5 已测试</span></div><div class="table-scroll"><table class="horizontal-tests" aria-label="训练前五张图片的模型预测"><tbody id="beforeTable"></tbody></table></div></div><div><div class="test-record-heading"><h3>训练后测试</h3><span id="afterProgress">0 / 5 已测试</span></div><div class="table-scroll"><table class="horizontal-tests" aria-label="训练后五张图片的模型预测"><tbody id="afterTable"></tbody></table></div></div></div>
+      <p class="hint test-record-note">两轮使用相同的 5 张图片，括号内为模型对所预测类别的预测比例。请结合图片和学习单自行比较。</p>
+    </section>
+    <section class="dataset-panel" aria-labelledby="datasetHeading"><div class="record-heading"><h2 id="datasetHeading">本次实验的全部图片</h2><span>点击图片，查看二值数据</span></div><p class="hint">人工设计的 6 列 × 10 行教学点阵。训练图片与测试图片不重复；测试图片始终不参与更新参数。</p><div class="dataset-group"><div class="dataset-label"><h3>训练集</h3><p>16 张 · 数字 0、1 各 8 张</p></div><div id="trainingGallery" class="gallery"></div></div><div class="dataset-group"><div class="dataset-label"><h3>固定测试集</h3><p>5 张 · 两轮使用相同图片</p><small>只展示图片，不提供标签</small></div><div id="testingGallery" class="gallery"></div></div></section>
+    <footer>活动 1 · 单层神经网络学习实验 <span>计算预测 → 衡量误差 → 计算调整方向与幅度 → 更新参数</span></footer>
+  </main>
+  <div id="status" class="status" role="status" aria-live="polite"></div>
+  <dialog id="sampleDialog"><div class="dialog-heading"><h2 id="dialogTitle"></h2><button id="closeDialog" class="quiet">关闭</button></div><div id="dialogContent"></div></dialog>
+</body>
+</html>

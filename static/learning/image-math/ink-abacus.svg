@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 76" fill="none">
+  <defs>
+    <filter id="ink"><feTurbulence type="fractalNoise" baseFrequency=".16" numOctaves="2" seed="7" result="grain"/><feDisplacementMap in="SourceGraphic" in2="grain" scale=".8"/></filter>
+    <path id="bead" d="M-4 0Q-4-2.8 0-3.1 4-2.8 4 0 3.7 2.6 0 2.9-4 2.5-4 0Z" fill="#4b503e"/>
+    <g id="rod"><path d="M0 10V65" stroke="#6a6950" stroke-width="1.3"/><use href="#bead" y="17"/><use href="#bead" y="23"/><use href="#bead" y="39"/><use href="#bead" y="45"/><use href="#bead" y="51"/><use href="#bead" y="57"/><use href="#bead" y="63"/></g>
+  </defs>
+  <g transform="rotate(-5 55 38)" filter="url(#ink)">
+    <path d="M7 8 101 7 103 69 8 70Z" stroke="#454b3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M10 30 101 29" stroke="#454b3a" stroke-width="3"/>
+    <use href="#rod" x="19"/><use href="#rod" x="31"/><use href="#rod" x="43"/><use href="#rod" x="55"/><use href="#rod" x="67"/><use href="#rod" x="79"/><use href="#rod" x="91"/>
+    <path d="M10 5 76 4M6 73 93 72" stroke="#76755d" stroke-width=".7" opacity=".6"/>
+  </g>
+</svg>

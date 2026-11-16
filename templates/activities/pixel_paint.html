@@ -1,0 +1,5 @@
+{% from "activities/pixel_editor.html" import pixel_editor %}
+<section id="pixel-paint" class="pixel-paint" data-student-id="{{ student.id }}" hidden aria-label="给小熊猫戴礼帽像素绘画">
+  <header class="paint-heading"><p>选择或调配你喜欢的颜色，给小熊猫画一顶礼帽。每一格都可以涂色。</p></header>
+  {{ pixel_editor("paint", "我的第一稿") }}
+</section>

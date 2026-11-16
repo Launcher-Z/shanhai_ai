@@ -1,0 +1,63 @@
+{% extends 'base.html' %}{% block body_class %}home-page{% endblock %}{% block content %}
+<div class="storm-scene" aria-hidden="true">
+  <div class="storm-image storm-background"></div>
+  <div class="storm-image storm-house"></div>
+  <div class="storm-image storm-foreground"></div>
+  <canvas class="storm-rain"></canvas>
+</div>
+<div class="landing">
+  <section class="intro"><p class="eyebrow">图像 · 识别 · 创造</p><h1>山海有象，<br><span>万物可识。</span></h1><p class="lead">从一幅图开始，和人工智能一起探索山海。</p></section>
+  <section class="login-card"><div class="card-heading"><h2>再绘山海经</h2></div><p class="muted">选择你的班级，输入真实姓名。</p>
+    {% if classes %}<form method="post" action="{{ url_for('student.login') }}" id="login-form"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="device" id="device"><label for="class_id">所在班级</label><select name="class_id" id="class_id" required><option value="">请选择班级</option>{% for c in classes %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}</select><label for="name">真实姓名</label><input name="name" id="name" placeholder="请输入姓名" required maxlength="30" autocomplete="name"><button type="submit">进入学习 <span>→</span></button></form>
+    {% else %}<div class="empty">还没有班级，请老师先创建班级。</div>{% endif %}
+  </section>
+</div>
+<script>
+// 同一画面的不同区域以不同幅度移动，形成轻量的前后景视差。
+const layers = document.querySelectorAll('.storm-image');
+const motionAllowed = window.matchMedia('(prefers-reduced-motion: no-preference) and (pointer: fine)');
+if (layers.length && motionAllowed.matches) {
+  let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+  let lastMove = 0;
+  const depths = [4, 13, 24];
+  window.addEventListener('pointermove', (event) => {
+    targetX = event.clientX / window.innerWidth * 2 - 1;
+    targetY = event.clientY / window.innerHeight * 2 - 1;
+    lastMove = performance.now();
+  }, { passive: true });
+  // 指针静止后缓慢漂移；切换到其他页面时浏览器会自动暂停动画帧。
+  const animate = (time) => {
+    if (!motionAllowed.matches) {
+      layers.forEach((layer) => { layer.style.transform = ''; });
+      return;
+    }
+    if (time - lastMove > 4000) {
+      targetX = Math.sin(time / 6500) * .25;
+      targetY = Math.sin(time / 9000) * .18;
+    }
+    currentX += (targetX - currentX) * .035;
+    currentY += (targetY - currentY) * .035;
+    layers.forEach((layer, index) => {
+      const x = -currentX * depths[index];
+      const y = -currentY * depths[index] * .45;
+      layer.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1.06)`;
+    });
+    requestAnimationFrame(animate);
+  };
+  requestAnimationFrame(animate);
+}
+const form = document.getElementById('login-form');
+if (form) form.addEventListener('submit', (event) => {
+  try {
+    // 设备标识保存在当前浏览器，不包含姓名或设备硬件信息。
+    let device = localStorage.getItem('shanhai_device');
+    if (!device) {
+      const bytes = new Uint8Array(24); crypto.getRandomValues(bytes);
+      device = Array.from(bytes, n => n.toString(16).padStart(2, '0')).join('');
+      localStorage.setItem('shanhai_device', device);
+    }
+    document.getElementById('device').value = device;
+    form.querySelector('button').disabled = true;
+  } catch (_) { event.preventDefault(); alert('无法保存设备标识，请允许浏览器保存本站数据后重试。'); }
+});
+</script><script src="{{ url_for('static', filename='rain.js') }}" defer></script>{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block body_class %}teacher-page{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='teacher.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='worksheet-teacher.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='animal-analysis.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='animal-chart.css') }}">
+{% endblock %}
+{% block content %}
+<div class="console-header">
+<header class="console-heading">
+  <div><p class="eyebrow">再绘山海经 · 教师端</p><h1>教学工作台</h1></div>
+  <form method="post" action="{{ url_for('student.logout') }}"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="secondary compact">退出教师端</button></form>
+</header>
+<nav class="console-tabs" aria-label="教师端功能">
+  {% for key, label in [('members','班级与成员'),('dashboard','课堂概览'),('analysis','札记分析')] %}
+  <a href="{{ url_for('teacher.dashboard', tab=key, class_id=selected_class_id or '') }}" {% if (active_tab|default('members')) == key %}aria-current="page"{% endif %}>{{ label }}{% if key == 'members' and scope is defined and scope.summary.pending %}<span>{{ scope.summary.pending }} 份待审</span>{% endif %}</a>
+  {% endfor %}
+</nav>
+</div>
+{% block console_content %}{% endblock %}
+<script src="{{ url_for('static', filename='teacher.js') }}" defer></script>
+{% endblock %}

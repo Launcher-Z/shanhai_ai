@@ -1,0 +1,159 @@
+{
+  "classes": [
+    {
+      "name": "金丝猴",
+      "images": [
+        {
+          "id": "monkey-1",
+          "file": "monkey-1.png"
+        },
+        {
+          "id": "monkey-2",
+          "file": "monkey-2.png"
+        },
+        {
+          "id": "monkey-3",
+          "file": "monkey-3.png"
+        },
+        {
+          "id": "monkey-4",
+          "file": "monkey-4.png"
+        },
+        {
+          "id": "monkey-5",
+          "file": "monkey-5.png"
+        },
+        {
+          "id": "monkey-6",
+          "file": "monkey-6.png"
+        },
+        {
+          "id": "monkey-7",
+          "file": "monkey-7.png"
+        },
+        {
+          "id": "monkey-8",
+          "file": "monkey-8.png"
+        },
+        {
+          "id": "monkey-9",
+          "file": "monkey-9.png"
+        },
+        {
+          "id": "monkey-10",
+          "file": "monkey-10.png"
+        }
+      ]
+    },
+    {
+      "name": "雪豹",
+      "images": [
+        {
+          "id": "snow-1",
+          "file": "snow-1.png"
+        },
+        {
+          "id": "snow-2",
+          "file": "snow-2.png"
+        },
+        {
+          "id": "snow-3",
+          "file": "snow-3.png"
+        },
+        {
+          "id": "snow-4",
+          "file": "snow-4.png"
+        },
+        {
+          "id": "snow-5",
+          "file": "snow-5.png"
+        },
+        {
+          "id": "snow-6",
+          "file": "snow-6.png"
+        },
+        {
+          "id": "snow-7",
+          "file": "snow-7.png"
+        },
+        {
+          "id": "snow-8",
+          "file": "snow-8.png"
+        },
+        {
+          "id": "snow-9",
+          "file": "snow-9.png"
+        },
+        {
+          "id": "snow-10",
+          "file": "snow-10.png"
+        }
+      ]
+    }
+  ],
+  "testing": [
+    {
+      "file": "test-1.png",
+      "truth": "雪豹",
+      "kind": "known",
+      "id": "test-1",
+      "number": 1
+    },
+    {
+      "file": "test-2.png",
+      "truth": "金丝猴",
+      "kind": "known",
+      "id": "test-2",
+      "number": 2
+    },
+    {
+      "file": "test-3.png",
+      "truth": "雪豹",
+      "kind": "known",
+      "id": "test-3",
+      "number": 3
+    },
+    {
+      "file": "test-4.png",
+      "truth": "雪豹",
+      "kind": "known",
+      "id": "test-4",
+      "number": 4
+    },
+    {
+      "file": "test-5.png",
+      "truth": "雪豹",
+      "kind": "known",
+      "id": "test-5",
+      "number": 5
+    },
+    {
+      "file": "test-6.jpeg",
+      "truth": null,
+      "kind": "challenge",
+      "id": "test-6",
+      "number": 6
+    },
+    {
+      "file": "test-7.jpeg",
+      "truth": null,
+      "kind": "challenge",
+      "id": "test-7",
+      "number": 7
+    },
+    {
+      "file": "test-8.jpeg",
+      "truth": null,
+      "kind": "challenge",
+      "id": "test-8",
+      "number": 8
+    },
+    {
+      "file": "test-9.png",
+      "truth": null,
+      "kind": "challenge",
+      "id": "test-9",
+      "number": 9
+    }
+  ]
+}

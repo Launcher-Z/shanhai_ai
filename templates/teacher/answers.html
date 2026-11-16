@@ -1,0 +1,142 @@
+{% from 'teacher/creation_answer.html' import creation_answer %}
+{% from 'teacher/training_evidence.html' import training_evidence %}
+{% from 'teacher/decision_answer.html' import decision_answer %}
+{% from 'teacher/knn_captures_answer.html' import knn_captures_answer %}
+{% macro render_question(record, section, q, reviewing=false, is_focus=false) %}
+{% set q_review = (record.question_reviews or {}).get(q.id) %}
+<article class="review-answer{% if is_focus %} is-review-card{% endif %}{% if q_review %} is-q-{{ q_review.status }}{% endif %}" data-question-id="{{ q.id }}">
+  <div class="review-answer-head">
+    {% if is_focus %}<span class="answer-stage-tag">T{{ section.step + 1 }} · {{ section.title }}</span>{% endif %}
+    <h4>{{ q.prompt }}</h4>
+  </div>
+  {% if q.get('pixel_context') %}<p class="hint">本题约定：白色＝{{ q.pixel_context.white }}，黑色＝{{ 1 - q.pixel_context.white }}</p><pre aria-label="本题原图，1为黑格，0为白格">原图（1黑、0白）：{% for row in q.pixel_context.pixels|batch(5) %}
+{{ row|join('') }}{% endfor %}</pre>{% endif %}
+  {% set answer = record.answers.get(q.id, '') %}
+  {% set exp_table = answer|structured_answer(q) %}
+  {% if q.type in ['single','multiple'] %}<p class="review-student-answer">{% for o in q.options %}{% if (q.type == 'single' and o.value == answer) or (q.type == 'multiple' and o.value in answer) %}{{ o.label }}；{% endif %}{% endfor %}{% if not answer %}未填写{% endif %}</p>
+  {% elif q.get('decision_tree') %}{{ decision_answer(answer) }}
+  {% elif q.get('knn_captures') %}{{ knn_captures_answer(answer) }}
+  {% elif q.get('record_form') == 'training_evidence' %}{{ training_evidence(answer) }}
+  {% elif q.get('record_form') %}<div class="review-creation-wrap">{{ creation_answer(answer) }}</div>
+  {% elif exp_table %}<div class="review-exp-wrap"><table class="teacher-exp-table"><thead><tr>{% for h in exp_table.headers %}<th>{{ h }}</th>{% endfor %}</tr></thead><tbody>{% for row in exp_table.rows %}<tr>{% for cell in row %}<td class="{{ 'tone-' + cell.tone if cell.tone else '' }}{{ ' has-digit-svg' if cell.bits else '' }}">{% if cell.bits %}<svg class="teacher-digit-svg" viewBox="0 0 12 18" width="36" height="54" role="img" aria-label="{{ cell.alt|default('手写数字笔迹') }}"><rect width="12" height="18" fill="#fff"/>{% for b in cell.bits %}{% if b == '1' %}<rect x="{{ loop.index0 % 12 }}" y="{{ loop.index0 // 12 }}" width="1" height="1" fill="#2c4a3e"/>{% endif %}{% endfor %}</svg>{% else %}{{ cell.text }}{% endif %}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+  {% else %}<p class="review-student-answer">{{ answer if answer != '' else '未填写' }}</p>{% endif %}
+  {% if q.type != 'text' %}{% set result = record.results.get(q.id) %}<p class="hint">{{ ('当前回答正确' if result.correct else '当前回答有误') if result else '尚未正式提交' }}{% if result and result.attempts == 2 %} · 已订正一次{% endif %}</p>
+  {% elif reviewing and is_focus and q.get('review', true) and record.stage_states[section.id].status == 'pending' %}
+  <div class="question-review-box" data-question-review="{{ q.id }}" data-q-review-url="{{ url_for('worksheet.review_question', record_id=record.id) }}">
+    <div class="q-review-head">
+      <span class="q-badge {{ 'is-' ~ q_review.status if q_review else 'is-pending' }}">{{ '已批：通过' if q_review and q_review.status == 'approved' else ('已批：需修改（待整份结算退回）' if q_review and q_review.status == 'returned' else '待批阅') }}</span>
+      <span class="q-review-msg" data-q-review-msg role="status" aria-live="polite"></span>
+    </div>
+    <textarea class="q-review-input" data-q-feedback rows="2" maxlength="2000" placeholder="{{ '写下针对这道题的评语（选填）…' if record.activity_id == 'lesson-9-task-2' else '写下针对这道题的评语或修改建议（驳回该题时必填）…' }}">{{ q_review.feedback if q_review else '' }}</textarea>
+    <div class="q-review-actions">
+      <button type="button" class="q-btn-approve" data-q-review-btn="approve">{{ '更新为通过' if q_review and q_review.status != 'approved' else '通过此题' }}</button>
+      {% if record.activity_id != 'lesson-9-task-2' %}<button type="button" class="secondary q-btn-return" data-q-review-btn="return">{{ '更新为驳回' if q_review and q_review.status != 'returned' else '驳回此题' }}</button>{% endif %}
+    </div>
+  </div>
+  {% elif q.type == 'text' and (q_review or q.id in (record.returned_questions or [])) %}
+  {% set eff_status = q_review.status if q_review else 'returned' %}
+  {% set eff_feedback = q_review.feedback if q_review else record.feedback %}
+  <p class="q-review-summary {{ 'is-' ~ eff_status }}"><strong>{{ '该题已通过' if eff_status == 'approved' else '该题已驳回待修改' }}</strong>{% if eff_feedback %}：{{ eff_feedback }}{% endif %}</p>
+  {% endif %}
+</article>
+{% endmacro %}
+
+{% macro render_objective_row(record, section, q) %}
+{% set answer = record.answers.get(q.id, '') %}
+{% set result = record.results.get(q.id) %}
+<div class="obj-answer-row">
+  <div class="obj-q"><span class="obj-stage">T{{ section.step + 1 }}</span><span>{{ q.prompt }}</span></div>
+  <div class="obj-a">
+    {% if q.type in ['single','multiple'] %}
+      {% set ns = namespace(found=false) %}
+      {% for o in q.options %}{% if (q.type == 'single' and o.value == answer) or (q.type == 'multiple' and o.value in answer) %}{% if ns.found %}；{% endif %}{{ o.label }}{% set ns.found = true %}{% endif %}{% endfor %}
+      {% if not ns.found %}<span class="muted">未填写</span>{% endif %}
+    {% else %}
+      {{ answer if answer != '' else '未填写' }}
+    {% endif %}
+  </div>
+  <div class="obj-status {{ 'is-correct' if result and result.correct else ('is-wrong' if result else 'is-draft') }}">
+    {{ ('✓ 正确' if result.correct else '✗ 有误') if result else '未提交' }}{% if result and result.attempts == 2 %} · 订正{% endif %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro answer_sections(record, reviewing=false) %}
+{% set obj_ns = namespace(count=0) %}
+{% for section in record.definition.sections %}{% for q in section.questions %}{% if q.type != 'text' %}{% set obj_ns.count = obj_ns.count + 1 %}{% endif %}{% endfor %}{% endfor %}
+{% if reviewing %}
+  {% set ns = namespace(focus_count=0, pending_left=0, context_text_count=0) %}
+  {% set reviews = record.question_reviews or {} %}
+  {% for section in record.definition.sections %}
+    {% for q in section.questions %}
+      {% if record.stage_states[section.id].status == 'pending' and q.type == 'text' and q.get('review', true) and (q.get('required') or record.answers.get(q.id)) %}
+        {% set ns.focus_count = ns.focus_count + 1 %}
+        {% if q.id not in reviews %}{% set ns.pending_left = ns.pending_left + 1 %}{% endif %}
+      {% elif q.type == 'text' %}
+        {% set ns.context_text_count = ns.context_text_count + 1 %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+  <div class="review-focus-group">
+    <div class="focus-group-head"><strong>逐题批阅 · 待审核题目</strong><span>共 {{ ns.focus_count }} 题{% if ns.pending_left != ns.focus_count %}（尚余 {{ ns.pending_left }} 题未批）{% endif %}</span></div>
+    {% for section in record.definition.sections %}
+      {% if record.stage_states[section.id].status == 'pending' %}
+        {% for q in section.questions %}
+          {% if q.type == 'text' and q.get('review', true) and (q.get('required') or record.answers.get(q.id)) %}
+            {{ render_question(record, section, q, true, true) }}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% if ns.context_text_count or obj_ns.count %}
+  <details class="review-context-fold">
+    <summary>查看固定客观题与免审／已通过内容（客观题 {{ obj_ns.count }} 题{% if ns.context_text_count %} · 其余 {{ ns.context_text_count }} 题{% endif %}）</summary>
+    <div class="review-context-body">
+    {% if ns.context_text_count %}
+      {% for section in record.definition.sections %}
+        {% set sec_ns = namespace(has_ctx=false) %}
+        {% for q in section.questions %}
+          {% if q.type == 'text' and not (record.stage_states[section.id].status == 'pending' and q.get('review', true) and (q.get('required') or record.answers.get(q.id))) %}{% set sec_ns.has_ctx = true %}{% endif %}
+        {% endfor %}
+        {% if sec_ns.has_ctx %}
+        <section class="answer-section"><h3>T{{ section.step + 1 }} · {{ section.title }}{% if section.get('optional') %}<small>选做</small>{% endif %}</h3>
+        {% for q in section.questions %}
+          {% if q.type == 'text' and not (record.stage_states[section.id].status == 'pending' and q.get('review', true) and (q.get('required') or record.answers.get(q.id))) %}
+            {{ render_question(record, section, q, false, false) }}
+          {% endif %}
+        {% endfor %}
+        </section>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    {% if obj_ns.count %}
+      <div class="obj-answer-list">
+        {% for section in record.definition.sections %}{% for q in section.questions %}{% if q.type != 'text' %}{{ render_objective_row(record, section, q) }}{% endif %}{% endfor %}{% endfor %}
+      </div>
+    {% endif %}
+    </div>
+  </details>
+  {% endif %}
+{% else %}
+  {% for section in record.definition.sections %}
+    {% set text_ns = namespace(has_text=false) %}
+    {% for q in section.questions %}{% if q.type == 'text' %}{% set text_ns.has_text = true %}{% endif %}{% endfor %}
+    {% if text_ns.has_text %}
+    <section class="answer-section"><h3>T{{ section.step + 1 }} · {{ section.title }}{% if section.get('optional') %}<small>选做</small>{% endif %}</h3>
+    {% for q in section.questions %}{% if q.type == 'text' %}{{ render_question(record, section, q, false, false) }}{% endif %}{% endfor %}
+    </section>
+    {% endif %}
+  {% endfor %}
+  {% if obj_ns.count %}
+  <details class="review-context-fold">
+    <summary>查看固定客观题作答（共 {{ obj_ns.count }} 题{% if record.has_objectives %} · 首次答对 {{ record.first_correct or 0 }}/{{ obj_ns.count }}{% endif %}）</summary>
+    <div class="review-context-body">
+      <div class="obj-answer-list">
+        {% for section in record.definition.sections %}{% for q in section.questions %}{% if q.type != 'text' %}{{ render_objective_row(record, section, q) }}{% endif %}{% endfor %}{% endfor %}
+      </div>
+    </div>
+  </details>
+  {% endif %}
+{% endif %}
+{% endmacro %}

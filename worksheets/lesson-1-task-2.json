@@ -1,0 +1,11 @@
+{
+  "activity_id":"lesson-1-task-2", "version":2,
+  "title":"给小熊猫戴礼帽 · 学习札记",
+  "intro":"完成绘画后，直接提交当前作品。",
+  "sections":[{
+    "id":"first-design", "step":0, "title":"我的第一次设计", "optional":false,
+    "questions":[
+      {"id":"pixel-work", "type":"text", "prompt":"我的作品", "required":true, "review":true, "record_form":"pixel", "max_length":2000}
+    ]
+  }]
+}

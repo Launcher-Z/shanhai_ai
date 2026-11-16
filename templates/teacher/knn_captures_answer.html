@@ -1,0 +1,70 @@
+{% macro knn_captures_answer(value) %}
+{% set items = value|knn_captures_data %}
+{% if not items %}
+<p class="review-student-answer">未填写</p>
+{% else %}
+<div class="teacher-knn-grid">
+  {% for item in items %}
+  <figure class="teacher-knn-card{% if not item.captured %} is-empty{% endif %}">
+    <div class="teacher-knn-head">
+      <span class="teacher-knn-beast">
+        <img src="{{ url_for('static', filename='bestiary/display/' + item.file + '.png') }}" alt="" width="24" height="24">
+        <strong>{{ item.beast }}</strong>
+      </span>
+      {% if item.captured %}
+      <span class="teacher-knn-badge is-{{ item.result }}">{{ item.result_label }}</span>
+      {% else %}
+      <span class="teacher-knn-badge is-empty">未截取</span>
+      {% endif %}
+    </div>
+    {% if item.captured %}
+    {% set ox = 28 %}{% set oy = 204 %}{% set span = 180 %}{% set scale = 1.8 %}
+    <svg class="teacher-knn-svg" viewBox="0 0 230 226" role="img" aria-label="{{ item.beast }}坐标模拟图">
+      <defs>
+        <clipPath id="t-knn-clip-{{ loop.index }}-{{ item.target.x }}-{{ item.target.y }}">
+          <rect x="{{ ox }}" y="{{ oy - span }}" width="{{ span }}" height="{{ span }}"/>
+        </clipPath>
+      </defs>
+      <rect x="{{ ox }}" y="{{ oy - span }}" width="{{ span }}" height="{{ span }}" fill="#fcfaf1" stroke="#71856833" stroke-width="1"/>
+      {% for n in [20, 40, 60, 80, 100] %}
+      <line x1="{{ ox + n * scale }}" y1="{{ oy - span }}" x2="{{ ox + n * scale }}" y2="{{ oy }}" stroke="#7185682b" stroke-width="1"/>
+      <line x1="{{ ox }}" y1="{{ oy - n * scale }}" x2="{{ ox + span }}" y2="{{ oy - n * scale }}" stroke="#7185682b" stroke-width="1"/>
+      <text x="{{ ox + n * scale }}" y="{{ oy + 12 }}" text-anchor="middle" font-size="8" fill="#5a6d5e">{{ n }}</text>
+      <text x="{{ ox - 5 }}" y="{{ oy - n * scale + 3 }}" text-anchor="end" font-size="8" fill="#5a6d5e">{{ n }}</text>
+      {% endfor %}
+      <line x1="{{ ox }}" y1="{{ oy }}" x2="{{ ox + span + 6 }}" y2="{{ oy }}" stroke="#4f6659" stroke-width="1.2"/>
+      <line x1="{{ ox }}" y1="{{ oy }}" x2="{{ ox }}" y2="{{ oy - span - 6 }}" stroke="#4f6659" stroke-width="1.2"/>
+      <text x="{{ ox - 4 }}" y="{{ oy + 11 }}" text-anchor="end" font-size="8" fill="#5a6d5e">0</text>
+      <g clip-path="url(#t-knn-clip-{{ loop.index }}-{{ item.target.x }}-{{ item.target.y }})">
+        {% if item.radius > 0 %}
+        <circle cx="{{ ox + item.target.x * scale }}" cy="{{ oy - item.target.y * scale }}" r="{{ '%.2f'|format(item.radius * scale) }}" fill="#42695d14" stroke="#42695d7a" stroke-width="1" stroke-dasharray="4 3"/>
+        {% endif %}
+      </g>
+      {% for p in item.neighbors %}
+      <line x1="{{ ox + item.target.x * scale }}" y1="{{ oy - item.target.y * scale }}" x2="{{ ox + p.x * scale }}" y2="{{ oy - p.y * scale }}" stroke="#4a6b56" stroke-width="1.1" stroke-dasharray="3 2"/>
+      {% endfor %}
+      {% for p in item.samples %}
+      {% set is_nbr = p.id in item.neighbor_ids %}
+      <g opacity="{{ '1' if is_nbr else '0.38' }}">
+        {% if p.type == 'monkey' %}
+        <circle cx="{{ ox + p.x * scale }}" cy="{{ oy - p.y * scale }}" r="3.8" fill="#d6a338" stroke="#2f433a" stroke-width="0.9"/>
+        {% else %}
+        <rect x="{{ ox + p.x * scale - 3.5 }}" y="{{ oy - p.y * scale - 3.5 }}" width="7" height="7" rx="1" fill="#557b8a" stroke="#2f433a" stroke-width="0.9"/>
+        {% endif %}
+      </g>
+      {% endfor %}
+      <circle cx="{{ ox + item.target.x * scale }}" cy="{{ oy - item.target.y * scale }}" r="7.5" fill="#953d2e1c" stroke="#953d2e" stroke-width="1.2"/>
+      <circle cx="{{ ox + item.target.x * scale }}" cy="{{ oy - item.target.y * scale }}" r="3" fill="#953d2e"/>
+    </svg>
+    <figcaption class="teacher-knn-meta">
+      <span>坐标 ({{ item.target.x }}, {{ item.target.y }}) · K={{ item.k }}</span>
+      <span>金丝猴 {{ item.monkey }} / 雪豹 {{ item.leopard }}</span>
+    </figcaption>
+    {% else %}
+    <div class="teacher-knn-placeholder">学生尚未截取该异兽</div>
+    {% endif %}
+  </figure>
+  {% endfor %}
+</div>
+{% endif %}
+{% endmacro %}

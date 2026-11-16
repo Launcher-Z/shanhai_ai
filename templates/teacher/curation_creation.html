@@ -12,6 +12,7 @@
       <h4>{{ task_label }} · 作品展览挑选</h4>
       <p class="muted curation-stats-line">当前查看「{{ scope_label }}」：待审核 <strong data-stat-pending>{{ stats.scope_pending }}</strong> 件 · 已通过 <strong data-stat-approved>{{ stats.scope_total }}</strong> 件（已选中 <strong data-stat-staged>{{ stats.scope_staged }}</strong> 件）{% if stats.scope_returned %} · 已驳回 <strong data-stat-returned>{{ stats.scope_returned }}</strong> 件{% endif %} ｜ 全校本任务当前展出 <strong data-stat-global-active>{{ stats.active }}</strong> 件。</p>
     </div>
+    <button type="button" class="secondary compact curation-refresh-btn" data-refresh-activity="{{ activity.id }}" data-refresh-hash="#creation-works-{{ activity.id }}">刷新作品</button>
   </div>
   <section class="sample-publication">
     <div>

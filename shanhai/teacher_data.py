@@ -704,7 +704,14 @@ def analysis(scope, lesson_id=None):
                 for q in s["questions"]
             )
     volumes = []
+    nav_volumes = []
     for volume in COURSE_VOLUMES:
+        all_v_lessons = [l for l in scope["lessons"] if l["volume_id"] == volume["id"]]
+        if all_v_lessons:
+            nav_volumes.append({
+                "id": volume["id"], "number": volume["number"], "title": volume["title"],
+                "lessons": all_v_lessons,
+            })
         v_lessons = [l for l in lessons if l["volume_id"] == volume["id"]]
         if v_lessons:
             v_ids = {a["id"] for l in v_lessons for a in l["activities"] if not a.get("optional")}
@@ -714,7 +721,8 @@ def analysis(scope, lesson_id=None):
                 "lessons": v_lessons,
                 "summary": summarize(student_list, v_records, v_ids),
             })
-    return {"volumes": volumes, "lessons": lessons, "summary": summarize(student_list, selected_records, selected_ids)}
+    return {"volumes": volumes, "nav_volumes": nav_volumes, "lessons": lessons,
+            "summary": summarize(student_list, selected_records, selected_ids)}
 
 
 def curations(class_id=None, digit=None, lesson_id=None):

@@ -33,10 +33,11 @@ if __name__ == "__main__":
             cert_path = os.environ.get("SHANHAI_SSL_CERT")
             key_path = os.environ.get("SHANHAI_SSL_KEY")
             if not cert_path or not key_path:
+                from pathlib import Path
                 from shanhai.certs import ensure_lan_cert
 
-                cert_dir = os.path.join(app.config["DATA_DIR"], "certs")
-                c, k, _ = ensure_lan_cert(cert_dir)
+                cert_dir = os.environ.get("SHANHAI_CERTS_DIR", str(Path(__file__).resolve().parent / "certs"))
+                c, k, _, _ = ensure_lan_cert(cert_dir)
                 cert_path, key_path = str(c), str(k)
 
             server = CherootServer(("0.0.0.0", port), app, numthreads=threads)

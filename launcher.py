@@ -32,7 +32,42 @@ DEFAULT_CONFIG = {
     "progress_locks": True,
     "auto_open_browser": True,
     "https": True,
+    "show_https_notice": True,
 }
+
+
+CERT_INSTALL_GUIDE = """山海AI课堂平台 · HTTPS 根证书安装说明
+======================================
+
+为什么要安装证书？
+----------------
+本平台在局域网启用 HTTPS 时使用本地自签名根证书。未安装该证书前，浏览器会提示
+“您的连接不是私密连接 / 存在安全风险”。学生端可通过以下任一方式正常访问：
+
+方式一：临时跳过（随堂最快，无需管理员权限）
+--------------------------------------------
+在浏览器警告页面依次点击：「高级」 -> 「继续前往 ……（不安全）」即可直接进入。
+
+方式二：导入受信任根证书（永久不再弹窗，适合机房统一部署）
+----------------------------------------------------------
+【图形界面步骤（Windows）】
+1. 双击同目录下的证书文件（例如 shanhai_lan_ca.crt）。
+2. 点击「安装证书...」。
+3. 存储位置选择「当前用户」（或「本地计算机」使本机所有账号生效，需管理员权限），点击「下一步」。
+4. 选择「将所有的证书都放入下列存储」 -> 点击「浏览...」 -> 选中「受信任的根证书颁发机构」 -> 点击「确定」。
+5. 点击「下一步」 -> 「完成」，弹出安全警告时点击「是」。
+6. 完全关闭并重启浏览器即可生效。
+
+【PowerShell 一行命令（适合机房批量执行）】
+在证书所在目录运行：
+  当前用户生效：
+    Import-Certificate -FilePath "shanhai_lan_ca.crt" -CertStoreLocation "Cert:\\CurrentUser\\Root"
+  本机所有用户生效（需管理员权限）：
+    Import-Certificate -FilePath "shanhai_lan_ca.crt" -CertStoreLocation "Cert:\\LocalMachine\\Root"
+
+提示：只要教师机保留 data / certs 目录中的根证书，即使以后教师机更换局域网 IP，
+已导入过该根证书的学生机也无需重新安装。
+"""
 
 
 def load_config():
@@ -100,6 +135,10 @@ def get_lan_ip():
 
 def data_dir_path():
     return Path(os.environ.get("SHANHAI_DATA_DIR", str(ROOT / "data")))
+
+
+def certs_dir_path():
+    return Path(os.environ.get("SHANHAI_CERTS_DIR", str(ROOT / "certs")))
 
 
 def backup_data(data_dir=None):
@@ -205,6 +244,7 @@ class LauncherApp:
         self.locks_var = tk.BooleanVar(value=bool(cfg["progress_locks"]))
         self.auto_open_var = tk.BooleanVar(value=bool(cfg["auto_open_browser"]))
         self.https_var = tk.BooleanVar(value=bool(cfg.get("https", True)))
+        self.show_https_notice = bool(cfg.get("show_https_notice", True))
         self.status_var = tk.StringVar(value="状态：未启动")
         scheme = "https" if self.https_var.get() else "http"
         self.teacher_url_var = tk.StringVar(value=f"{scheme}://127.0.0.1:{cfg['port']}/teacher")
@@ -352,7 +392,7 @@ class LauncherApp:
             sys.path.insert(0, str(ROOT))
         from shanhai.certs import ensure_lan_cert
 
-        return ensure_lan_cert(data_dir_path() / "certs", self.lan_ips)
+        return ensure_lan_cert(certs_dir_path(), self.lan_ips)
 
     def start_server(self):
         parsed = self._validate_inputs()
@@ -369,6 +409,7 @@ class LauncherApp:
             "progress_locks": locks,
             "auto_open_browser": auto_open,
             "https": use_https,
+            "show_https_notice": self.show_https_notice,
         })
 
         py_exe = RUNTIME_DIR / "python.exe"
@@ -385,11 +426,12 @@ class LauncherApp:
 
         if use_https:
             try:
-                cert_path, key_path, regenerated = self._ensure_cert()
+                cert_path, key_path, _, regenerated = self._ensure_cert()
+                env["SHANHAI_CERTS_DIR"] = str(certs_dir_path())
                 env["SHANHAI_SSL_CERT"] = str(cert_path)
                 env["SHANHAI_SSL_KEY"] = str(key_path)
                 if regenerated:
-                    self._append_log(f"已生成局域网 HTTPS 证书：{cert_path}")
+                    self._append_log(f"已签发局域网 HTTPS 服务器证书：{cert_path}")
             except Exception as exc:
                 messagebox.showerror("证书生成失败", f"无法生成 HTTPS 证书：{exc}")
                 return
@@ -417,8 +459,60 @@ class LauncherApp:
         self._append_log(f"正在启动服务（{proto}，端口={port}，线程={threads}，进度解锁={'开启' if locks else '关闭'}）...")
 
         threading.Thread(target=self._read_proc_output, daemon=True).start()
+        if use_https and self.show_https_notice:
+            self._show_https_notice_dialog(port, threads, locks, auto_open, use_https)
         if auto_open:
             self.root.after(1500, self.open_teacher)
+
+    def _show_https_notice_dialog(self, port, threads, locks, auto_open, use_https):
+        dlg = tk.Toplevel(self.root)
+        dlg.title("HTTPS 访问提醒")
+        dlg.resizable(False, False)
+        dlg.transient(self.root)
+        dlg.grab_set()
+
+        body = ttk.Frame(dlg, padding=16)
+        body.pack(fill="both", expand=True)
+
+        ttk.Label(
+            body,
+            text="已启用局域网 HTTPS 访问，学生端首次打开可能出现安全提示：",
+            font=("Microsoft YaHei UI", 10, "bold"),
+        ).pack(anchor="w", pady=(0, 8))
+
+        tips = (
+            "1. 随堂临时进入：让学生在浏览器提示页点击「高级」→「继续前往 ……（不安全）」即可。\n"
+            "2. 永久免弹窗（规避提示）：点击主界面的「导出HTTPS证书」，按附带说明将根证书\n"
+            "   导入学生机的「受信任的根证书颁发机构」，导入后不再弹窗。"
+        )
+        ttk.Label(body, text=tips, justify="left", wraplength=480).pack(anchor="w", pady=(0, 12))
+
+        dont_show_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(body, text="下次不再弹出此提醒", variable=dont_show_var).pack(anchor="w", pady=(0, 12))
+
+        def on_close():
+            if dont_show_var.get():
+                self.show_https_notice = False
+                save_config({
+                    "port": port,
+                    "threads": threads,
+                    "progress_locks": locks,
+                    "auto_open_browser": auto_open,
+                    "https": use_https,
+                    "show_https_notice": False,
+                })
+            dlg.destroy()
+
+        dlg.protocol("WM_DELETE_WINDOW", on_close)
+        btn_bar = ttk.Frame(body)
+        btn_bar.pack(fill="x")
+        ttk.Button(btn_bar, text="我知道了", command=on_close).pack(side="right")
+
+        dlg.update_idletasks()
+        x = self.root.winfo_rootx() + max(20, (self.root.winfo_width() - dlg.winfo_width()) // 2)
+        y = self.root.winfo_rooty() + max(20, (self.root.winfo_height() - dlg.winfo_height()) // 2)
+        dlg.geometry(f"+{x}+{y}")
+        self.root.wait_window(dlg)
 
     def _read_proc_output(self):
         proc = self.proc
@@ -517,9 +611,9 @@ class LauncherApp:
 
     def on_export_cert(self):
         try:
-            cert_path, _, regenerated = self._ensure_cert()
+            _, _, ca_path, regenerated = self._ensure_cert()
             if regenerated:
-                self._append_log(f"已生成局域网 HTTPS 证书：{cert_path}")
+                self._append_log(f"已准备局域网 HTTPS 根证书：{ca_path}")
         except Exception as exc:
             messagebox.showerror("生成证书失败", str(exc))
             return
@@ -532,13 +626,17 @@ class LauncherApp:
         if not save_to:
             return
         try:
-            shutil.copy2(cert_path, save_to)
-            self._append_log(f"已导出 HTTPS 证书到：{save_to}")
+            shutil.copy2(ca_path, save_to)
+            guide_path = Path(save_to).with_name("HTTPS证书安装说明.txt")
+            guide_path.write_text(CERT_INSTALL_GUIDE, encoding="utf-8")
+            self._append_log(f"已导出 HTTPS 根证书到：{save_to}")
+            self._append_log(f"已生成证书安装说明：{guide_path}")
             messagebox.showinfo(
                 "导出成功",
-                f"证书已保存到：\n{save_to}\n\n"
-                "提示：在学生机（或域控/极域批量脚本）中将该证书导入“受信任的根证书颁发机构”后，\n"
-                "访问学生端将不再出现“连接不是私密连接”提示。",
+                f"根证书已保存到：\n{save_to}\n\n"
+                f"安装说明已一并保存到：\n{guide_path}\n\n"
+                "提示：在学生机导入“受信任的根证书颁发机构”后，即使以后教师机更换 IP，\n"
+                "只要保留 certs\\ 目录，学生机也无需重新安装证书。",
             )
         except Exception as exc:
             messagebox.showerror("导出失败", str(exc))

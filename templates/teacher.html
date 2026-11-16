@@ -7,8 +7,8 @@
   <div class="toolbar-actions">
     <form method="get" class="scope-filter">
       <input type="hidden" name="tab" value="{{ active_tab }}">
+      {% if active_tab == 'analysis' and lesson_id %}<input type="hidden" name="lesson_id" value="{{ lesson_id }}">{% endif %}
       <label for="scope-class">班级<select id="scope-class" name="class_id"><option value="">全部班级</option>{% for c in classes %}<option value="{{ c.id }}" {% if selected_class_id == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></label>
-      {% if active_tab == 'analysis' %}<label for="scope-lesson">课时<select id="scope-lesson" name="lesson_id">{% for l in scope.lessons %}<option value="{{ l.id }}" {% if lesson_id == l.id %}selected{% endif %}>第 {{ l.number }} 课 · {{ l.title }}</option>{% endfor %}<option value="all" {% if lesson_id == 'all' %}selected{% endif %}>全部课时</option></select></label>{% endif %}
       <button class="compact">查看</button>
     </form>
     <form method="post" action="{{ url_for('teacher.create_class') }}" class="global-create-class">

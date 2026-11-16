@@ -4,20 +4,27 @@
 <div class="analysis-caption"><span>有效首答 <strong>{{ report.summary.first_total }}</strong> 次 · 答对 <strong>{{ report.summary.first_correct }}</strong> 次</span><details><summary>统计口径</summary><p>仅计正式提交，未答不计为错误；订正不覆盖首次成绩。不同题目版本分别统计。</p></details></div>
 {% if not report.volumes %}<div class="console-empty"><h3>暂时没有已接入的札记</h3></div>{% endif %}
 <div class="analysis-layout">
-{% if report.volumes %}
+{% if report.nav_volumes %}
 <aside class="analysis-index" aria-label="分析目录">
-  <p class="index-label">卷课目录</p>
+  <div class="index-head">
+    <p class="index-label">卷课目录</p>
+    {% if lesson_id != 'all' %}
+    <a class="index-all-link" href="{{ url_for('teacher.dashboard', tab='analysis', class_id=selected_class_id or '', lesson_id='all') }}">全部课时</a>
+    {% endif %}
+  </div>
   <nav>
-    {% for vol in report.volumes %}
-    <div class="index-volume-group">
-      <a class="index-volume" href="#analysis-{{ vol.id }}"><span>卷{{ vol.number }}</span><strong>{{ vol.title }}</strong></a>
+    {% for vol in report.nav_volumes %}
+    {% set vol_open = (lesson_id == 'all') or (vol.lessons|selectattr('id', 'equalto', lesson_id)|list|length > 0) %}
+    <details class="index-volume-group"{% if vol_open %} open{% endif %}>
+      <summary class="index-volume"><span>卷{{ vol.number }}</span><strong>{{ vol.title }}</strong></summary>
       {% for l in vol.lessons %}
-      <a class="index-lesson" href="#analysis-{{ l.id }}"><span>第 {{ l.number }} 课</span><strong>{{ l.title }}</strong></a>
+      {% set l_loaded = (lesson_id == 'all') or (l.id == lesson_id) %}
+      <a class="index-lesson{% if l.id == lesson_id %} is-current{% endif %}" href="{{ '#analysis-' ~ l.id if l_loaded else url_for('teacher.dashboard', tab='analysis', class_id=selected_class_id or '', lesson_id=l.id) }}" {% if l.id == lesson_id %}aria-current="page"{% endif %}><span>第 {{ l.number }} 课</span><strong>{{ l.title }}</strong></a>
       {% for a in l.activities %}
-      <a class="index-activity" href="#analysis-{{ a.id }}">{{ a.title }}</a>
+      <a class="index-activity{% if open_activity == a.id %} is-current{% endif %}" href="{{ '#analysis-' ~ a.id if l_loaded else url_for('teacher.dashboard', tab='analysis', class_id=selected_class_id or '', lesson_id=l.id, open=a.id) ~ '#analysis-' ~ a.id }}">{{ a.title }}</a>
       {% endfor %}
       {% endfor %}
-    </div>
+    </details>
     {% endfor %}
   </nav>
 </aside>

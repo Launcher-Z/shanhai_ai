@@ -10,14 +10,17 @@
       <h4>课堂手写样本库</h4>
       <p class="muted">当前查看「{{ scope_label }}」：已收集 {{ totals.scope_total }} 张 · 已选用 {{ totals.scope_included }} 张（显示 {{ samples|length }} 张）｜ 全库已收集 {{ totals.total }} 张 · 已选用 {{ totals.included }} 张（每生限 10 张）。</p>
     </div>
-    <form method="get" action="{{ url_for('teacher.dashboard') }}#handwriting-library" class="sample-digit-filter">
-      <input type="hidden" name="tab" value="analysis">
-      <input type="hidden" name="class_id" value="{{ selected_class_id or '' }}">
-      <input type="hidden" name="lesson_id" value="{{ lesson_id or '' }}">
-      <input type="hidden" name="open" value="lesson-7-task-2">
-      <label>数字<select name="digit"><option value="">全部数字</option>{% for n in range(10) %}<option value="{{ n }}" {% if digit == n %}selected{% endif %}>{{ n }}</option>{% endfor %}</select></label>
-      <button class="secondary compact">筛选样本</button>
-    </form>
+    <div class="curation-heading-actions">
+      <button type="button" class="secondary compact curation-refresh-btn" data-refresh-activity="lesson-7-task-2" data-refresh-hash="#handwriting-library">刷新样本</button>
+      <form method="get" action="{{ url_for('teacher.dashboard') }}#handwriting-library" class="sample-digit-filter">
+        <input type="hidden" name="tab" value="analysis">
+        <input type="hidden" name="class_id" value="{{ selected_class_id or '' }}">
+        <input type="hidden" name="lesson_id" value="{{ lesson_id or '' }}">
+        <input type="hidden" name="open" value="lesson-7-task-2">
+        <label>数字<select name="digit"><option value="">全部数字</option>{% for n in range(10) %}<option value="{{ n }}" {% if digit == n %}selected{% endif %}>{{ n }}</option>{% endfor %}</select></label>
+        <button class="secondary compact">筛选样本</button>
+      </form>
+    </div>
   </div>
   <section class="sample-publication">
     <div>

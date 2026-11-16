@@ -17,7 +17,24 @@
       }
     }
     analysisIndex.addEventListener('click', event => {
-      const link = event.target.closest('a');
+      const lessonLink = event.target.closest('a.index-lesson');
+      if (lessonLink && lessonLink.getAttribute('href')?.startsWith('#')) {
+        event.preventDefault();
+        const lessonEl = document.getElementById(lessonLink.hash.slice(1));
+        if (lessonEl) {
+          if (lessonEl.tagName === 'DETAILS') lessonEl.open = true;
+          for (const act of lessonEl.querySelectorAll('details.activity-analysis[open]')) {
+            act.open = false;
+          }
+          lessonEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        for (const a of analysisIndex.querySelectorAll('nav a')) {
+          if (a === lessonLink) a.setAttribute('aria-current', 'location');
+          else a.removeAttribute('aria-current');
+        }
+        return;
+      }
+      const link = event.target.closest('a.index-activity');
       if (link) revealActivity(link.hash);
     });
     if (location.hash) revealActivity(location.hash);
@@ -33,6 +50,24 @@
   const analysisContent = document.querySelector('.analysis-content');
   if (analysisContent) {
     analysisContent.addEventListener('click', event => {
+      const refreshBtn = event.target.closest('.curation-refresh-btn');
+      if (refreshBtn) {
+        const section = refreshBtn.closest('.curation-section');
+        if (section?.querySelector('.teacher-sample-card.is-dirty') && !window.confirm('当前有未保存的勾选或标签改动，刷新将丢失这些改动，确定继续刷新吗？')) {
+          return;
+        }
+        refreshBtn.disabled = true;
+        refreshBtn.textContent = '刷新中...';
+        const url = new URL(location.href);
+        const activityId = refreshBtn.dataset.refreshActivity;
+        if (activityId) url.searchParams.set('open', activityId);
+        const hash = refreshBtn.dataset.refreshHash || '';
+        if (hash) url.hash = hash;
+        const target = url.toString();
+        if (target === location.href) location.reload();
+        else location.href = target;
+        return;
+      }
       const variantTab = event.target.closest('.tree-variant-tab[data-variant-index]');
       if (variantTab) {
         const box = variantTab.closest('.teacher-tree-variants');

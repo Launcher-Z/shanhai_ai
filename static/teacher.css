@@ -273,6 +273,8 @@
 .matrix-state.green { color:var(--green); background:#e9f0e3; }
 .matrix-state.pending { color:#a67314; background:#fdf4dc; }
 .matrix-state.red { color:#855449; background:#f5eee6; }
+.matrix-state.is-unstarted { color:#b0b8ae; background:transparent; }
+.status-dash { display:inline-block; width:10px; height:2px; background:#c2c9bf; border-radius:1px; vertical-align:middle; }
 
 /* 目录作为课时定位，正文按活动折叠；统计图和文字回答共享题目层级。 */
 .analysis-caption { display:flex; justify-content:space-between; gap:20px; color:var(--console-muted); font-size:11px; margin:0 0 24px; }
@@ -282,14 +284,21 @@
 .analysis-caption details p { position:absolute; z-index:3; top:18px; right:0; width:300px; padding:14px 16px; background:var(--console-paper); border:1px solid var(--console-rule); border-radius:5px; box-shadow:var(--console-shadow); line-height:1.9; }
 .analysis-layout { display:grid; grid-template-columns:190px minmax(0,1fr); gap:28px; align-items:start; }
 .analysis-index { position:sticky; top:24px; max-height:calc(100dvh - 48px); overflow:auto; padding-right:20px; border-right:1px solid var(--console-rule); scrollbar-width:thin; }
-.index-label { font-size:11px; color:var(--console-muted); margin:0 0 17px; letter-spacing:.15em; }
+.index-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0 0 17px; }
+.index-label { font-size:11px; color:var(--console-muted); margin:0; letter-spacing:.15em; }
+.index-all-link { font-size:11px; color:var(--green); text-decoration:underline; white-space:nowrap; }
+.index-all-link:hover { color:#234636; }
 .analysis-index nav { display:flex; flex-direction:column; gap:14px; }
 .index-volume-group { display:flex; flex-direction:column; padding-bottom:12px; border-bottom:1px dashed var(--console-rule); }
 .index-volume-group:last-child { border-bottom:0; padding-bottom:0; }
-.index-volume { display:flex; align-items:baseline; gap:6px; color:var(--green); padding:4px 0 8px; border-bottom:1px solid var(--console-rule); margin-bottom:6px; }
+.index-volume { display:flex; align-items:baseline; gap:6px; color:var(--green); padding:4px 0 8px; border-bottom:1px solid var(--console-rule); margin-bottom:6px; cursor:pointer; list-style:none; user-select:none; }
+.index-volume::-webkit-details-marker { display:none; }
+.index-volume::before { content:'›'; display:inline-block; width:10px; font:16px/1 Georgia,serif; color:var(--green); transition:transform .16s ease; }
+.index-volume-group[open]>.index-volume::before { transform:rotate(90deg); }
+.index-volume:hover { color:#234636; }
 .index-volume span { font-size:11px; color:#8d6e3e; white-space:nowrap; }
 .index-volume strong { font:700 15px/1.4 SimSun,serif; }
-.index-volume:hover,.index-volume[aria-current] { color:#234636; }
+.index-lesson-group { display:flex; flex-direction:column; }
 .index-lesson { display:grid; gap:3px; color:var(--green); margin:8px 0 4px; padding-left:6px; }
 .index-lesson span { font-size:10px; color:#8d6e3e; }
 .index-lesson strong { font:14px/1.5 SimSun,serif; }
@@ -512,6 +521,7 @@ a.answer-cell:hover,a.answer-cell:focus-visible { transform:scale(1.22); box-sha
 .creation-tools-form button { width:auto; margin:0; justify-self:start; }
 .curation-section { margin:8px 22px 22px; padding-top:18px; border-top:1px solid var(--console-rule); }
 .curation-heading { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:14px; }
+.curation-heading-actions { display:flex; align-items:flex-end; gap:10px; flex-wrap:wrap; }
 .curation-heading h4 { margin:0 0 4px; font:700 16px SimSun,serif; color:var(--green); }
 .curation-heading p { margin:0; font-size:12px; }
 .sample-digit-filter { display:flex; align-items:flex-end; gap:8px; }

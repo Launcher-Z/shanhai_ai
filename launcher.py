@@ -22,7 +22,7 @@ if (RUNTIME_DIR / "tcl" / "tk8.6").is_dir():
     os.environ.setdefault("TK_LIBRARY", str(RUNTIME_DIR / "tcl" / "tk8.6"))
 
 import tkinter as tk
-from tkinter import messagebox, simpledialog, ttk
+from tkinter import filedialog, messagebox, simpledialog, ttk
 from werkzeug.security import generate_password_hash
 
 CONFIG_FILE = ROOT / "launcher_config.json"
@@ -31,6 +31,7 @@ DEFAULT_CONFIG = {
     "threads": 8,
     "progress_locks": True,
     "auto_open_browser": True,
+    "https": True,
 }
 
 
@@ -190,9 +191,9 @@ def reset_teacher_password(new_password=None, data_dir=None):
 class LauncherApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("再绘山海经 · AI 课堂平台启动器 (v1.0.0)")
-        self.root.geometry("620x560")
-        self.root.minsize(580, 520)
+        self.root.title("再绘山海经 · AI 课堂平台启动器 (v1.0.1)")
+        self.root.geometry("640x600")
+        self.root.minsize(600, 560)
 
         self.proc = None
         self.lan_ips = get_lan_ips()
@@ -203,12 +204,15 @@ class LauncherApp:
         self.threads_var = tk.StringVar(value=str(cfg["threads"]))
         self.locks_var = tk.BooleanVar(value=bool(cfg["progress_locks"]))
         self.auto_open_var = tk.BooleanVar(value=bool(cfg["auto_open_browser"]))
+        self.https_var = tk.BooleanVar(value=bool(cfg.get("https", True)))
         self.status_var = tk.StringVar(value="状态：未启动")
-        self.teacher_url_var = tk.StringVar(value=f"http://127.0.0.1:{cfg['port']}/teacher")
-        self.student_url_var = tk.StringVar(value=f"http://{self.lan_ip}:{cfg['port']}")
+        scheme = "https" if self.https_var.get() else "http"
+        self.teacher_url_var = tk.StringVar(value=f"{scheme}://127.0.0.1:{cfg['port']}/teacher")
+        self.student_url_var = tk.StringVar(value=f"{scheme}://{self.lan_ip}:{cfg['port']}")
 
         self._build_ui()
         self.port_var.trace_add("write", lambda *_: self._refresh_urls())
+        self.https_var.trace_add("write", lambda *_: self._refresh_urls())
         self.root.protocol("WM_DELETE_WINDOW", self._on_close)
 
     def _build_ui(self):
@@ -235,6 +239,15 @@ class LauncherApp:
         self.locks_chk.pack(side="left", padx=(0, 16))
         self.auto_open_chk = ttk.Checkbutton(row2, text="启动后自动打开教师端", variable=self.auto_open_var)
         self.auto_open_chk.pack(side="left")
+
+        row3 = ttk.Frame(cfg_frame)
+        row3.pack(fill="x", pady=(6, 0))
+        self.https_chk = ttk.Checkbutton(
+            row3,
+            text="启用局域网 HTTPS（学生端使用摄像头需开启，首次访问点“高级→继续前往”）",
+            variable=self.https_var,
+        )
+        self.https_chk.pack(side="left")
 
         # 2. 服务控制与地址区
         ctrl_frame = ttk.LabelFrame(self.root, text="服务控制与访问地址", padding=10)
@@ -266,9 +279,10 @@ class LauncherApp:
 
         btn_row = ttk.Frame(tool_frame)
         btn_row.pack(fill="x")
-        ttk.Button(btn_row, text="一键备份数据库", command=self.on_backup).pack(side="left", padx=(0, 8))
-        ttk.Button(btn_row, text="备份并初始化数据库", command=self.on_reset_db).pack(side="left", padx=(0, 8))
-        ttk.Button(btn_row, text="重置教师控制台密码", command=self.on_reset_pwd).pack(side="left", padx=(0, 8))
+        ttk.Button(btn_row, text="一键备份数据库", command=self.on_backup).pack(side="left", padx=(0, 6))
+        ttk.Button(btn_row, text="备份并初始化数据库", command=self.on_reset_db).pack(side="left", padx=(0, 6))
+        ttk.Button(btn_row, text="重置教师密码", command=self.on_reset_pwd).pack(side="left", padx=(0, 6))
+        ttk.Button(btn_row, text="导出HTTPS证书", command=self.on_export_cert).pack(side="left", padx=(0, 6))
         ttk.Button(btn_row, text="打开数据目录", command=self.on_open_data).pack(side="left")
 
         # 4. 运行日志区
@@ -284,11 +298,15 @@ class LauncherApp:
 
     def _refresh_urls(self):
         port = self.port_var.get().strip() or "5000"
-        self.teacher_url_var.set(f"http://127.0.0.1:{port}/teacher")
-        urls = [f"http://{ip}:{port}" for ip in self.lan_ips]
+        scheme = "https" if self.https_var.get() else "http"
+        self.teacher_url_var.set(f"{scheme}://127.0.0.1:{port}/teacher")
+        urls = [f"{scheme}://{ip}:{port}" for ip in self.lan_ips]
         self.student_url_combo["values"] = urls
-        if self.student_url_var.get() not in urls:
-            self.student_url_var.set(urls[0])
+        current = self.student_url_var.get()
+        if current not in urls:
+            # 切换协议时尽量保持选中的 IP 不变
+            matched = next((u for u in urls if current.endswith(u.split("://", 1)[1])), None)
+            self.student_url_var.set(matched or urls[0])
 
     def _append_log(self, msg):
         ts = datetime.now().strftime("%H:%M:%S")
@@ -303,6 +321,7 @@ class LauncherApp:
         self.threads_spin.configure(state=state)
         self.locks_chk.configure(state=state)
         self.auto_open_chk.configure(state=state)
+        self.https_chk.configure(state=state)
         self.toggle_btn.configure(text="■ 停止课堂服务" if running else "▶ 启动课堂服务")
 
     def _validate_inputs(self):
@@ -328,6 +347,13 @@ class LauncherApp:
         else:
             self.start_server()
 
+    def _ensure_cert(self):
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from shanhai.certs import ensure_lan_cert
+
+        return ensure_lan_cert(data_dir_path() / "certs", self.lan_ips)
+
     def start_server(self):
         parsed = self._validate_inputs()
         if not parsed:
@@ -335,12 +361,14 @@ class LauncherApp:
         port, threads = parsed
         locks = self.locks_var.get()
         auto_open = self.auto_open_var.get()
+        use_https = self.https_var.get()
 
         save_config({
             "port": port,
             "threads": threads,
             "progress_locks": locks,
             "auto_open_browser": auto_open,
+            "https": use_https,
         })
 
         py_exe = RUNTIME_DIR / "python.exe"
@@ -352,7 +380,19 @@ class LauncherApp:
         env["SHANHAI_PORT"] = str(port)
         env["SHANHAI_THREADS"] = str(threads)
         env["SHANHAI_PROGRESS_LOCKS"] = "1" if locks else "0"
+        env["SHANHAI_HTTPS"] = "1" if use_https else "0"
         env["PYTHONUNBUFFERED"] = "1"
+
+        if use_https:
+            try:
+                cert_path, key_path, regenerated = self._ensure_cert()
+                env["SHANHAI_SSL_CERT"] = str(cert_path)
+                env["SHANHAI_SSL_KEY"] = str(key_path)
+                if regenerated:
+                    self._append_log(f"已生成局域网 HTTPS 证书：{cert_path}")
+            except Exception as exc:
+                messagebox.showerror("证书生成失败", f"无法生成 HTTPS 证书：{exc}")
+                return
 
         creationflags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
         try:
@@ -372,8 +412,9 @@ class LauncherApp:
             return
 
         self._set_running_ui(True)
-        self.status_var.set(f"状态：运行中（端口 {port}，{threads} 线程）")
-        self._append_log(f"正在启动服务（端口={port}，线程={threads}，进度解锁={'开启' if locks else '关闭'}）...")
+        proto = "HTTPS" if use_https else "HTTP"
+        self.status_var.set(f"状态：运行中（{proto} 端口 {port}，{threads} 线程）")
+        self._append_log(f"正在启动服务（{proto}，端口={port}，线程={threads}，进度解锁={'开启' if locks else '关闭'}）...")
 
         threading.Thread(target=self._read_proc_output, daemon=True).start()
         if auto_open:
@@ -473,6 +514,34 @@ class LauncherApp:
                 messagebox.showinfo("重置成功", "教师控制台密码已清除，下次打开教师控制台时将提示设置新密码。")
         except Exception as exc:
             messagebox.showerror("重置失败", str(exc))
+
+    def on_export_cert(self):
+        try:
+            cert_path, _, regenerated = self._ensure_cert()
+            if regenerated:
+                self._append_log(f"已生成局域网 HTTPS 证书：{cert_path}")
+        except Exception as exc:
+            messagebox.showerror("生成证书失败", str(exc))
+            return
+        save_to = filedialog.asksaveasfilename(
+            title="导出 HTTPS 根证书",
+            defaultextension=".crt",
+            initialfile="shanhai_lan_ca.crt",
+            filetypes=[("证书文件 (*.crt)", "*.crt"), ("所有文件 (*.*)", "*.*")],
+        )
+        if not save_to:
+            return
+        try:
+            shutil.copy2(cert_path, save_to)
+            self._append_log(f"已导出 HTTPS 证书到：{save_to}")
+            messagebox.showinfo(
+                "导出成功",
+                f"证书已保存到：\n{save_to}\n\n"
+                "提示：在学生机（或域控/极域批量脚本）中将该证书导入“受信任的根证书颁发机构”后，\n"
+                "访问学生端将不再出现“连接不是私密连接”提示。",
+            )
+        except Exception as exc:
+            messagebox.showerror("导出失败", str(exc))
 
     def on_open_data(self):
         d = data_dir_path()

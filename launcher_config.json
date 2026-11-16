@@ -2,5 +2,6 @@
   "port": 5000,
   "threads": 8,
   "progress_locks": true,
-  "auto_open_browser": true
+  "auto_open_browser": true,
+  "https": true
 }

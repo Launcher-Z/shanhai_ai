@@ -1,4 +1,5 @@
 """创建并配置课堂平台。"""
+import gzip
 import os
 import secrets
 from pathlib import Path
@@ -38,6 +39,32 @@ def create_app(config=None):
                 if request.path.startswith("/api/"):
                     return {"error": "页面验证已失效，请刷新页面后重试。"}, 400
                 abort(400)
+
+    @app.after_request
+    def compress_response(response):
+        if (
+            response.status_code != 200
+            or response.direct_passthrough
+            or "Content-Encoding" in response.headers
+            or "gzip" not in request.headers.get("Accept-Encoding", "").lower()
+        ):
+            return response
+        mimetype = (response.mimetype or "").lower()
+        if not (mimetype.startswith("text/") or mimetype in {"application/json", "application/javascript"}):
+            return response
+        data = response.get_data()
+        if len(data) <= 1024:
+            return response
+        compressed = gzip.compress(data, compresslevel=5)
+        if len(compressed) >= len(data):
+            return response
+        response.set_data(compressed)
+        response.headers["Content-Encoding"] = "gzip"
+        response.headers["Content-Length"] = str(len(compressed))
+        vary = response.headers.get("Vary", "")
+        if "Accept-Encoding" not in vary:
+            response.headers["Vary"] = f"{vary}, Accept-Encoding".strip(", ")
+        return response
 
     @app.context_processor
     def inject_csrf():

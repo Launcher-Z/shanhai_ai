@@ -33,8 +33,14 @@ def questions(definition):
     return [q for section in definition["sections"] for q in section["questions"]]
 
 
+_PROGRESS_NODES_CACHE = {}
+
+
 def progress_nodes():
     """按课程顺序展开所有可设卡点的节点（精确到子活动，无札记的活动保留活动本身）。"""
+    cache_key = str(WORKSHEET_DIR)
+    if cache_key in _PROGRESS_NODES_CACHE:
+        return _PROGRESS_NODES_CACHE[cache_key]
     nodes = []
     for volume in COURSE_VOLUMES:
         for lesson in volume["lessons"]:
@@ -70,6 +76,7 @@ def progress_nodes():
                         "section_id": None,
                         "section_title": None,
                     })
+    _PROGRESS_NODES_CACHE[cache_key] = nodes
     return nodes
 
 

@@ -21,14 +21,38 @@ app = create_app({"PROGRESS_LOCKS_ENABLED": PROGRESS_LOCKS_ENABLED})
 if __name__ == "__main__":
     port = int(os.environ.get("SHANHAI_PORT", "5000"))
     threads = max(1, int(os.environ.get("SHANHAI_THREADS", "8")))
+    use_https = _env_bool("SHANHAI_HTTPS", False)
     if RUN_MODE == "dev":
         app.run(host="127.0.0.1", port=port, debug=True)
     elif RUN_MODE == "waitress":
-        from waitress import serve
-
-        # 课堂模式监听所有网卡，供学生通过教师机的局域网 IP 访问。
         app.debug = False
-        print(f"山海AI课堂服务已启动：http://0.0.0.0:{port} (threads={threads}, locks={PROGRESS_LOCKS_ENABLED})", flush=True)
-        serve(app, host="0.0.0.0", port=port, threads=threads)
+        if use_https:
+            from cheroot.ssl.builtin import BuiltinSSLAdapter
+            from cheroot.wsgi import Server as CherootServer
+
+            cert_path = os.environ.get("SHANHAI_SSL_CERT")
+            key_path = os.environ.get("SHANHAI_SSL_KEY")
+            if not cert_path or not key_path:
+                from shanhai.certs import ensure_lan_cert
+
+                cert_dir = os.path.join(app.config["DATA_DIR"], "certs")
+                c, k, _ = ensure_lan_cert(cert_dir)
+                cert_path, key_path = str(c), str(k)
+
+            server = CherootServer(("0.0.0.0", port), app, numthreads=threads)
+            server.ssl_adapter = BuiltinSSLAdapter(cert_path, key_path)
+            print(f"山海AI课堂服务已启动（HTTPS）：https://0.0.0.0:{port} (threads={threads}, locks={PROGRESS_LOCKS_ENABLED})", flush=True)
+            try:
+                server.start()
+            except KeyboardInterrupt:
+                pass
+            finally:
+                server.stop()
+        else:
+            from waitress import serve
+
+            # 课堂模式监听所有网卡，供学生通过教师机的局域网 IP 访问。
+            print(f"山海AI课堂服务已启动：http://0.0.0.0:{port} (threads={threads}, locks={PROGRESS_LOCKS_ENABLED})", flush=True)
+            serve(app, host="0.0.0.0", port=port, threads=threads)
     else:
         raise ValueError('RUN_MODE 只能设为 "dev" 或 "waitress"')

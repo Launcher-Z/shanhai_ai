@@ -73,7 +73,7 @@ def dashboard():
         abort(400)
     scope = teacher_data.load_scope(class_id)
     lesson_id = request.args.get("lesson_id", "")
-    if lesson_id and not any(l["id"] == lesson_id for l in scope["lessons"]):
+    if lesson_id and lesson_id != "all" and not any(l["id"] == lesson_id for l in scope["lessons"]):
         abort(400)
     digit = request.args.get("digit", type=int) if tab == "analysis" else None
     if digit is not None and not 0 <= digit <= 9:
@@ -81,6 +81,19 @@ def dashboard():
     open_activity = request.args.get("open", "")
     if not open_activity and digit is not None:
         open_activity = "lesson-7-task-2"
+    if tab == "analysis" and not lesson_id and scope["lessons"]:
+        if open_activity:
+            lesson_id = next(
+                (l["id"] for l in scope["lessons"] if any(a["id"] == open_activity for a in l["activities"])),
+                "",
+            )
+        if not lesson_id:
+            active_aids = {aid for _, aid in scope["records"]}
+            lesson_id = next(
+                (l["id"] for l in reversed(scope["lessons"]) if any(a["id"] in active_aids for a in l["activities"])),
+                scope["lessons"][0]["id"],
+            )
+    analysis_lesson_id = None if lesson_id == "all" else lesson_id
     selected_student = request.args.get("student_id", type=int)
     if selected_student is not None and not any(s["id"] == selected_student for s in scope["students"]):
         abort(404)
@@ -98,8 +111,8 @@ def dashboard():
                            rows=rows, overview_cols=overview_cols,
                            progress_cap_groups=progress_cap_groups,
                            selected_cap_label=selected_cap_label,
-                           report=teacher_data.analysis(scope, lesson_id) if tab == "analysis" else None,
-                           curations=teacher_data.curations(class_id, digit, lesson_id) if tab == "analysis" else {})
+                           report=teacher_data.analysis(scope, analysis_lesson_id) if tab == "analysis" else None,
+                           curations=teacher_data.curations(class_id, digit, analysis_lesson_id) if tab == "analysis" else {})
 
 
 @teacher.get("/students/<int:student_id>/workspace")

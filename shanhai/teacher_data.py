@@ -2,7 +2,7 @@
 import json
 import re
 import time
-from collections import Counter
+from collections import Counter, defaultdict
 from copy import deepcopy
 
 from . import neural_analysis, worksheets
@@ -38,8 +38,14 @@ def percent(value, total):
     return round(value / total * 100, 1) if total else None
 
 
+_CATALOG_CACHE = {}
+
+
 def catalog():
     """只把已有札记纳入统计，尚未开发的活动不进入完成率分母。"""
+    cache_key = str(worksheets.WORKSHEET_DIR)
+    if cache_key in _CATALOG_CACHE:
+        return _CATALOG_CACHE[cache_key]
     lessons = []
     for volume in COURSE_VOLUMES:
         for lesson in volume["lessons"]:
@@ -53,7 +59,19 @@ def catalog():
             if activities:
                 lessons.append({**lesson, "volume": volume["title"], "volume_id": volume["id"],
                                 "volume_number": volume["number"], "activities": activities})
+    _CATALOG_CACHE[cache_key] = lessons
     return lessons
+
+
+def _prepare_record(record):
+    """一次性缓存单条作答记录的常用派生字段，避免后续统计和逐题分析重复解析。"""
+    if "_progress" not in record:
+        record["_progress"] = worksheets.progress(record)
+    if "_first_answers" not in record:
+        record["_first_answers"] = json.loads(record["first_answers"]) if record["first_answers"] else {}
+    if "_has_pending" not in record:
+        record["_has_pending"] = record["status"] == "pending" or bool(worksheets._pending_reviewable_ids(record))
+    return record
 
 
 def load_scope(class_id=None):
@@ -66,18 +84,21 @@ def load_scope(class_id=None):
             "(s.device_token IS NOT NULL AND s.locked_until>?) AS bound "
             "FROM students s JOIN classes c ON c.id=s.class_id" + condition +
             " ORDER BY c.id DESC, s.id", (int(time.time()), *params))]
-        records = [worksheets.sync_live_answers(db, worksheets.decode(row)) for row in db.execute(
+        records = [_prepare_record(worksheets.sync_live_answers(db, worksheets.decode(row))) for row in db.execute(
             "SELECT w.* FROM worksheet_records w JOIN students s ON s.id=w.student_id" + condition,
             params)]
     indexed = {(r["student_id"], r["activity_id"]): r for r in records}
+    by_student = defaultdict(list)
+    for r in records:
+        by_student[r["student_id"]].append(r)
     lessons = catalog()
     # 选做仍出现在矩阵与逐题分析中，但不进入全班基础完成率的分母。
     activity_ids = {a["id"] for lesson in lessons for a in lesson["activities"] if not a.get("optional")}
     for student in students:
-        all_own = [r for r in records if r["student_id"] == student["id"]]
+        all_own = by_student.get(student["id"], ())
         own = [r for r in all_own if r["activity_id"] in activity_ids]
-        states = [worksheets.progress(r) for r in own]
-        student.update(pending=sum(r["status"] == "pending" or bool(worksheets._pending_reviewable_ids(r)) for r in all_own),
+        states = [r["_progress"] for r in own]
+        student.update(pending=sum(r["_has_pending"] for r in all_own),
                        completed=sum(s["completed"] for s in states),
                        excellent=sum(s["excellent"] for s in states))
     return {"students": students, "records": indexed, "lessons": lessons,
@@ -85,12 +106,12 @@ def load_scope(class_id=None):
 
 
 def summarize(students, records, activity_ids):
-    all_pending = sum(r["status"] == "pending" or bool(worksheets._pending_reviewable_ids(r)) for r in records)
+    all_pending = sum((r["_has_pending"] if "_has_pending" in r else (r["status"] == "pending" or bool(worksheets._pending_reviewable_ids(r)))) for r in records)
     records = [r for r in records if r["activity_id"] in activity_ids]
-    states = [worksheets.progress(r) for r in records]
+    states = [r.get("_progress") or worksheets.progress(r) for r in records]
     first_correct = first_total = 0
     for record in records:
-        first = json.loads(record["first_answers"]) if record["first_answers"] else {}
+        first = record["_first_answers"] if "_first_answers" in record else (json.loads(record["first_answers"]) if record["first_answers"] else {})
         for q in worksheets.objective_questions(record["definition"]):
             if q["id"] in first:
                 first_total += 1
@@ -98,8 +119,8 @@ def summarize(students, records, activity_ids):
     return {"students": len(students), "bound": sum(s["bound"] for s in students),
             "expected": len(students) * len(activity_ids), "started": len(records),
             "submitted": sum(bool(r["first_answers"]) for r in records),
-            "fully_submitted": sum(all(s["submitted"] for s in worksheets.flow(r)["sections"]
-                                       if not s["optional"]) for r in records),
+            "fully_submitted": sum(all(sec["submitted"] for sec in s["flow"]["sections"]
+                                       if not sec["optional"]) for s in states),
             "pending": all_pending,
             "correction": sum(any(s["status"] == "correction" for s in r["stage_states"].values()) for r in records),
             "returned": sum(r["status"] == "returned" for r in records),
@@ -500,7 +521,7 @@ def _subjective_cells(q, section, records, eligible_students):
         record = by_student.get(student["id"])
         sec_info = record["stage_states"].get(section["id"], {}) if record else {}
         submitted = bool(record and sec_info.get("submitted"))
-        first_map = json.loads(record["first_answers"]) if (record and record["first_answers"]) else {}
+        first_map = (record["_first_answers"] if "_first_answers" in record else (json.loads(record["first_answers"]) if record["first_answers"] else {})) if record else {}
         raw_value = record["answers"].get(q["id"]) if record else None
         if raw_value in (None, "", []):
             raw_value = first_map.get(q["id"])
@@ -539,7 +560,7 @@ def question_analysis(q, section, records, students, eligible, eligible_students
     answers = []
     distribution = Counter()
     for record in records:
-        first = json.loads(record["first_answers"]) if record["first_answers"] else {}
+        first = record["_first_answers"] if "_first_answers" in record else (json.loads(record["first_answers"]) if record["first_answers"] else {})
         if not record["stage_states"][section["id"]]["submitted"] or q["id"] not in first:
             continue
         value = first[q["id"]]
@@ -632,17 +653,21 @@ def question_analysis(q, section, records, students, eligible, eligible_students
 
 
 def analysis(scope, lesson_id=None):
-    lessons = deepcopy(scope["lessons"])
-    if lesson_id:
-        lessons = [lesson for lesson in lessons if lesson["id"] == lesson_id]
+    base_lessons = [l for l in scope["lessons"] if not lesson_id or l["id"] == lesson_id]
+    lessons = deepcopy(base_lessons)
     student_list = scope["students"]
     students = {s["id"]: s for s in student_list}
+    by_activity = defaultdict(list)
+    for r in scope["records"].values():
+        by_activity[r["activity_id"]].append(r)
     selected_ids = {a["id"] for lesson in lessons for a in lesson["activities"] if not a.get("optional")}
+    selected_records = [r for aid in selected_ids for r in by_activity.get(aid, ())]
     for lesson in lessons:
         lesson_ids = {a["id"] for a in lesson["activities"] if not a.get("optional")}
-        lesson["summary"] = summarize(student_list, scope["records"].values(), lesson_ids)
+        lesson_records = [r for aid in lesson_ids for r in by_activity.get(aid, ())]
+        lesson["summary"] = summarize(student_list, lesson_records, lesson_ids)
         for activity in lesson["activities"]:
-            own = [r for r in scope["records"].values() if r["activity_id"] == activity["id"]]
+            own = by_activity.get(activity["id"], [])
             if activity['id'] in {'lesson-2-task-2', 'lesson-3-task-2', 'lesson-4-task-1'}:
                 from .animal_analysis import build
                 activity['animal_chart'] = build(scope, activity['id'])
@@ -683,12 +708,13 @@ def analysis(scope, lesson_id=None):
         v_lessons = [l for l in lessons if l["volume_id"] == volume["id"]]
         if v_lessons:
             v_ids = {a["id"] for l in v_lessons for a in l["activities"] if not a.get("optional")}
+            v_records = [r for aid in v_ids for r in by_activity.get(aid, ())]
             volumes.append({
                 "id": volume["id"], "number": volume["number"], "title": volume["title"],
                 "lessons": v_lessons,
-                "summary": summarize(student_list, scope["records"].values(), v_ids),
+                "summary": summarize(student_list, v_records, v_ids),
             })
-    return {"volumes": volumes, "lessons": lessons, "summary": summarize(student_list, scope["records"].values(), selected_ids)}
+    return {"volumes": volumes, "lessons": lessons, "summary": summarize(student_list, selected_records, selected_ids)}
 
 
 def curations(class_id=None, digit=None, lesson_id=None):

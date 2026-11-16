@@ -23,6 +23,8 @@ def connect():
 def init_db():
     # 与初版表结构一致，现有班级、学生和教师密码可直接使用。
     with connect() as db:
+        db.execute("PRAGMA journal_mode=WAL")
+        db.execute("PRAGMA synchronous=NORMAL")
         db.executescript("""
         CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
         CREATE TABLE IF NOT EXISTS classes (

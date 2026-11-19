@@ -27,8 +27,14 @@ if __name__ == "__main__":
     elif RUN_MODE == "waitress":
         app.debug = False
         if use_https:
+            import ssl
+            from cheroot import errors as cheroot_errors
             from cheroot.ssl.builtin import BuiltinSSLAdapter
             from cheroot.wsgi import Server as CherootServer
+
+            # 忽略客户端中途断连导致的 SSLEOFError (errno 8)，避免控制台刷屏。
+            if ssl.SSL_ERROR_EOF not in cheroot_errors.socket_errors_to_ignore:
+                cheroot_errors.socket_errors_to_ignore.append(ssl.SSL_ERROR_EOF)
 
             cert_path = os.environ.get("SHANHAI_SSL_CERT")
             key_path = os.environ.get("SHANHAI_SSL_KEY")
@@ -40,9 +46,11 @@ if __name__ == "__main__":
                 c, k, _, _ = ensure_lan_cert(cert_dir)
                 cert_path, key_path = str(c), str(k)
 
-            server = CherootServer(("0.0.0.0", port), app, numthreads=threads)
+            # Cheroot 为一连接一线程模型，HTTPS 下需要足够线程数且缩短空闲 Keep-Alive 超时。
+            cheroot_threads = max(threads, 256)
+            server = CherootServer(("0.0.0.0", port), app, numthreads=cheroot_threads, timeout=2)
             server.ssl_adapter = BuiltinSSLAdapter(cert_path, key_path)
-            print(f"山海AI课堂服务已启动（HTTPS）：https://0.0.0.0:{port} (threads={threads}, locks={PROGRESS_LOCKS_ENABLED})", flush=True)
+            print(f"山海AI课堂服务已启动（HTTPS）：https://0.0.0.0:{port} (threads={cheroot_threads}, locks={PROGRESS_LOCKS_ENABLED})", flush=True)
             try:
                 server.start()
             except KeyboardInterrupt:

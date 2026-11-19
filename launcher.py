@@ -31,7 +31,7 @@ DEFAULT_CONFIG = {
     "threads": 8,
     "progress_locks": True,
     "auto_open_browser": True,
-    "https": True,
+    "https": False,
     "show_https_notice": True,
 }
 
@@ -243,7 +243,7 @@ class LauncherApp:
         self.threads_var = tk.StringVar(value=str(cfg["threads"]))
         self.locks_var = tk.BooleanVar(value=bool(cfg["progress_locks"]))
         self.auto_open_var = tk.BooleanVar(value=bool(cfg["auto_open_browser"]))
-        self.https_var = tk.BooleanVar(value=bool(cfg.get("https", True)))
+        self.https_var = tk.BooleanVar(value=bool(cfg.get("https", False)))
         self.show_https_notice = bool(cfg.get("show_https_notice", True))
         self.status_var = tk.StringVar(value="状态：未启动")
         scheme = "https" if self.https_var.get() else "http"
@@ -269,9 +269,9 @@ class LauncherApp:
         self.port_entry.pack(side="left", padx=(0, 18))
 
         ttk.Label(row1, text="并发线程数：").pack(side="left")
-        self.threads_spin = ttk.Spinbox(row1, from_=1, to=64, textvariable=self.threads_var, width=6)
+        self.threads_spin = ttk.Spinbox(row1, from_=1, to=512, textvariable=self.threads_var, width=6)
         self.threads_spin.pack(side="left", padx=(0, 18))
-        ttk.Label(row1, text="（建议课堂 50 人设为 8~16）", foreground="#666666").pack(side="left")
+        ttk.Label(row1, text="（HTTP 建议 8~16；HTTPS 最低按 256 并发）", foreground="#666666").pack(side="left")
 
         row2 = ttk.Frame(cfg_frame)
         row2.pack(fill="x", pady=(6, 0))
@@ -282,12 +282,21 @@ class LauncherApp:
 
         row3 = ttk.Frame(cfg_frame)
         row3.pack(fill="x", pady=(6, 0))
-        self.https_chk = ttk.Checkbutton(
+        ttk.Label(row3, text="访问协议：").pack(side="left")
+        self.http_radio = ttk.Radiobutton(
             row3,
-            text="启用局域网 HTTPS（学生端使用摄像头需开启，首次访问点“高级→继续前往”）",
+            text="HTTP 模式（推荐，免装证书、并发更稳）",
             variable=self.https_var,
+            value=False,
         )
-        self.https_chk.pack(side="left")
+        self.http_radio.pack(side="left", padx=(0, 16))
+        self.https_radio = ttk.Radiobutton(
+            row3,
+            text="HTTPS 模式（仅需学生端摄像头时开启）",
+            variable=self.https_var,
+            value=True,
+        )
+        self.https_radio.pack(side="left")
 
         # 2. 服务控制与地址区
         ctrl_frame = ttk.LabelFrame(self.root, text="服务控制与访问地址", padding=10)
@@ -311,7 +320,6 @@ class LauncherApp:
         self.student_url_combo = ttk.Combobox(url2, textvariable=self.student_url_var, state="readonly")
         self.student_url_combo.pack(side="left", fill="x", expand=True, padx=(0, 6))
         ttk.Button(url2, text="复制", width=8, command=self.copy_student_url).pack(side="left")
-        self._refresh_urls()
 
         # 3. 实用维护工具区
         tool_frame = ttk.LabelFrame(self.root, text="数据与维护工具（建议先停止服务后操作）", padding=10)
@@ -322,8 +330,10 @@ class LauncherApp:
         ttk.Button(btn_row, text="一键备份数据库", command=self.on_backup).pack(side="left", padx=(0, 6))
         ttk.Button(btn_row, text="备份并初始化数据库", command=self.on_reset_db).pack(side="left", padx=(0, 6))
         ttk.Button(btn_row, text="重置教师密码", command=self.on_reset_pwd).pack(side="left", padx=(0, 6))
-        ttk.Button(btn_row, text="导出HTTPS证书", command=self.on_export_cert).pack(side="left", padx=(0, 6))
+        self.export_cert_btn = ttk.Button(btn_row, text="导出HTTPS证书", command=self.on_export_cert)
+        self.export_cert_btn.pack(side="left", padx=(0, 6))
         ttk.Button(btn_row, text="打开数据目录", command=self.on_open_data).pack(side="left")
+        self._refresh_urls()
 
         # 4. 运行日志区
         log_frame = ttk.LabelFrame(self.root, text="运行日志", padding=8)
@@ -347,6 +357,8 @@ class LauncherApp:
             # 切换协议时尽量保持选中的 IP 不变
             matched = next((u for u in urls if current.endswith(u.split("://", 1)[1])), None)
             self.student_url_var.set(matched or urls[0])
+        if hasattr(self, "export_cert_btn"):
+            self.export_cert_btn.configure(state="normal" if self.https_var.get() else "disabled")
 
     def _append_log(self, msg):
         ts = datetime.now().strftime("%H:%M:%S")
@@ -361,7 +373,8 @@ class LauncherApp:
         self.threads_spin.configure(state=state)
         self.locks_chk.configure(state=state)
         self.auto_open_chk.configure(state=state)
-        self.https_chk.configure(state=state)
+        self.http_radio.configure(state=state)
+        self.https_radio.configure(state=state)
         self.toggle_btn.configure(text="■ 停止课堂服务" if running else "▶ 启动课堂服务")
 
     def _validate_inputs(self):
@@ -374,10 +387,10 @@ class LauncherApp:
             return None
         try:
             threads = int(self.threads_var.get().strip())
-            if not (1 <= threads <= 64):
+            if not (1 <= threads <= 512):
                 raise ValueError
         except ValueError:
-            messagebox.showerror("配置有误", "线程数必须是 1 到 64 之间的整数。")
+            messagebox.showerror("配置有误", "线程数必须是 1 到 512 之间的整数。")
             return None
         return port, threads
 
@@ -455,8 +468,9 @@ class LauncherApp:
 
         self._set_running_ui(True)
         proto = "HTTPS" if use_https else "HTTP"
-        self.status_var.set(f"状态：运行中（{proto} 端口 {port}，{threads} 线程）")
-        self._append_log(f"正在启动服务（{proto}，端口={port}，线程={threads}，进度解锁={'开启' if locks else '关闭'}）...")
+        actual_threads = max(threads, 256) if use_https else threads
+        self.status_var.set(f"状态：运行中（{proto} 端口 {port}，{actual_threads} 线程）")
+        self._append_log(f"正在启动服务（{proto}，端口={port}，线程={actual_threads}，进度解锁={'开启' if locks else '关闭'}）...")
 
         threading.Thread(target=self._read_proc_output, daemon=True).start()
         if use_https and self.show_https_notice:

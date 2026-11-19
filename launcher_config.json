@@ -3,5 +3,6 @@
   "threads": 8,
   "progress_locks": true,
   "auto_open_browser": true,
-  "https": true
+  "https": false,
+  "show_https_notice": true
 }

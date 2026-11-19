@@ -10,7 +10,7 @@
 </head>
 <body class="{% block body_class %}{% endblock %}">
   <header class="topbar"><a href="{{ url_for('student.index') }}" class="brand"><span class="seal">山<br>海</span><span>再绘山海经<small>图像与人工智能</small></span></a><nav><a href="{{ url_for('student.index') }}">学生入口</a><a href="{{ url_for('teacher.dashboard') }}">教师控制台</a></nav></header>
-  <main>{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="messages" aria-live="polite">{% for category, message in messages %}<div class="notice {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}{% block content %}{% endblock %}</main>
+  <main>{% block flash_messages %}{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="messages" aria-live="polite">{% for category, message in messages %}<div class="notice {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}{% endblock %}{% block content %}{% endblock %}</main>
   <footer>再绘山海经 <span>·</span> 一起探索图像与人工智能</footer>
 </body>
 </html>

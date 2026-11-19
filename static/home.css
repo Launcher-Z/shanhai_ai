@@ -32,6 +32,9 @@ body, h1, h2, .brand, .brand small, .seal, .stamp, .ridge {
 .home-page .card-heading .eyebrow { color: #bda579; font-weight: 400; }
 .home-page .card-heading h2 { font-size: 24px; font-weight: 400; letter-spacing: .1em; }
 .home-page .login-card > .muted { color: #bdc7bf; margin: 12px 0 13px; }
+.home-page .login-messages { margin: 0 0 14px; display: grid; gap: 8px; }
+.home-page .login-messages .notice { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; font-size: 13px; line-height: 1.55; padding: 10px 12px; border-radius: 3px; border: 1px solid rgba(162, 206, 173, .38); background: rgba(34, 72, 54, .75); color: #e8f5ea; }
+.home-page .login-messages .notice.error { border-color: rgba(236, 128, 108, .75); border-left: 3px solid #e46f5a; background: rgba(110, 34, 27, .82); color: #ffebe6; font-weight: 600; }
 .home-page label { color: #d8d8c9; margin: 12px 0 5px; font-weight: 400; font-size: 15px; }
 .home-page input, .home-page select { color: #f2eee1; background: #172b30; border-color: #52665e; border-radius: 2px; padding: 10px 12px; }
 .home-page input::placeholder { color: #a8b6ae; }

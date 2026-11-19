@@ -397,6 +397,171 @@
       if (event.key === 'Escape') hideCellTooltip();
     });
   }
+  const activityMatrix = document.querySelector('.activity-matrix');
+  if (activityMatrix) {
+    const tbody = activityMatrix.tBodies[0];
+    const subHeads = [...activityMatrix.querySelectorAll('th.section-col-head')];
+    let sortCol = null;
+    let sortDir = 'none'; // 'none' | 'desc' | 'asc'
+
+    function applyMatrixSort() {
+      if (!tbody) return;
+      const rows = [...tbody.rows];
+      rows.sort((a, b) => {
+        if (sortCol !== null && sortDir !== 'none') {
+          const rankA = Number(a.cells[sortCol + 1]?.querySelector('.matrix-state')?.dataset.sortRank ?? -1);
+          const rankB = Number(b.cells[sortCol + 1]?.querySelector('.matrix-state')?.dataset.sortRank ?? -1);
+          if (rankA !== rankB) return sortDir === 'desc' ? rankB - rankA : rankA - rankB;
+        }
+        return Number(a.dataset.rowIndex || 0) - Number(b.dataset.rowIndex || 0);
+      });
+      tbody.append(...rows);
+      for (const th of subHeads) {
+        const idx = Number(th.dataset.colIndex);
+        const active = idx === sortCol && sortDir !== 'none';
+        th.classList.toggle('is-sorted', active);
+        th.setAttribute('aria-sort', active ? (sortDir === 'desc' ? 'descending' : 'ascending') : 'none');
+        const indicator = th.querySelector('.sort-indicator');
+        if (indicator) indicator.textContent = active ? (sortDir === 'desc' ? '↓' : '↑') : '';
+      }
+    }
+
+    function lineNode(label, text) {
+      const p = document.createElement('p');
+      const strong = document.createElement('strong');
+      strong.textContent = label;
+      p.append(strong, document.createTextNode(text));
+      return p;
+    }
+
+    function positionMatrixTooltip(target) {
+      if (!cellTooltip) return;
+      cellTooltip.hidden = false;
+      const rect = target.getBoundingClientRect();
+      const tipRect = cellTooltip.getBoundingClientRect();
+      const vw = window.innerWidth || 1024;
+      const left = Math.max(8, Math.min(vw - tipRect.width - 8, rect.left + rect.width / 2 - tipRect.width / 2));
+      const top = rect.top - tipRect.height - 8 >= 8 ? rect.top - tipRect.height - 8 : rect.bottom + 8;
+      cellTooltip.style.left = `${Math.round(left)}px`;
+      cellTooltip.style.top = `${Math.round(top)}px`;
+    }
+
+    let activeMatrixTarget = null;
+    const MATRIX_TIP_SELECTOR = 'th.section-col-head, a.matrix-state';
+
+    function renderMatrixTooltip(target) {
+      if (!cellTooltip) return;
+      const nodes = [];
+      if (target.matches('th.section-col-head')) {
+        const head = document.createElement('div');
+        head.className = 'tooltip-head';
+        const title = document.createElement('strong');
+        title.textContent = `${target.dataset.code} · ${target.dataset.sectionTitle}`;
+        head.append(title);
+        if (target.dataset.optional === '1') {
+          const badge = document.createElement('span');
+          badge.className = 'tooltip-badge is-pending';
+          badge.textContent = '选做';
+          head.append(badge);
+        }
+        nodes.push(head);
+        nodes.push(lineNode('所属活动：', target.dataset.activityTitle || ''));
+        nodes.push(lineNode(
+          '完成情况：',
+          `完成 ${target.dataset.done || 0} 人（优秀 ${target.dataset.gold || 0} / 完成 ${target.dataset.green || 0}）`
+        ));
+        nodes.push(lineNode(
+          '待审 / 未完成：',
+          `${target.dataset.pending || 0} 人 / ${target.dataset.incomplete || 0} 人（共 ${target.dataset.total || 0} 人）`
+        ));
+        const idx = Number(target.dataset.colIndex);
+        const hint = document.createElement('small');
+        if (idx === sortCol && sortDir === 'desc') hint.textContent = '当前：完成度从高到低 · 点击切换从低到高';
+        else if (idx === sortCol && sortDir === 'asc') hint.textContent = '当前：完成度从低到高 · 点击恢复默认顺序';
+        else hint.textContent = '点击按该子活动完成情况排序';
+        nodes.push(hint);
+      } else {
+        const head = document.createElement('div');
+        head.className = 'tooltip-head';
+        const who = document.createElement('strong');
+        who.textContent = `${target.dataset.studentName} · ${target.dataset.className}`;
+        const badge = document.createElement('span');
+        const mState = target.dataset.matrixState;
+        const badgeType = mState === 'gold' ? 'gold'
+          : mState === 'green' ? 'correct'
+            : mState === 'pending' ? 'pending'
+              : target.dataset.status === 'unstarted' ? 'unanswered' : 'wrong';
+        badge.className = `tooltip-badge is-${badgeType}`;
+        badge.textContent = target.dataset.stateLabel || '';
+        head.append(who, badge);
+        nodes.push(head);
+        nodes.push(lineNode('所属活动：', target.dataset.activityTitle || ''));
+        nodes.push(lineNode('子活动：', `${target.dataset.code} ${target.dataset.sectionTitle || ''}`));
+        const hint = document.createElement('small');
+        hint.textContent = '点击查看或审核该生札记';
+        nodes.push(hint);
+      }
+      cellTooltip.replaceChildren(...nodes);
+      positionMatrixTooltip(target);
+    }
+
+    function hideMatrixTooltip() {
+      if (!cellTooltip) return;
+      activeMatrixTarget = null;
+      cellTooltip.hidden = true;
+    }
+
+    activityMatrix.addEventListener('click', event => {
+      const btn = event.target.closest('.section-sort-btn');
+      if (!btn) return;
+      const th = btn.closest('th.section-col-head');
+      if (!th) return;
+      const idx = Number(th.dataset.colIndex);
+      if (sortCol !== idx) {
+        sortCol = idx;
+        sortDir = 'desc';
+      } else if (sortDir === 'desc') {
+        sortDir = 'asc';
+      } else {
+        sortCol = null;
+        sortDir = 'none';
+      }
+      applyMatrixSort();
+      if (activeMatrixTarget === th) renderMatrixTooltip(th);
+    });
+
+    if (cellTooltip) {
+      activityMatrix.addEventListener('mouseover', event => {
+        const target = event.target.closest(MATRIX_TIP_SELECTOR);
+        if (target) {
+          activeMatrixTarget = target;
+          renderMatrixTooltip(target);
+        }
+      });
+      activityMatrix.addEventListener('mouseout', event => {
+        if (!activeMatrixTarget) return;
+        const related = event.relatedTarget?.closest?.(MATRIX_TIP_SELECTOR);
+        if (related !== activeMatrixTarget) hideMatrixTooltip();
+      });
+      activityMatrix.addEventListener('focusin', event => {
+        const target = event.target.closest(MATRIX_TIP_SELECTOR);
+        if (target) {
+          activeMatrixTarget = target;
+          renderMatrixTooltip(target);
+        }
+      });
+      activityMatrix.addEventListener('focusout', event => {
+        if (!activeMatrixTarget) return;
+        const related = event.relatedTarget?.closest?.(MATRIX_TIP_SELECTOR);
+        if (related !== activeMatrixTarget) hideMatrixTooltip();
+      });
+      activityMatrix.closest('.matrix-scroll')?.addEventListener('scroll', hideMatrixTooltip, { passive: true });
+      window.addEventListener('scroll', hideMatrixTooltip, { passive: true });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') hideMatrixTooltip();
+      });
+    }
+  }
   const workspace = document.getElementById('student-workspace');
   if (!workspace) return;
   const message = document.getElementById('workspace-message');

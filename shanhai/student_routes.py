@@ -9,15 +9,21 @@ student = Blueprint("student", __name__)
 
 @student.get("/")
 def index():
-    return render_template("index.html", classes=classroom.list_classes())
+    form_data = session.pop("login_form", None) or {}
+    return render_template("index.html", classes=classroom.list_classes(),
+                           selected_class_id=str(form_data.get("class_id", "")),
+                           entered_name=str(form_data.get("name", "")))
 
 
 @student.post("/login")
 def login():
     device = request.form.get("device", "")
+    class_id = request.form.get("class_id", "")
+    name = request.form.get("name", "")
     try:
-        student_id = classroom.login_student(request.form.get("class_id", ""), request.form.get("name", ""), device)
+        student_id = classroom.login_student(class_id, name, device)
     except classroom.ClassroomError as exc:
+        session["login_form"] = {"class_id": class_id, "name": name}
         flash(str(exc), "error")
         return redirect(url_for("student.index"))
     session.clear()
@@ -30,6 +36,10 @@ def login():
 def home():
     current = classroom.current_student(session.get("student_id"), session.get("device"))
     if not current:
+        if session.get("student_id"):
+            session.pop("student_id", None)
+            session.pop("device", None)
+            flash("当前账号绑定已解除或已在另一台终端登录，请重新登录。", "error")
         return redirect(url_for("student.index"))
     return render_template("learn.html", student=current,
                            volumes=student_catalog(session["student_id"], COURSE_VOLUMES))

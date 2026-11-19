@@ -252,10 +252,17 @@
 .activity-matrix thead tr:first-child th { border-bottom:1px solid var(--console-rule); }
 .activity-matrix thead th { font-size:12px; color:var(--green); white-space:nowrap; }
 .activity-matrix thead tr.matrix-activity-head th { background:#f1f4eb; font-weight:500; font-size:11px; min-width:74px; white-space:normal; line-height:1.45; }
-.activity-matrix thead tr.matrix-subhead th { background:#f6f8f1; padding:7px 6px; min-width:52px; font-size:11px; font-weight:600; color:var(--green); border-top:1px solid var(--console-rule); }
+.activity-matrix thead tr.matrix-subhead th { background:#f6f8f1; padding:0; min-width:52px; font-size:11px; font-weight:600; color:var(--green); border-top:1px solid var(--console-rule); }
 .activity-matrix thead tr.matrix-subhead th.is-optional { background:#f7f3e8; color:#8d6e3e; }
+.activity-matrix thead tr.matrix-subhead th.is-sorted { background:#e7efe3; box-shadow:inset 0 -2px 0 var(--green); }
+.activity-matrix thead tr.matrix-subhead th.is-optional.is-sorted { background:#f2e8d2; box-shadow:inset 0 -2px 0 var(--gold); }
+.section-sort-btn { display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; margin:0; padding:7px 6px; border:0; border-radius:0; background:transparent; color:inherit; font:inherit; cursor:pointer; }
+.section-sort-btn:hover { background:rgb(36 76 64 / 7%); }
 .section-code { display:inline-flex; align-items:center; gap:3px; line-height:1.2; }
 .section-code small { display:inline; margin:0; font-size:9px; font-weight:500; color:#8d6e3e; }
+.sort-indicator { font-size:10px; line-height:1; color:var(--green); }
+.sort-indicator:empty { display:none; }
+.activity-matrix thead tr.matrix-subhead th.is-optional .sort-indicator { color:#8d6e3e; }
 .mini-progress-bar { display:flex; gap:1px; height:6px; width:100%; min-width:36px; margin-top:5px; padding:1px; background:#e7ebe0; border-radius:999px; overflow:hidden; }
 .mini-progress-bar .bar-seg { min-width:2px; }
 .mini-progress-bar .bar-seg.is-gold { background:var(--gold); }
@@ -406,6 +413,7 @@ a.answer-cell:hover,a.answer-cell:focus-visible { transform:scale(1.22); box-sha
 .answer-cell-tooltip { position:fixed; z-index:60; pointer-events:none; max-width:360px; padding:10px 12px; background:#22302a; color:#f8f6ef; border-radius:6px; box-shadow:0 8px 24px rgb(0 0 0 / 22%); font-size:12px; line-height:1.65; }
 .answer-cell-tooltip .tooltip-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:4px; }
 .answer-cell-tooltip .tooltip-badge { font-size:10px; padding:1px 6px; border-radius:3px; white-space:nowrap; }
+.answer-cell-tooltip .tooltip-badge.is-gold { background:#9b7328; color:#fff8e4; }
 .answer-cell-tooltip .tooltip-badge.is-correct { background:#3c6e4f; color:#eaf6ee; }
 .answer-cell-tooltip .tooltip-badge.is-pending { background:#9b6f17; color:#fff8e6; }
 .answer-cell-tooltip .tooltip-badge.is-wrong { background:#933f32; color:#fdece9; }
